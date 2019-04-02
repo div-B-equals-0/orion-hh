@@ -37,16 +37,25 @@
   + Odell:1997a "Herbig Haro Objects in the Orion Nebula."
     + http://adsabs.harvard.edu/abs/1997AJ....114..730O
     + HST imaging: HH 202, 202, 204/4
+  + Odell:2015a "THE NATURE AND FREQUENCY OF OUTFLOWS FROM STARS IN THE CENTRAL ORION NEBULA CLUSTER"
+    + http://adsabs.harvard.edu/abs/2015AJ....150..108O
 + Spectrophotometry
   + Blagrave:2006a "A Photoionized Herbig-Haro Object in the Orion Nebula"
-  + http://adsabs.harvard.edu/abs/2006ApJ...644.1006B
-  + HH 529 spectra
-  + 
+    + http://adsabs.harvard.edu/abs/2006ApJ...644.1006B
+    + HH 529 spectra
+  + Mesa-Delgado:2009a "Properties of the ionized gas in HH 202. II: Results from echelle spectrophotometry with UVES"
+    + http://adsabs.harvard.edu/abs/2009MNRAS.395..855M
+  + Espiritu:2017a "DUST DESTRUCTION AND THERMAL INHOMOGENEITIES IN THE ORION NEBULA. RESULTS OF HH 202."
+    + http://adsabs.harvard.edu/abs/2017cfe..confE..10E
 + Infrared imaging
   + Smith:2005a "Thermal Dust Emission from Proplyds, Unresolved Disks, and Shocks in the Orion Nebula"
     + http://adsabs.harvard.edu/abs/2005AJ....130.1763S
+    + 11.7 micron emission from HH 529 I and III, and jet
 + Neutral gas
   + van-der-Werf:2013a
++ Atomic physics
+  + Laha:2017a "Emission Line Ratios of FE III as Astrophysical Plasma Diagnostics"
+  + http://adsabs.harvard.edu/abs/2017ApJ...841....3L
 
 
 
@@ -59,3 +68,4 @@
 + [O III] is in red
 + H\alpha is in cyan
 + You can see a very thin [O III] layer at the leading edge of the shock
++ But why is the [O III] emission not limb-brightened?
