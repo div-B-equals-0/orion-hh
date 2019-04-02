@@ -21,7 +21,7 @@
 
 ** Background reading
 + OW Coordinate notation
-  + See Fig 3 of DOH
+  + See Fig 3 of Doi:2004a
 + Orion velocity maps
   + Odell:1997b "High Velocity Features in the Orion Nebula"
     + http://adsabs.harvard.edu/abs/1997AJ....114.2016O
@@ -48,3 +48,14 @@
 + Neutral gas
   + van-der-Werf:2013a
 
+
+
+** Shock emission in HH 204
+
+*** [O III] versus H\alpha emission
+#+attr_html: :width 300
+[[./HH204-shock-shell_1.png]]
+
++ [O III] is in red
++ H\alpha is in cyan
++ You can see a very thin [O III] layer at the leading edge of the shock
