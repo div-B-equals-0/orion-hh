@@ -1,0 +1,50 @@
+* UVES observations of HH objects in Orion
+
+** Original Proposal
++ [[file:092.C-0323.pdf]]
++ [[https://www.evernote.com/l/ACQYu1coCdVPE5VGdvX8V1HmLkwqEcXjmRM][Evernote note]] with finding charts
+
+
+| Object        |
+|---------------|
+| HH 514        |
+| HH 528        |
+| HH 523        |
+| HH 529-I      |
+| HH 529-II/III |
+| HH 202-N      |
+| HH 203        |
+| HH 204        |
+
+
+
+
+** Background reading
++ OW Coordinate notation
+  + See Fig 3 of DOH
++ Orion velocity maps
+  + Odell:1997b "High Velocity Features in the Orion Nebula"
+    + http://adsabs.harvard.edu/abs/1997AJ....114.2016O
+    + FP spectra of Huygens region, HH 203/4
+  + Doi:2004a "Internal Velocities in the Orion Nebula: Large Radial Velocity Features"
+    + http://adsabs.harvard.edu/abs/2004AJ....127.3456D
+    + Multiple longslit echelle spectra
+    + HH objects, Big Arc, DOH objects
+  + Henney:2007b "Large-Scale Flows from Orion South"
+    + http://adsabs.harvard.edu/abs/2007AJ....133.2192H
++ Orion proper motions and imaging
+  + Hester:1991a
+  + Odell:1997a "Herbig Haro Objects in the Orion Nebula."
+    + http://adsabs.harvard.edu/abs/1997AJ....114..730O
+    + HST imaging: HH 202, 202, 204/4
++ Spectrophotometry
+  + Blagrave:2006a "A Photoionized Herbig-Haro Object in the Orion Nebula"
+  + http://adsabs.harvard.edu/abs/2006ApJ...644.1006B
+  + HH 529 spectra
+  + 
++ Infrared imaging
+  + Smith:2005a "Thermal Dust Emission from Proplyds, Unresolved Disks, and Shocks in the Orion Nebula"
+    + http://adsabs.harvard.edu/abs/2005AJ....130.1763S
++ Neutral gas
+  + van-der-Werf:2013a
+
