@@ -1,7 +1,7 @@
 * UVES observations of HH objects in Orion
 
 ** Original Proposal
-+ [[file:092.C-0323.pdf]]
++ [[file:docs/092.C-0323.pdf]]
 + [[https://www.evernote.com/l/ACQYu1coCdVPE5VGdvX8V1HmLkwqEcXjmRM][Evernote note]] with finding charts
 
 
@@ -32,6 +32,10 @@
     + HH objects, Big Arc, DOH objects
   + Henney:2007b "Large-Scale Flows from Orion South"
     + http://adsabs.harvard.edu/abs/2007AJ....133.2192H
+  + Garcia-Diaz:2007a "Velocity Structure in the Orion Nebula. I. Spectral Mapping in Low-Ionization Lines"
+    + http://adsabs.harvard.edu/abs/2007AJ....133..952G
+  + Garcia-Diaz:2008a "Velocity Structure in the Orion Nebula. II. Emission Line Atlas of Partially Ionized to Fully Ionized Gas"
+    + http://adsabs.harvard.edu/abs/2008RMxAA..44..181G
 + Orion proper motions and imaging
   + Hester:1991a
   + Odell:1997a "Herbig Haro Objects in the Orion Nebula."
@@ -47,6 +51,10 @@
     + http://adsabs.harvard.edu/abs/2009MNRAS.395..855M
   + Espiritu:2017a "DUST DESTRUCTION AND THERMAL INHOMOGENEITIES IN THE ORION NEBULA. RESULTS OF HH 202."
     + http://adsabs.harvard.edu/abs/2017cfe..confE..10E
+  + Weilbacher:2015a "A MUSE map of the central Orion Nebula (M 42)"
+    + http://adsabs.harvard.edu/abs/2015A%26A...582A.114W
+  + McLeod:2016a "A nebular analysis of the central Orion nebula with MUSE"
+    + http://adsabs.harvard.edu/abs/2016MNRAS.455.4057M
 + Infrared imaging
   + Smith:2005a "Thermal Dust Emission from Proplyds, Unresolved Disks, and Shocks in the Orion Nebula"
     + http://adsabs.harvard.edu/abs/2005AJ....130.1763S
@@ -55,15 +63,28 @@
   + van-der-Werf:2013a
 + Atomic physics
   + Laha:2017a "Emission Line Ratios of FE III as Astrophysical Plasma Diagnostics"
-  + http://adsabs.harvard.edu/abs/2017ApJ...841....3L
+    + http://adsabs.harvard.edu/abs/2017ApJ...841....3L
 
 
+
+
+** Large-scale velocity maps
+*** Combined channel maps of [O III] and [N II]
++ [[file:figs/multi-panel-isovel-oiii-nii.pdf]]
+*** Velocity-colorized [O III] 5007 image
+#+attr_html: :width 300
+[[./figs/final502-colorized.jpg]]
+
+*** Velocity-colorized [N II] 6583 image
+#+attr_html: :width 300
+[[./figs/final658-colorized.jpg]]
+ 
 
 ** Shock emission in HH 204
 
 *** [O III] versus H\alpha emission
 #+attr_html: :width 300
-[[./HH204-shock-shell_1.png]]
+[[./figs/HH204-shock-shell_1.png]]
 
 + [O III] is in red
 + H\alpha is in cyan
