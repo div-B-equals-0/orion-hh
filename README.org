@@ -19,6 +19,29 @@
 
 
 
+** Discussions 2019 August
++ Discussions between Eduardo and Will during Eduardo's visit to Morelia
+*** The back-scattered component
++ Gives red-shifted shoulder/wing to many lines
+  + More prominent in higher ionization (e.g., [O III]) but also seen in [N II]
++ See the positive channels of these isovelocity maps:
+  + [[file:figs/multi-panel-isovel-oiii-nii.pdf]]
+  + Based on Doi:2004a and Garcia-Diaz:2008a
++ This mainly maps the distribution of dust in the neutral/molecular filaments
+  + Same ones that are traced by fluorescent O I lines
++ Secondary influence of orientation effects
+  + In the most red-shifted channels (Vhel > +50 km/s), face-on illuminated filaments predominate
+  + Edge-on illuminated filaments are seen at intermediate red-shifted velocities (Vhel ~ +40 km/s).  Examples are:
+    + Bright Bar
+    + SW Compact Bar
+*** Finding chart for nebular features 
+[[figs/finding-chart-orion.png]]
+*** Other ideas for Eduardo to pursue
+1. Diagnostics of density/temperature from the O II permitted lines
+   - See Peimbert & Peimbert 2013ApJ...778...89P
+   - Also, see Will's notes on analysis of this for nebula
+     - [ ] Add those notes to project
+
 ** Background reading
 + OW Coordinate notation
   + See Fig 3 of Doi:2004a
@@ -90,3 +113,22 @@
 + H\alpha is in cyan
 + You can see a very thin [O III] layer at the leading edge of the shock
 + But why is the [O III] emission not limb-brightened?
+
+
+** Results from Adal's previous UVES observations of HH202-S
+
+*** Dust destruction
+Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
+
+*** ADFs
++ Gets high ADF for C^{2+} but
+  + might be fluorescence if it is from the 723X lines
+    + No, seems mainly based on 4267 which should be unaffected
+  + Also it is based on 3rd party [C III] NUV observations
+
+
+** First look at data
+#+attr_html: :width 200
+[[file:figs/uves-data-description.png]]
+
+*** HH 529 dataset
