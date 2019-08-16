@@ -35,12 +35,15 @@
     + Bright Bar
     + SW Compact Bar
 *** Finding chart for nebular features 
+This is from Garcia-Diaz:2007a
 [[figs/finding-chart-orion.png]]
 *** Other ideas for Eduardo to pursue
 1. Diagnostics of density/temperature from the O II permitted lines
    - See Peimbert & Peimbert 2013ApJ...778...89P
    - Also, see Will's notes on analysis of this for nebula
-     - [ ] Add those notes to project
+     - [X] Add those notes to project. Done
+     - [[file:notebooks/Adal%20spectra.ipynb][Adal spectra]]
+     - [[file:notebooks/Manu%20Spectra.ipynb][Manu spectra]]
 
 ** Background reading
 + OW Coordinate notation
