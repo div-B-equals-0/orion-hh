@@ -482,7 +482,9 @@ flct: finished
 #+RESULTS:
 [[file:proper-motions/hh529_acs_f775w_proper_motions.jpg]]
 
-*** Make a GIF
+*** Make some GIFs
+
+**** Frame of reference of star cluster
 #+begin_src sh :dir proper-motions :results silent
 ORDER="HH-529-ACS-GO10246-2005-04.png HH-529-ACS-GO13826-2015-10.png"
 convert $(for a in "$ORDER"; do printf -- "-delay 25 %s " $a; done; ) HH529-motions.gif
@@ -493,6 +495,17 @@ convert $(for a in "$ORDER"; do printf -- "-delay 25 %s " $a; done; ) HH529-moti
 open -a Safari proper-motions/HH529-motions.gif
 #+END_SRC
 
+**** Frame of reference of HH 529-III bow shock
+#+begin_src sh :dir proper-motions :results silent
+ORDER="HH529-III-bowshock-frame-2005.png HH529-III-bowshock-frame-2015.png"
+convert $(for a in "$ORDER"; do printf -- "-delay 25 %s " $a; done; ) HH529-III-bowshock-frame.gif
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC sh :results silent
+open -a Safari proper-motions/HH529-III-bowshock-frame.gif
+#+END_SRC
+
 
 
 *** Measurements of HH 529 PM 
@@ -500,8 +513,8 @@ open -a Safari proper-motions/HH529-motions.gif
   + PA = 98 +/- 10 deg
   + V_t = 35 +/- 2 km/s
 + HH 529-II
-  + V_t = 28 +/- 5
   + PA = 105 +/- 13
+  + V_t = 28 +/- 5
 + HH 529-I
   + PA = 83 +/- 50
   + V_t = 25 +/- 15
@@ -524,6 +537,22 @@ open -a Safari proper-motions/HH529-motions.gif
   + PA = 224 +/- 24
   + V_t = 54 +/- 27
 
+
+*** Align on the HH529-III motion
++ Move the CRPIX according to the motion
+  + -35 sin(98) / 10 = -3.466 pix
+  + +35 cos(98) / 10 = -0.487 pix
+  + [676.0 - 3.466, -37.0 - 0.487] = [672.534, -37.487]
++ Turns out that the bowshock frame is a bit different
+  + CRPIX = [671.534, -37.987]
+  + So shift is [671.534, -37.987] - [676.0, -37.0] = [-4.466, -0.987]
+  + 4.5738 pixels = 46 km/s
+  + PA = arctan2(4.466, -0.987) = 102.4 deg
++ /Why is this different from the results from FLCT?/
+  + Because there is sub-structure to HH 529-III with different velocities
+  + The bow shock is moving the fastest
+  + There is a bright knot, with its own half mini-bow to north, which is moving slower
+
 *** Figure showing the ACS proper motions for HH 529
 + Objects that I name here (not all are exactly new)
   + HH 529-1.5
@@ -533,3 +562,10 @@ open -a Safari proper-motions/HH529-motions.gif
     - This is just above the E end of the "East shock", about 2 arcsec W of the HH 998 knot
 * TODO Make a new version of Fig 1
 + Remove the labels
++ [ ] Query about position
+* TODO Compare with SPM horizontal slits
++ For instance [[file:~/Dropbox/SPMFEB13/OrionS/spm-vstack-oiii.fits][file:~/Dropbox/SPMFEB13/OrionS/spm-vstack-oiii.fits]]
++ Zoom factor needs to be 4.5x10 to match 1.68 on MUSE images
++ Bowshock III and bowshock-east show up best in the V = +4 channel
++ II and the III knot show up best around -28
++ 0 and Ram show peak atound -46

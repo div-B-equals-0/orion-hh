@@ -1,0 +1,11 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+image
+# text(132.53627,331.01546) color=white text={Star}
+# text(261.29568,318.95555) color=white text={Star}
+# text(285.89152,363.32699) textangle=359.99999 color=white text={Knot}
+# text(284.91013,280.38117) textangle=359.99999 color=white font="helvetica 16 normal roman" text={HH 529-III}
+# text(165.30308,495.46732) textangle=359.99999 color=white font="helvetica 16 normal roman" text={HH 529-East}
+# text(353.40056,343.54698) textangle=359.99999 color=white font="helvetica 16 normal roman" text={HH 529-II}
+# text(132.51291,207.08314) textangle=359.99999 color=white font="courier 16 bold roman" text={Epoch 2015.16}
+# text(152.77514,223.47202) textangle=359.99999 color=white font="helvetica 16 normal roman" text={Bow shock reference frame}
