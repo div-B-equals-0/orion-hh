@@ -1,0 +1,31 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+point(83.8197659,-5.3881404) # point=circle
+point(83.8197258,-5.3881568) # point=circle
+point(83.8196881,-5.3881639) # point=circle
+point(83.8196410,-5.3881826) # point=circle
+point(83.8196009,-5.3881850) # point=circle
+point(83.8195514,-5.3881850) # point=circle
+point(83.8195114,-5.3881850) # point=circle
+point(83.8195939,-5.3880348) # point=circle
+point(83.8195585,-5.3880372) # point=circle
+point(83.8195279,-5.3880395) # point=circle
+point(83.8194949,-5.3880372) # point=circle
+point(83.8194548,-5.3880278) # point=circle
+point(83.8194100,-5.3880254) # point=circle
+point(83.8193747,-5.3880137) # point=circle
+point(83.8193346,-5.3879879) # point=circle
+point(83.8192615,-5.3879691) # point=circle
+point(83.8192286,-5.3879691) # point=circle
+point(83.8191908,-5.3879691) # point=circle
+point(83.8191555,-5.3879621) # point=circle
+point(83.8191154,-5.3879480) # point=circle
+point(83.8190706,-5.3879433) # point=circle
+point(83.8196481,-5.3882483) # point=circle
+point(83.8196009,-5.3882554) # point=circle
+point(83.8195302,-5.3882530) # point=circle
+point(83.8194619,-5.3882413) # point=circle
+point(83.8193794,-5.3882225) # point=circle
+point(83.8193110,-5.3881873) # point=circle
+point(83.8192333,-5.3881686) # point=circle

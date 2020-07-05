@@ -142,7 +142,7 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
 ** HH 529 
 + Disagreement between OH2008 and OD2015
   |            | Vt 08 | Vr\odot 08 |   |
-  | HH 529-I   |    54 |    -31  |   |
+  | HH 529-I   |    54 |    -31 |   |
   | HH 529-II  |    92 |    -31 |   |
   | HH 529-III |    40 |    -30 |   |
  
@@ -194,9 +194,10 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
   + Although unfortunately they are not aligned very well
 + We also have both Bally and Robberto for 2005 ACS
   + But Bally needs to be shifted a little bit
-+ Extract just a window of the ACS 2005 Ha+[N II] image
-  + In the F775W version below, I am now taking a very large window
-  + But here I want to concentrate on HH 529 for now
+
+*** Extract just a window of the ACS 2005 Ha+[N II] image
++ In the F775W version below, I am now taking a very large window
++ But here I want to concentrate on HH 529 for now
 #+begin_src python
   from pathlib import Path
   import numpy as np
@@ -206,7 +207,7 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
   datadir = Path("../Orion-HH-data/ACS")
 
   # Corners of window to extract from image
-  xmin, xmax, ymin, ymax = 8120, 9670, 3770, 4710
+  xmin, xmax, ymin, ymax = 8120, 9670, 3770, 5710
   rect = slice(ymin, ymax), slice(xmin, xmax)
 
   # Big file from Robberto 2005 program
@@ -231,7 +232,7 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
 #+RESULTS:
 : None
 
-Now reproject the 1996 and 2015 epochs onto 2005
+*** Reproject the 1996 and 2015 epochs onto 2005
 #+begin_src python
   from pathlib import Path
   import numpy as np
@@ -268,7 +269,9 @@ Now reproject the 1996 and 2015 epochs onto 2005
 
   # Orig file from Bally 1996 program
   hdu3 = fits.open(bigdatadir / "F656N-HST3-align-rob_drz_sci.fits")[0]
-  # Alignment should be fine already
+  # Alignment tweak
+  hdu3.header["CRVAL1"] += 0.05/3600
+  hdu3.header["CRVAL2"] -= 0.05/3600
 
   # Reproject 2->1
   newdata, _ = reproject_interp(hdu3, hdu1.header)
@@ -288,7 +291,7 @@ Now reproject the 1996 and 2015 epochs onto 2005
 : None
 
 
-+ And use FLCT to calculate proper motions
+*** Use FLCT to calculate proper motions 1996 \to 2005 \to 2015 
 #+begin_src python :results output
   import sys
   sys.path.append("../../Source/pyflct")
@@ -458,7 +461,7 @@ flct: progress  i = 0 out of 939flct: progress  i = 1 out of 939flct: progress
 flct: finished
 #+end_example
 
-High-pass filtered fersion of the 2015 epoch WFC3 H\alpha filter
+*** High-pass filtered version of the 2015 epoch WFC3 H\alpha filter
 
 #+begin_src sh :results verbatim :dir proper-motions/data
 python /Users/will/Dropbox/Teresa-Turtle/scripts/smooth-image.py hh529_wfc3_f656n_2015.fits -w 16 
@@ -472,7 +475,7 @@ python /Users/will/Dropbox/Teresa-Turtle/scripts/smooth-image.py hh529_acs_f658n
 
 #+RESULTS:
 
-Make vector graphs of the proper motions.  
+*** Make vector graphs of the proper motions.  
 
 - First using the entire 20 year interval
   - The problem with this is that things move to far so we need to use a wide kernel (15 pix) and even then it doesn't pick up all the motions properly
@@ -730,7 +733,7 @@ Make vector graphs of the proper motions.
 #+RESULTS:
 [[file:proper-motions/hh529_f656n_1996_2005_proper_motions.jpg]]
 
-+ [ ] Next thing to do: take an average of the two 10-year intervals
++ [X] Next thing to do: take an average of the two 10-year intervals
 
 *** Average and dispersion the two 10-year intervals
 
@@ -916,6 +919,261 @@ Make vector graphs of the proper motions.
 [[file:proper-motions/hh529_f656n_1996_2015_2stage_proper_motions.jpg]]
 
 
+*** Make some ratio images
+This is a lot easier than what we have been doing, and it might be useful
+
+#+begin_src python
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  datadir = Path("proper-motions/data")
+
+
+  hdu1, = fits.open(datadir / "hh529_wfpc2_f656n_1996.fits")
+  hdu2, = fits.open(datadir / "hh529_acs_f658n_2005.fits")
+  hdu3, = fits.open(datadir / "hh529_wfc3_f656n_2015.fits")
+
+
+  fits.PrimaryHDU(
+      header=hdu3.header,
+      data=hdu3.data/hdu2.data,
+  ).writeto(
+      datadir / f"hh529_f656n_ratio_2015_2005.fits",
+      overwrite=True,
+  )
+  fits.PrimaryHDU(
+      header=hdu2.header,
+      data=hdu2.data/hdu1.data,
+  ).writeto(
+      datadir / f"hh529_f656n_ratio_2005_1996.fits",
+      overwrite=True,
+  )
+  fits.PrimaryHDU(
+      header=hdu3.header,
+      data=hdu3.data/hdu1.data,
+  ).writeto(
+      datadir / f"hh529_f656n_ratio_2015_1996.fits",
+      overwrite=True,
+  )
+#+end_src
+
+#+RESULTS:
+: None
+
+
+
+*** Measure the per-feature motions in HH 529-III and II
++ Define regions in DS9
+  + [[file:proper-motions/HH529-samples.reg]]
+  + Ellipses are regions we measure PM
+  + Dashed boxes are for background brightness measurements
++ [ ] Eventually I should repeat for HH 529-I, HH 529-East, and HH 1149, etc
++ Plan is to calculate weighted average of V and PA for each region
++ Weighting by BG-subtracted brightness
++ We can do it separately for the 1996-2005 and 2005-2015 intervals, where available
++ This only works because the WCS is the same for all the images
+#+begin_src python :return display
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from astropy.table import Table
+  import regions as rg
+
+  regiondir = Path("proper-motions")
+  datadir = regiondir / "data"
+  regions = rg.read_ds9(regiondir / "HH529-samples.reg")
+
+  # Split into BG and source regions
+  source_regions = []
+  bg_regions = {}
+  for region in regions:
+      label = region.meta["label"]
+      if "BG" in label:
+          # BG samples are grouped into II, III, etc
+          bg_group = label.split()[0]
+          if bg_group not in bg_regions:
+              bg_regions[bg_group] = []
+          bg_regions[bg_group].append(region)
+      else:
+          source_regions.append(region)
+
+  hdu2015, = fits.open(datadir / "hh529_wfc3_f656n_2015.fits")
+  w = WCS(hdu2015.header)
+  badmask = ~np.isfinite(hdu2015.data)
+  hdu2015.data[badmask] = 0.0
+
+  data_images = {
+      # "VV 96->05": fits.open(datadir / "hh529_f656n_1996_2005_vv_sig10.fits")[0].data, 
+      # "PA 96->05": fits.open(datadir / "hh529_f656n_1996_2005_pa_sig10.fits")[0].data, 
+      # "VV 05->15": fits.open(datadir / "hh529_f656n_2005_2015_vv_sig10.fits")[0].data, 
+      # "PA 05->15": fits.open(datadir / "hh529_f656n_2005_2015_pa_sig10.fits")[0].data, 
+      "VV": fits.open(datadir / "hh529_f656n_1996_2015_2stage_vv_sig10.fits")[0].data,
+      "PA": fits.open(datadir / "hh529_f656n_1996_2015_2stage_pa_sig10.fits")[0].data,
+  }
+
+  # Find mean brightness BG for each group
+  bg_brightness = {}
+  for bg_group, bgrs in bg_regions.items():
+      weights = np.zeros_like(hdu2015.data)
+      for r in bgrs:
+          weights += r.to_pixel(w).to_mask().to_image(hdu2015.data.shape)
+      bg_brightness[bg_group] = np.average(hdu2015.data, weights=weights)
+
+  # Now do measurements on each source region
+  all_results = []
+  for region in source_regions:
+      label = region.meta["label"]
+      group = label.split()[0]
+      bg = bg_brightness[group]
+      results = {"region": label}
+      mask = region.to_pixel(w).to_mask()
+      mw = mask.to_image(hdu2015.data.shape).astype(bool)
+      weights = hdu2015.data[mw] - bg
+      results["Bright"] = np.round(np.mean(weights), 2)
+      results["Bright sig"] = np.round(np.std(weights), 2)
+      results["Bright BG"] = np.round(bg, 2)
+      for data_label, data in data_images.items():
+          m = mask.to_image(data.shape).astype(bool)
+          mean = np.average(data[m], weights=weights)
+          sigma = np.sqrt(np.average((data[m] - mean)**2, weights=weights))
+          results[data_label] = np.round(mean, 2)
+          results[f"{data_label} sig"] = np.round(sigma, 2)
+      all_results.append(results)
+
+  #
+  # List of dicts to astropy.table.Table
+  #
+  # It would be cleaner to just write Table(rows=all_results) but for
+  # some reason that does alphabetical sorting on column names, which we
+  # don't want.  This way preserves the column order.
+  table = Table(
+      names=all_results[0].keys(),
+      rows=[_.values() for _ in all_results],
+  )
+
+  #
+  # astropy.table.Table to a list of lists, which babel will format as
+  # an org table
+  #
+  display = [list(table.colnames), None] + [list(row) for row in table]
+#+end_src
+
+#+RESULTS:
+| region           | Bright | Bright sig | Bright BG |   VV | VV sig |     PA | PA sig |
+|------------------+--------+------------+-----------+------+--------+--------+--------|
+| III knot         |  13.47 |       1.21 |     11.85 | 2.67 |   0.03 | 129.84 |    0.9 |
+| III knot N       |   11.2 |       1.06 |     11.85 | 2.98 |   0.17 | 104.75 |    3.3 |
+| III knot S       |   7.57 |       0.82 |     11.85 | 3.03 |   0.23 |  124.9 |   4.24 |
+| III apex         |    9.7 |        1.3 |     11.85 | 3.56 |    0.1 | 106.79 |   6.79 |
+| III apex N       |   5.49 |       1.69 |     11.85 | 3.33 |   0.34 |  90.18 |   3.18 |
+| III apex S       |   6.18 |       1.61 |     11.85 | 3.16 |   0.14 | 117.18 |   3.12 |
+| III lower wing   |    4.8 |       0.88 |     11.85 | 3.92 |   0.19 | 136.86 |   4.63 |
+| III lower wing S |   3.16 |       0.87 |     11.85 | 3.15 |   0.12 | 151.74 |  10.23 |
+| II a             |    3.3 |       0.46 |      13.2 | 2.09 |   0.93 | 117.04 |  58.35 |
+| II c             |   2.91 |       0.42 |      13.2 | 3.52 |   0.86 | 151.16 |  87.38 |
+| II b             |   4.62 |       1.05 |      13.2 | 2.58 |   0.51 | 107.14 |   4.44 |
+
+|     PA | PA + 90 |
+|--------+---------|
+| 129.84 |  219.84 |
+| 104.75 |  194.75 |
+|  124.9 |  214.90 |
+| 106.79 |  196.79 |
+|  90.18 |  180.18 |
+| 117.18 |  207.18 |
+| 136.86 |  226.86 |
+| 151.74 |  241.74 |
+| 117.04 |  207.04 |
+| 151.16 |  241.16 |
+| 107.14 |  197.14 |
+#+TBLFM: $2=$1 + 90;%.2f
+
+I have now renamed these features for the figure.
+| region           | new name      | Bright | Bright sig | Bright BG |   VV | VV sig |     PA | PA sig |    Rel Bright |
+|------------------+---------------+--------+------------+-----------+------+--------+--------+--------+---------------|
+| III knot         | HH 529 III b2 |  13.47 |       1.21 |     11.85 | 2.67 |   0.03 | 129.84 |    0.9 | 1.14 +/- 0.10 |
+| III knot N       | HH 529 III b1 |   11.2 |       1.06 |     11.85 | 2.98 |   0.17 | 104.75 |    3.3 | 0.95 +/- 0.09 |
+| III knot S       | HH 529 III b3 |   7.57 |       0.82 |     11.85 | 3.03 |   0.23 |  124.9 |   4.24 | 0.64 +/- 0.07 |
+| III apex         | HH 529 III a2 |    9.7 |        1.3 |     11.85 | 3.56 |    0.1 | 106.79 |   6.79 | 0.82 +/- 0.11 |
+| III apex N       | HH 529 III a1 |   5.49 |       1.69 |     11.85 | 3.33 |   0.34 |  90.18 |   3.18 | 0.46 +/- 0.14 |
+| III apex S       | HH 529 III a3 |   6.18 |       1.61 |     11.85 | 3.16 |   0.14 | 117.18 |   3.12 | 0.52 +/- 0.14 |
+| III lower wing   | HH 529 III a4 |    4.8 |       0.88 |     11.85 | 3.92 |   0.19 | 136.86 |   4.63 | 0.41 +/- 0.07 |
+| III lower wing S | HH 529 III a5 |   3.16 |       0.87 |     11.85 | 3.15 |   0.12 | 151.74 |  10.23 | 0.27 +/- 0.07 |
+| II a             | HH 529 II a   |    3.3 |       0.46 |      13.2 | 2.09 |   0.93 | 117.04 |  58.35 | 0.25 +/- 0.03 |
+| II c             | HH 529 II b   |   2.91 |       0.42 |      13.2 | 3.52 |   0.86 | 151.16 |  87.38 | 0.22 +/- 0.03 |
+| II b             | HH 529 II c   |   4.62 |       1.05 |      13.2 | 2.58 |   0.51 | 107.14 |   4.44 | 0.35 +/- 0.08 |
+#+TBLFM: $10=($3 +/- $4)/$5;f2
+
+
+
+*** Which proper motion features are in the UVIS slit
+1. HH 529 III a2
+   - V = 36 +/- 1 km/s
+   - PA = 107 +/- 7 deg
+   - contrast = 0.82 +/- 0.11
+2. HH 529 III b1
+   - V = 30 +/- 2 km/s
+   - PA = 105 +/- 3 deg
+   - contrast = 0.95 +/- 0.09
+3. HH 529 II a
+   - V = 21 +/- 9 km/s
+   - PA = 120 +/- 50 deg
+   - contrast = 0.25 +/- 0.03
+4. HH 529 II b
+   - V = 26 +/- 5 km/s
+   - PA = 107 +/- 4 km/s
+   - contrast = 0.35 +/- 0.08
+*** Comparison with radial velocities
++ HH 529 II is the most straightforward, since the components are narrow
+  + Suggesting either bullets are internal working surfaces
+  + II a has an extent on the [Fe III] PV array of Fig 2e of [-40, -20] km/s
+    + Thermal broadening should be negligible (3 km/s) and instrumental width is 6.5 km/s
+    + So the corrected FWZI is sqrt(20**2 - 6.5**2 - 3**2) = 18.5 km/s, which should be the working surface speed relative to the upstream gas
+    + The average Vhel is -30 km/s, which gives Vr = -57 km/s
+    + Proper motion gives Vt = 21 +/- 9 km/s, so V = 61 km/s and inc = arctan2(-57, 21 +/- 9) = -70 +/- 8 deg
+  + II b has Vhel in range [-25, -45]
+    + V_WS - V_us = 18.5
+    + Average Vhel = -35 => Vr = -62
+    + Vt = 26 +/- 5 => V = -67 km/s and inc = -67 +/- 4
++ HH 529 III is a combination of a2 and b1 in the spectrum
+  + a2 is part of the bow shock
+  + whereas b1 may be something different
+  + To start with, analyse them as a single entity
+    + the fact that it goes down to near-systemic velocities suggests it is a terminal bow
+    + highest velocity is -45 km/s => Vr = -72 km/s
+    + Average Vt = 33 km/s
+    + If we used
+      + Vmax = V 0.5 (1 + sin i)
+      + Vt = V cos i
+      + Vmax/Vt = r = 0.5 (seci + tan i)
+        + 2r - tan i = sec i
+        + 4r^2 + tan^2 i - 4 r tan i = 1 + tan^2 i
+        + tan i = (4r^2 - 1)/4r = r - 1/4r
+      + r = 72/(33 +/- 3) = 2.18 +/- 0.20 =>  r - 1/4r = 2.07 +/- 0.20 => inc = 64 +/- 2 deg
+      + V = 72 / 0.5 (1 + sin(64 +/- 2)) = 75.8 +/- 0.6  km/s
+      + Alternative V = (33 +/- 3) / cos(64 +/- 2) = 75.3 +/- 0.7  - close enough
+    + But this means that we should get a most red-shifted velocity of Vr = V 0.5 (sin i - 1) = -0.05 V = 4 km/s
+      + This would mean Vhel = +30 km/s
+      + This would be hard to see - maybe there is evidence in [O I]
+  + Alternatively, we could suppose that the most redshifted velocity is actually Vhel = 0
+    + Suggested at least for III b1 from the spectrum
+    + This would give V_WS - V_us = 45 km/s
+    + Average Vhel = -23 km/s => Vr = -50 km/s
+    + Vt = 30 +/- 2 km/s => V = 58 +/- 3 km/s
+      + Implying upstream V = 13 km/s
+    + inc = arctan2(-50, 30) = -59 deg
+  + Going back,
+    + 0.5 (1 + sin(i)) V = 0.93 45 = 42 km/s
+    + 0.5 (-1 + sin(i)) V = -0.07 45 = -3 km/s
+    + This implies that the rest frame of upstream is Vr = +3 km/s, which is -30 km/s wrt systemic
+    + I don't quite understand this, but lets carry on
+  + If that was at the same angle (60 deg), then upstream V = 30 / sin(60) = 35 km/s
+    + So Vt = 35 cos(60) = 17.5 km/s
+    + This would be a prediction for III a2 but we actually have 36 km/s! 
+
 ** ACS 10-year interval
 *** Fix the WCS of epoch 2
 + Center on the star that is superimposed on HH 529-III
@@ -933,7 +1191,7 @@ Make vector graphs of the proper motions.
   datadir = Path("../Orion-HH-data/ACS")
 
   # Corners of window to extract from image
-  xmin, xmax, ymin, ymax = 6324, 11724, 1787, 6717
+  xmin, xmax, ymin, ymax = 7324, 10724, 2787, 5717
   rect = slice(ymin, ymax), slice(xmin, xmax)
 
   # Big file from Robberto 2005 program
@@ -1307,9 +1565,250 @@ open -a Safari proper-motions/HH529-III-bowshock-frame.gif
     - They are aligned with HH 529-east
   + HH 529-0
     - This is just above the E end of the "East shock", about 2 arcsec W of the HH 998 knot
+
+** Radio observations
++ Epoch: 2012
++ Published in Forbrich:2016a
++ Data is [[file:~/Dropbox/RadioProplyds/JanData/concat_nouvra_inner4k.fits]]
++ In principle, these should be better absolute coordinates
++ They don't quite align with Robberto 2005
++ I had to subtract (1.0, -0.5) pixels from the CRPIX of the radio data
+  + But a better solution would be to shift the optical coordinates
 * TODO Make a new version of Fig 1
 + Remove the labels
-+ [ ] Query about position
++ [X] Query about position
+  + Corrected in email from Eduardo
+* Compare with MUSE spectral maps
+** Copy the files that we want from /Volumes/SSD-2TB/OrionMuse/LineMaps/
+#+begin_src sh :dir ../Orion-HH-data/MUSE :results verbatim
+  files="mean-Fe_III-4658-patfixx.fits
+  mean-Fe_II-8617-patfixx.fits
+  mean-Ar_IV-4740-patfixx.fits
+  mean-Cl_IV-8046-patfixx.fits
+  mean-H_I-6563-patfixx.fits
+  mean-H_I-4861-patfixx.fits
+  mean-He_I-5876-patfixx.fits
+  mean-He_I-6678-patfixx.fits
+  mean-N_II-6548-patfixx.fits
+  mean-N_II-6583-patfixx.fits
+  mean-O_I-6300-patfixx.fits
+  mean-O_III-4959-patfixx.fits
+  mean-O_III-5007-patfixx.fits
+  mean-S_II-6716-patfixx.fits
+  mean-S_II-6731-patfixx.fits
+  mean-S_III-9069-patfixx.fits"
+  for f in $files;do
+      cp -pv /Volumes/SSD-2TB/OrionMuse/LineMaps/$f .
+  done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Fe_III-4658-patfixx.fits -> ./mean-Fe_III-4658-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Fe_II-8617-patfixx.fits -> ./mean-Fe_II-8617-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Ar_IV-4740-patfixx.fits -> ./mean-Ar_IV-4740-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Cl_IV-8046-patfixx.fits -> ./mean-Cl_IV-8046-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-H_I-6563-patfixx.fits -> ./mean-H_I-6563-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-H_I-4861-patfixx.fits -> ./mean-H_I-4861-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-He_I-5876-patfixx.fits -> ./mean-He_I-5876-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-He_I-6678-patfixx.fits -> ./mean-He_I-6678-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-N_II-6548-patfixx.fits -> ./mean-N_II-6548-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-N_II-6583-patfixx.fits -> ./mean-N_II-6583-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-O_I-6300-patfixx.fits -> ./mean-O_I-6300-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-O_III-4959-patfixx.fits -> ./mean-O_III-4959-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-O_III-5007-patfixx.fits -> ./mean-O_III-5007-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-S_II-6716-patfixx.fits -> ./mean-S_II-6716-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-S_II-6731-patfixx.fits -> ./mean-S_II-6731-patfixx.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-S_III-9069-patfixx.fits -> ./mean-S_III-9069-patfixx.fits
+#+end_example
+
+#+begin_src sh :dir ../Orion-HH-data/MUSE :results verbatim
+  files="linesum-Fe_III-4881.fits
+  linesum-Fe_III-4881-bin004.fits
+  linesum-Fe_III-4658-bin004.fits
+  linesum-Fe_III-5270-bin004.fits
+  linesum-Fe_III-4702-bin004.fits
+  ratio-4702-4658-multibin-SN0010.fits
+  ratio-4658-4861-bin004.fits
+  ratio-9069-9229.fits
+  ratio-6583-6563.fits
+  linesum-Fe_III-4702-multibin-SN0005.fits"
+  for f in $files;do
+      cp -pv /Volumes/SSD-2TB/OrionMuse/LineMaps/$f .
+  done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4881.fits -> ./linesum-Fe_III-4881.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4881-bin004.fits -> ./linesum-Fe_III-4881-bin004.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4658-bin004.fits -> ./linesum-Fe_III-4658-bin004.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-5270-bin004.fits -> ./linesum-Fe_III-5270-bin004.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4702-bin004.fits -> ./linesum-Fe_III-4702-bin004.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/ratio-4702-4658-multibin-SN0010.fits -> ./ratio-4702-4658-multibin-SN0010.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/ratio-4658-4861-bin004.fits -> ./ratio-4658-4861-bin004.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/ratio-9069-9229.fits -> ./ratio-9069-9229.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/ratio-6583-6563.fits -> ./ratio-6583-6563.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4702-multibin-SN0005.fits -> ./linesum-Fe_III-4702-multibin-SN0005.fits
+#+end_example
+
+
+Original batch
+#+begin_src sh :dir ../Orion-HH-data/MUSE :results verbatim
+  files="linesum-Fe_III-5270-multibin-SN0005.fits
+  linesum-Fe_III-4658-multibin-SN0005.fits
+  linesum-Fe_II-8617-multibin-SN0005.fits
+  linesum-Ni_II-7378-multibin-SN0005.fits
+  linesum-Si_III-5740-bin032.fits
+  linesum-S_III-9069.fits
+  linesum-S_III-6312.fits
+  linesum-Ar_III-7136.fits
+  linesum-O_III-5007.fits
+  mean-Ar_III-7136-patfixx-bin001.fits
+  mean-O_II-7318-patfixx-bin001.fits
+  mean-O_I-8446-bin001.fits
+  sigma-O_I-8446-bin001.fits
+  mean-Ni_II-7378-bin008.fits
+  muse-derived-Ne-iii-multibin-SN0003.fits
+  muse-derived-Ne-multibin-SN0010.fits
+  muse-derived-Te-multibin-SN0030.fits
+  muse-derived-Te-iii-multibin-SN0003.fits
+  linesum-O_III-5007.fits
+  linesum-O_II-7318.fits
+  linesum-O_I-8446.fits
+  linesum-N_II-6583.fits
+  linesum-Fe_III-5270-multibin-SN0005.fits
+  linesum-O_II-7330.fits
+  linesum-O_I-8446-multibin-SN0005.fits
+  linesum-Ni_II-7378-multibin-SN0005.fits
+  linesum-Fe_II-8617-multibin-SN0005.fits
+  linesum-S_III-9069.fits
+  linesum-Ar_III-7136.fits
+  linesum-O_III-5007.fits
+  ratio-5007-7318.fits"
+  for f in $files;do
+      cp -pv /Volumes/SSD-2TB/OrionMuse/LineMaps/$f .
+  done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-5270-multibin-SN0005.fits -> ./linesum-Fe_III-5270-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-4658-multibin-SN0005.fits -> ./linesum-Fe_III-4658-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_II-8617-multibin-SN0005.fits -> ./linesum-Fe_II-8617-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Ni_II-7378-multibin-SN0005.fits -> ./linesum-Ni_II-7378-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Si_III-5740-bin032.fits -> ./linesum-Si_III-5740-bin032.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-S_III-9069.fits -> ./linesum-S_III-9069.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-S_III-6312.fits -> ./linesum-S_III-6312.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Ar_III-7136.fits -> ./linesum-Ar_III-7136.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_III-5007.fits -> ./linesum-O_III-5007.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Ar_III-7136-patfixx-bin001.fits -> ./mean-Ar_III-7136-patfixx-bin001.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-O_II-7318-patfixx-bin001.fits -> ./mean-O_II-7318-patfixx-bin001.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-O_I-8446-bin001.fits -> ./mean-O_I-8446-bin001.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/sigma-O_I-8446-bin001.fits -> ./sigma-O_I-8446-bin001.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/mean-Ni_II-7378-bin008.fits -> ./mean-Ni_II-7378-bin008.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/muse-derived-Ne-iii-multibin-SN0003.fits -> ./muse-derived-Ne-iii-multibin-SN0003.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/muse-derived-Ne-multibin-SN0010.fits -> ./muse-derived-Ne-multibin-SN0010.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/muse-derived-Te-multibin-SN0030.fits -> ./muse-derived-Te-multibin-SN0030.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/muse-derived-Te-iii-multibin-SN0003.fits -> ./muse-derived-Te-iii-multibin-SN0003.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_III-5007.fits -> ./linesum-O_III-5007.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_II-7318.fits -> ./linesum-O_II-7318.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_I-8446.fits -> ./linesum-O_I-8446.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-N_II-6583.fits -> ./linesum-N_II-6583.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_III-5270-multibin-SN0005.fits -> ./linesum-Fe_III-5270-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_II-7330.fits -> ./linesum-O_II-7330.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_I-8446-multibin-SN0005.fits -> ./linesum-O_I-8446-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Ni_II-7378-multibin-SN0005.fits -> ./linesum-Ni_II-7378-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Fe_II-8617-multibin-SN0005.fits -> ./linesum-Fe_II-8617-multibin-SN0005.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-S_III-9069.fits -> ./linesum-S_III-9069.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-Ar_III-7136.fits -> ./linesum-Ar_III-7136.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/linesum-O_III-5007.fits -> ./linesum-O_III-5007.fits
+/Volumes/SSD-2TB/OrionMuse/LineMaps/ratio-5007-7318.fits -> ./ratio-5007-7318.fits
+#+end_example
+** Extra line ratios
+*** O I / [O II]
+#+begin_src python :dir ../Orion-HH-data/MUSE
+  import numpy as np
+  from astropy.io import fits
+
+  hdu = {
+      id_: fits.open(f"linesum-{id_}.fits")[0]
+      for id_ in ["O_III-5007", "O_II-7330", "O_II-7318", "O_I-8446"]
+  }
+
+  pairs = [
+      ["O_I-8446", "O_II-7330"],
+      ["O_II-7318", "O_II-7330"],
+      ["O_II-7318", "O_III-5007"],
+  ]
+  for wav1, wav2 in pairs:
+      ratio = hdu[wav1].data/hdu[wav2].data
+      fits.PrimaryHDU(
+          header=hdu[wav1].header,
+          data=ratio,
+          ).writeto(f"ratio-{wav1}-{wav2}.fits", overwrite=True)
+
+#+end_src
+
+#+RESULTS:
+: None
+
+*** [Fe III] density and temperature sensitive
++ 4881/4658 varies from 0.3 @ 1000 pcc to 0.45 @ 1e4, then falls again at higher densities
++ 5271/4658 is mainly T sensitive when n = 1e3 \to 1e5: 0.6 @ 6000 K, falling to 0.4 @ 14,000 K
++ 4702/4658 is density-sensitive (and monotonic this time), from 0.26 @ 1000 pcc to 0.33 @ 1e4 pcc to 0.46 @ 1e5 pcc
+
+
+#+begin_src python :dir ../Orion-HH-data/MUSE
+  import numpy as np
+  from astropy.io import fits
+
+  hdu = {
+      wav: fits.open(f"linesum-Fe_III-{wav}-bin004.fits")["SCALED"]
+      for wav in ["4881", "5270", "4702", "4658"]
+  }
+
+  pairs = [
+      ["4881", "4658"],
+      ["5270", "4658"],
+      ["4702", "4658"],
+  ]
+  mask = (hdu["4658"].data > 15000.0) 
+  for wav1, wav2 in pairs:
+      ratio = hdu[wav1].data/hdu[wav2].data
+      ratio[~mask] = np.nan
+      fits.PrimaryHDU(
+          header=hdu[wav1].header,
+          data=ratio,
+          ).writeto(f"ratio-Fe_III-{wav1}-{wav2}-bin004.fits", overwrite=True)
+
+#+end_src
+
+#+RESULTS:
+: None
+
+Measurements of features in [Fe III] lines
+
+#+name: fe-iii-ratios
+| Feature       | 4658 | 4702/4658     | 4881/4658     | 5270/4658     | N(S II)/1000 |
+|---------------+------+---------------+---------------+---------------+--------------|
+| Outside Bar   |      | 0.26 +/- 0.06 | 0.37 +/- 0.05 | 0.56 +/- 0.06 |              |
+| Bar NE        |      | 0.29 +/- 0.04 | 0.42 +/- 0.04 | 0.57 +/- 0.05 |              |
+| HH 204        |      | 0.30 +/- 0.05 | 0.45 +/- 0.03 | 0.64 +/- 0.06 |              |
+| HH 203        |      | 0.31 +/- 0.07 | 0.43 +/- 0.03 | 0.61 +/- 0.04 |              |
+| Bar SW        |      | 0.31 +/- 0.06 | 0.44 +/- 0.06 | 0.58 +/- 0.06 |              |
+| HH 529-III/II |      | 0.31 +/- 0.07 | 0.46 +/- 0.07 | 0.59 +/- 0.08 |              |
+| knots         |      | 0.32 +/- 0.07 | 0.48 +/- 0.06 | 0.56 +/- 0.13 |              |
+| shock         |      | 0.32 +/- 0.05 | 0.47 +/- 0.05 | 0.66 +/- 0.06 |              |
+| minibar       |      | 0.32 +/- 0.04 | 0.43 +/- 0.02 | 0.60 +/- 0.06 | 8.4 +/- 1.0  |
+| HH 202        |      | 0.33 +/- 0.04 | 0.48 +/- 0.05 | 0.59 +/- 0.04 | 5.0 +/- 1.2  |
+| HH 529-0      |      | 0.35 +/- 0.03 | 0.45 +/= 0.06 | 0.68 +/- 0.05 |              |
+| HH 269 base   |      | 0.37 +/- 0.06 | 0.32 +/- 0.02 | 0.64 +/- 0.06 |              |
+
+
+** Region for the slit
++ Slit size: 1 x 12 arcsec in red; 1 x 10 arcsec in blue
++ Slit center: RA(J2000) 05:35:16.80, DEC(J2000) -05:23:57.48
 * TODO Compare with SPM horizontal slits
 + For instance [[file:~/Dropbox/SPMFEB13/OrionS/spm-vstack-oiii.fits][file:~/Dropbox/SPMFEB13/OrionS/spm-vstack-oiii.fits]]
 + Zoom factor needs to be 4.5x10 to match 1.68 on MUSE images
@@ -1342,6 +1841,22 @@ open -a Safari proper-motions/HH529-III-bowshock-frame.gif
 + This is strongest in S wing of III
 + 
 ** Implication for 3D kinematics
+* Flow from HH 1149-CW down to Bright Bar
++ There are some bright knots just below HH 529-III
+  + [[file:~/Dropbox/Orion-HH-data/MUSE/fe-ii-knots.reg][file:~/Dropbox/Orion-HH-data/MUSE/fe-ii-knots.reg]]
+  + They turn out to be HH 1149-CW bows
++ I had thought this might be feeding HH 203
+  + But now it doesn't look like it
++ Some interesting low-ionization knots near HST 10
+  + [[file:~/Dropbox/Orion-HH-data/MUSE/oi-sii-knots.reg][file:~/Dropbox/Orion-HH-data/MUSE/oi-sii-knots.reg]]
+  + Possibly an extension of the HH 1149-CW flow
+  + Not moving very fast
+    + At least that is what I get by comparing by eye F658N 1996 with F373N 2015
+      + ~final658-radec.fits~
+        + Shifted 5 pix to CRPIX1=1360
+      + ~icaz02040_drz.fits~
+    + Also possibly visible in 2005 ACS F658N
+
 * Interesting proper motion projects in the field of HH 529
 ** Colliding shocks - 162-341
 + Bow shock with fat shell driven by p159-350 (?) moving to NE at 15 km/s
@@ -1351,6 +1866,50 @@ open -a Safari proper-motions/HH529-III-bowshock-frame.gif
 + These look like these are a super-slow jet that is feeding HH 1149-CW
 + But actually they are the wings of the HH 529 bow shocks passing over a stationary filament
 ** Moving dark filament
+** Multipolar jet from 160-353
++ Star is AC Ori, also known as:
+  + [HC2000] 202 - near-IR
+  + COUP 768 - X-ray
+  + JW503
+  + [FRM2016] 266 - Radio
++ 
 ** New proplyd? 170-360
 + This is projected onto the HH 529-III shock
 + It has a shadow disk, surrounded by faint, circularly symmetric emission
++ This is similar to 171-340, but even more circular
++ Looking in catalogues
+  + Coordinates are 5:35:16.9570 -5:23:59.567
+  + Searching in SIMBAD finds MLLA 264
+    + Muench:2002a - The Luminosity and Mass Function of the Trapezium Cluster: From B Stars to the Deuterium-burning Limit
+    + Source 264 in catalog
+    + Coordinates 05 35 16.95, -05 23 59.6
+      + Agree within 0.1 arcsec
+    + [[https://vizier.u-strasbg.fr/viz-bin/VizieR-5?-ref=VIZ5efd0fa33bb9&-out.add=.&-source=J/ApJ/573/366/table6&recno=274][Full record for this source]]
+    + Only photometry is from NTT
+      + J = 15.26 +/- 0.16
+      + H = 14.62 +/- 0.06
+      + K = 13.90 +/- 0.01
+    + Cross-ref to [HC2000] 182
+      + This is Hillenbrand:2000a
+      + Same coords (within 0.1 arcsec)
+      + H=14.264, K=13.237 mags are a bit brighter
+  + Other matches
+    + [FRM2016] 329
+      + Forbrich:2016a - Radio 4cm and 6cm survey
+      + Flux density 0.1964 +/- 0.0026 mJy
+    + Eisner:2018a
+      + Calls it HC182
+      + F(850 mic) = 2.0 +/- 0.2 mJy
+      + F(dust) = 2.0 +/- 0.2 mJy
+      + M(dust) = 3.5 +/- 0.3 Mearth = 1e-5 Msun
+      + R(disk) = 14.8 +/- 1.9 AU = 0.03 arcsec
+      + This puts it at the faint and small end of the distribution of detected sources
+    + In the HST images I measure a disk shadow diameter of 0.13 arcsec
+      + This gives a radius of 0.065 arcsec = 27 AU
+
+*** Comparison with 175-355
++ 5:35:17.5401 -5:23:55.023
++ Previously classified as proplyd in OW94
++ Very similar morphology
+  + Circular rim of Ha
+  + Inner disk extinction

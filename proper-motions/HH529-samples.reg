@@ -1,0 +1,18 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+ellipse(5:35:16.9729,-5:23:58.251,0.193",0.253",359.99987) # color=black text={III knot}
+ellipse(5:35:16.9724,-5:23:57.495,0.156",0.361",345.67622) # color=black text={III knot N}
+ellipse(5:35:16.9473,-5:23:58.630,0.193",0.253",20.157697) # color=black text={III knot S}
+ellipse(5:35:17.0119,-5:23:57.820,0.246",0.577",359.99987) # color=black text={III apex}
+ellipse(5:35:17.0007,-5:23:56.295,0.236",0.828",343.92067) # color=black text={III apex N}
+ellipse(5:35:16.9939,-5:23:58.829,0.227",0.514",23.434966) # color=black text={III apex S}
+ellipse(5:35:16.9114,-5:24:00.512,0.280",1.156",53.960002) # color=black text={III lower wing}
+ellipse(5:35:16.8000,-5:24:01.598,0.298",0.911",62.396309) # color=black text={III lower wing S}
+ellipse(5:35:16.8040,-5:23:57.481,0.393",0.683",17.825502) # color=black text={II a}
+ellipse(5:35:16.7209,-5:23:56.264,0.365",0.586",7.3045749) # color=black text={II c}
+ellipse(5:35:16.7510,-5:23:57.274,0.410",0.650",26.359181) # color=black text={II b}
+box(5:35:16.8624,-5:23:58.062,0.528",1.276",35.857738) # color=black text={II BG 01} dash=1
+box(5:35:16.6149,-5:23:56.766,0.528",1.276",35.857738) # color=black text={II BG 02} dash=1
+box(5:35:17.0711,-5:23:58.407,0.764",2.017",13.516755) # color=black text={III BG 01} dash=1
+box(5:35:16.9444,-5:24:01.683,0.764",2.017",50.937541) # color=black text={III BG 02} dash=1
