@@ -1929,3 +1929,23 @@ Measurements of features in [Fe III] lines
 + Very similar morphology
   + Circular rim of Ha
   + Inner disk extinction
+
+
+* Acceleration in the main ionization front
+
+
+** Previous empirical studies
++ Weilbacher:2015a - Fig 28 shows maps of velocity difference nii-ha and sii-nii
+  + But these are mean velocities, so they are heavily effected by high-velocity components, so pretty useless for studying the main ionization front except for in restricted regions of the nebula where we can be sure there are no jets, etc
++ Garcia-Diaz:2008a - Fig 18 shows distribution of peak velocities for different pairs of lines
+  + This should be relatively unaffected by high-velocity flows unless they dominate the brightness
+  + Table 2 shows the average differences
+    + nii - oiii = 5.6 km/s
+    + sii - siii = 2.6 km/s
+    + oi - sii = 4.5 km/s
+
+
+** Previous theory
++ Henney:2005b appendix A gives a simple model of plane parallel weak-D front
+  + This includes neutral and singly-ionized line only
+  + Does not include a neutral fluorescent line, but that should be represented approximately by zero velocity
