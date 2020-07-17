@@ -1,2 +1,12 @@
 /.DS_Store
 .DS_store
+/proper-motions/auto/
+/proper-motions/will-529-III-motions.pdf
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+/proper-motions/will-529-III-motions.log
+/proper-motions/will-529-III-motions.out
+*.synctex.gz

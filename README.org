@@ -1092,7 +1092,7 @@ This is a lot easier than what we have been doing, and it might be useful
 #+TBLFM: $2=$1 + 90;%.2f
 
 I have now renamed these features for the figure.
-| region           | new name      | Bright | Bright sig | Bright BG |   VV | VV sig |     PA | PA sig |    Rel Bright |
+| region           | new name      | Bright | Bright sig | Bright BG |   VV | VV sig |     PA | PA sig | Rel Bright    |
 |------------------+---------------+--------+------------+-----------+------+--------+--------+--------+---------------|
 | III knot         | HH 529 III b2 |  13.47 |       1.21 |     11.85 | 2.67 |   0.03 | 129.84 |    0.9 | 1.14 +/- 0.10 |
 | III knot N       | HH 529 III b1 |   11.2 |       1.06 |     11.85 | 2.98 |   0.17 | 104.75 |    3.3 | 0.95 +/- 0.09 |
@@ -1103,9 +1103,25 @@ I have now renamed these features for the figure.
 | III lower wing   | HH 529 III a4 |    4.8 |       0.88 |     11.85 | 3.92 |   0.19 | 136.86 |   4.63 | 0.41 +/- 0.07 |
 | III lower wing S | HH 529 III a5 |   3.16 |       0.87 |     11.85 | 3.15 |   0.12 | 151.74 |  10.23 | 0.27 +/- 0.07 |
 | II a             | HH 529 II a   |    3.3 |       0.46 |      13.2 | 2.09 |   0.93 | 117.04 |  58.35 | 0.25 +/- 0.03 |
-| II c             | HH 529 II b   |   2.91 |       0.42 |      13.2 | 3.52 |   0.86 | 151.16 |  87.38 | 0.22 +/- 0.03 |
-| II b             | HH 529 II c   |   4.62 |       1.05 |      13.2 | 2.58 |   0.51 | 107.14 |   4.44 | 0.35 +/- 0.08 |
+| II c             | HH 529 II c   |   2.91 |       0.42 |      13.2 | 3.52 |   0.86 | 151.16 |  87.38 | 0.22 +/- 0.03 |
+| II b             | HH 529 II b   |   4.62 |       1.05 |      13.2 | 2.58 |   0.51 | 107.14 |   4.44 | 0.35 +/- 0.08 |
 #+TBLFM: $10=($3 +/- $4)/$5;f2
+
+And a version for exporting to latex
+| Region        | VV     | PA        | Rel Bright  |
+|---------------+--------+-----------+-------------|
+| HH 529 III b1 | 30 \pm 2 | 105  \pm 3  | 0.95 \pm 0.09 |
+| HH 529 III b2 | 27 \pm 1 | 130  \pm 1  | 1.14 \pm 0.10 |
+| HH 529 III b3 | 30 \pm 2 | 125  \pm 4  | 0.64 \pm 0.07 |
+| HH 529 III a1 | 33 \pm 3 | 90  \pm  3  | 0.46 \pm 0.14 |
+| HH 529 III a2 | 36 \pm 1 | 107 \pm 7   | 0.82 \pm 0.11 |
+| HH 529 III a3 | 32 \pm 1 | 117  \pm  3 | 0.52 \pm 0.14 |
+| HH 529 III a4 | 39 \pm 2 | 137  \pm  5 | 0.41 \pm 0.07 |
+| HH 529 III a5 | 32 \pm 1 | 152  \pm 10 | 0.27 \pm 0.07 |
+| HH 529 II a   | 21 \pm 9 | 117  \pm 58 | 0.25 \pm 0.03 |
+| HH 529 II b   | 26 \pm 5 | 107  \pm  4 | 0.35 \pm 0.08 |
+| HH 529 II c   | 35 \pm 9 | 151  \pm 87 | 0.22 \pm 0.03 |
+
 
 
 
