@@ -1769,6 +1769,7 @@ Original batch
 #+RESULTS:
 : None
 
+
 *** [Fe III] density and temperature sensitive
 + 4881/4658 varies from 0.3 @ 1000 pcc to 0.45 @ 1e4, then falls again at higher densities
 + 5271/4658 is mainly T sensitive when n = 1e3 \to 1e5: 0.6 @ 6000 K, falling to 0.4 @ 14,000 K
@@ -1933,12 +1934,35 @@ Measurements of features in [Fe III] lines
 
 * Acceleration in the main ionization front
 
+** Data from the Keck proplyd study
+
+
+*** [Fe II] lines - collisions and fluorescence
++ Both excitation mechanisms seem to be operating for these lines
+  + 5158.7924 \AA is roughly equal parts collisional and fluorescent in the Keck spectrum of 244-440 adjacent nebula
+    + We clearly see the velocity splitting of about 10 km/s between the two components
+  + 5262 is mainly fluorescent, but weaker
+  + Both lines are fluorescent in the proplyd itself - maybe collisional deexcitation of collisional line
+  + Can also see differences in the MUSE maps, which cover broader range of wavelengths
+    + 7155 is mainly collisional
+    + 4815 is mainly fluorescent
+      + This line is also in the Keck data, but I seem to have never reduced it
+        + Actually I did
+      + It is slightly weaker than 5262 and has another high-ionization line next to it at 4816
+    + 8617 is the strongest and is a combination of both
++ There is plenty of discussion in Keck notes
+  + [[id:4F674E2D-0B0C-4584-9333-40C6131BD3F2][[Fe II] lines]]
+
+*** Si II lines - recombination and fluorescence
++ These are also combinations of at least two mechanisms
+
+
 
 ** Previous empirical studies
 + Weilbacher:2015a - Fig 28 shows maps of velocity difference nii-ha and sii-nii
   + But these are mean velocities, so they are heavily effected by high-velocity components, so pretty useless for studying the main ionization front except for in restricted regions of the nebula where we can be sure there are no jets, etc
 + Garcia-Diaz:2008a - Fig 18 shows distribution of peak velocities for different pairs of lines
-  + This should be relatively unaffected by high-velocity flows unless they dominate the brightness
+  + This should be relatively unaffected by high-velocity flows except in the restricted regions where they dominate the brightness
   + Table 2 shows the average differences
     + nii - oiii = 5.6 km/s
     + sii - siii = 2.6 km/s
