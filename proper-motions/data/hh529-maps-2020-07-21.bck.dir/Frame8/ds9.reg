@@ -1,0 +1,30 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+# vector(83.8207204,-5.3995142,2.670",219.8) vector=1 color=red
+# vector(83.8207183,-5.3993042,2.980",194.7) vector=1 color=red
+# vector(83.8206137,-5.3996194,3.030",214.9) vector=1 color=red
+# vector(83.8208829,-5.3993944,3.560",196.7) vector=1 color=red
+# vector(83.8208362,-5.3989708,3.330",180.1) vector=1 color=red
+# vector(83.8208079,-5.3996747,3.160",207.1) vector=1 color=red
+# vector(83.8204642,-5.4001422,3.920",226.8) vector=1 color=red
+# vector(83.8200000,-5.4004439,3.150",241.7) vector=1 color=red
+# vector(83.8200167,-5.3993003,2.090",207) vector=1 color=red
+# vector(83.8196704,-5.3989622,3.520",241.1) vector=1 color=red
+# vector(83.8197958,-5.3992428,2.580",197.1) vector=1 color=red
+ellipse(83.8207204,-5.3995142,0.193",0.253",359.99987) # color=black text={III knot}
+ellipse(83.8207183,-5.3993042,0.156",0.361",345.67622) # color=black text={III knot N}
+ellipse(83.8206137,-5.3996194,0.193",0.253",20.157697) # color=black text={III knot S}
+ellipse(83.8208829,-5.3993944,0.246",0.577",359.99987) # color=black text={III apex}
+ellipse(83.8208362,-5.3989708,0.236",0.828",343.92067) # color=black text={III apex N}
+ellipse(83.8208079,-5.3996747,0.227",0.514",23.434966) # color=black text={III apex S}
+ellipse(83.8204642,-5.4001422,0.280",1.156",53.960002) # color=black text={III lower wing}
+ellipse(83.8200000,-5.4004439,0.298",0.911",62.396309) # color=black text={III lower wing S}
+ellipse(83.8200167,-5.3993003,0.393",0.683",17.825502) # color=black text={II a}
+ellipse(83.8196704,-5.3989622,0.365",0.586",7.3045749) # color=black text={II c}
+ellipse(83.8197958,-5.3992428,0.410",0.650",26.359181) # color=black text={II b}
+box(83.8202600,-5.3994617,0.528",1.276",35.857738) # color=black text={II BG 01} dash=1
+box(83.8192288,-5.3991017,0.528",1.276",35.857738) # color=black text={II BG 02} dash=1
+box(83.8211296,-5.3995575,0.764",2.017",13.516755) # color=black text={III BG 01} dash=1
+box(83.8206017,-5.4004675,0.764",2.017",50.937541) # color=black text={III BG 02} dash=1
+box(83.8200000,-5.3993000,12.000",1.000",359.99987) # color=#48c width=4

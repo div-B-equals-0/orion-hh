@@ -1,3 +1,4 @@
+#+OPTIONS: ^:{}
 * UVES observations of HH objects in Orion
 
 ** Original Proposal
@@ -254,7 +255,8 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
   # Cropped file from Robberto 2005 program
   hdu1, = fits.open(datadir / "hh529_acs_f658n_2005.fits")
 
-  # Reproject 2->1
+  # Reproject 2->
+  1
   newdata, _ = reproject_interp(hdu2, hdu1.header)
   newheader = hdu2.header.copy()
   newheader.update(WCS(hdu1.header).to_header())
@@ -1594,6 +1596,139 @@ open -a Safari proper-motions/HH529-III-bowshock-frame.gif
 + Remove the labels
 + [X] Query about position
   + Corrected in email from Eduardo
++ Filters to use
+  + I had thought about [O I]/[O II]/[O III]
+    + But the [O II] is from 2015 while [O I] is 1996, so there will be motions
+  + Could use all from 1996
+  + Or all from 2015
++ Dry run with DS9
+  + I am comparing two different sets (the Bally ones have too weird a set of filters)
+    #+begin_src sh :results verbatim
+      xpaset -p RGB rgb red
+      xpaget RGB file
+      xpaget RGB scale limits
+      xpaset -p RGB rgb green
+      xpaget RGB file
+      xpaget RGB scale limits
+      xpaset -p RGB rgb blue
+      xpaget RGB file
+      xpaget RGB scale limits
+    #+end_src
+
+    #+RESULTS:
+    : /Users/will/Work/BobPC/2002/final502-radec.fits
+    : 130 750
+    : /Users/will/Work/BobPC/2002/final658-radec.fits
+    : 200 2200
+    : /Users/will/Work/BobPC/2002/final656-radec.fits
+    : 600 3500
+    
+    The WFPC2 1996 set
+    : /Users/will/Work/BobPC/2002/final502-radec.fits
+    : 130 750
+    : /Users/will/Work/BobPC/2002/final658-radec.fits
+    : 200 2200
+    : /Users/will/Work/BobPC/2002/final673-radec.fits
+    : 70 500
+
+    The ACS 2005 set:
+    : /Users/will/Work/OrionTreasury/acs/hlsp_orion_hst_acs_strip0l_f658n_v1_drz.fits[SCI]
+    : 20 140
+    : /Users/will/Work/OrionTreasury/acs/hlsp_orion_hst_acs_strip0l_f555w_v1_drz.fits[SCI]
+    : 20 130
+    : /Users/will/Work/OrionTreasury/acs/hlsp_orion_hst_acs_strip0l_f435w_v1_drz.fits[SCI]
+    : 7 35
+
+** Make lupton versions
+
+#+name: rgb-channels-1996
+| final502-radec | 130 |  750 |
+| final658-radec | 200 | 2200 |
+| final673-radec |  70 | 500  |
+
+#+name: window-1996
+| 1354 | 1369 | 760 | 600 |
+
+#+name: rgb-lupton-hh529
+#+header: :var TAB=rgb-channels-1996 DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996" HDU=0
+#+header: :var STRETCH=0.9 Q=2.5 WINDOW=window-1996
+#+begin_src python :results file :return figfile :tangle rgb-lupton-hh529.py
+  from pathlib import Path
+  import matplotlib.pyplot as plt
+  from astropy.visualization import make_lupton_rgb
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  import regions as rg
+
+
+  datadir = Path(DIR)
+  # Unpack the channel info from the table
+  [rf, r1, r2], [gf, g1, g2], [bf, b1, b2] = TAB
+
+  def load_and_scale_image(fn, v1, v2, ihdu=HDU):
+      data = fits.open(datadir / f"{fn}.fits")[ihdu].data
+      return (data - v1) / (v2 - v1)
+
+  w = WCS(fits.open(datadir / f"{rf}.fits")[HDU].header)
+
+  image_r = load_and_scale_image(rf, r1, r2)
+  image_g = load_and_scale_image(gf, g1, g2)
+  image_b = load_and_scale_image(bf, b1, b2)
+  image = make_lupton_rgb(image_r, image_g, image_b, stretch=STRETCH, Q=Q)
+
+  [x0, y0, dx, dy], = WINDOW
+
+
+  figfile = f"rgb-lupton-hh529-{SUFFIX}.jpg"
+  fig, ax = plt.subplots(figsize=(6.2, 5), subplot_kw=dict(projection=w))
+  ax.imshow(image)
+
+  regions = rg.read_ds9("hh529-iii-slit.reg")
+  for skyregion in regions:
+      pixelregion = skyregion.to_pixel(w)
+      pixelregion.plot(ax=ax, color="w", lw=0.7, ls="--")
+
+
+  ax.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+      xlim=[x0-dx/2, x0+dx/2],
+      ylim=[y0-dy/2, y0+dy/2],
+  )
+  fig.tight_layout(rect=[0.15, 0.07, 1.0, 1.0])
+  fig.savefig(figfile, dpi=300)
+#+end_src
+
+#+RESULTS: rgb-lupton-hh529
+[[file:rgb-lupton-hh529-1996.jpg]]
+
+#+name: rgb-channels-2005
+| hlsp_orion_hst_acs_strip0l_f658n_v1_drz | 20 | 140 |
+| hlsp_orion_hst_acs_strip0l_f555w_v1_drz | 20 | 130 |
+| hlsp_orion_hst_acs_strip0l_f435w_v1_drz |  7 |  35 |
+
+#+name: window-2005
+| 8899 | 4312 | 1500 | 1165 |
+
+#+call: rgb-lupton-hh529(TAB=rgb-channels-2005, WINDOW=window-2005, SUFFIX="2005", HDU="SCI", DIR="/Users/will/Work/OrionTreasury/acs")
+
+#+RESULTS:
+[[file:rgb-lupton-hh529-2005.jpg]]
+
+#+name: rgb-channels-1996b
+| final502-radec | 130 |  750 |
+| final658-radec | 200 | 2200 |
+| final656-radec | 600 | 2500 |
+
+#+name: window-1996-big
+| 1354 | 1369 | 1140 | 900 |
+
+#+call: rgb-lupton-hh529(TAB=rgb-channels-1996b, WINDOW=window-1996-big, SUFFIX="1996b", Q=1.2, STRETCH=0.9)
+
+#+RESULTS:
+[[file:rgb-lupton-hh529-1996b.jpg]]
+
+
 * Compare with MUSE spectral maps
 ** Copy the files that we want from /Volumes/SSD-2TB/OrionMuse/LineMaps/
 #+begin_src sh :dir ../Orion-HH-data/MUSE :results verbatim
@@ -1973,3 +2108,280 @@ Measurements of features in [Fe III] lines
 + Henney:2005b appendix A gives a simple model of plane parallel weak-D front
   + This includes neutral and singly-ionized line only
   + Does not include a neutral fluorescent line, but that should be represented approximately by zero velocity
+
+
+
+* Permitted lines
++ Extract O II and C II lines from MUSE
++ For the O II lines, we need to isolate the 4649 blens
++ For C II pure recomb lines 
+  + We have 4620 supposedly ?!
+    + Very weak and there may be another line at 4621
+  + Also 4803 but blended with N II and [Co II]
+  + 5342.40 - very weak
+  + 6151.43 - might be good
+  + 6461.96 - weak but should be clear
+    + This is definitely the best bet for C II lines
++ N II lines
+  + These are generally weak and must be a mixture of recombination and fluorescence
++ Si II lines
+  + These are much stronger, also mixture
+
+
+** Revisiting the Adal and Manu analysis
++ The Adal spectra are plotted for 6 different sections of Slit 6
+  | x range |         |
+  |---------+---------|
+  |    0:40 | Red bay |
+  |   40:50 |         |
+  |   50:62 |         |
+  |   67:80 |         |
+  |   80:95 |         |
+  |  95:154 |         |
+  + Numbers x correspond to pixels of length 1.2 arcsec along slit
+  + Note that 62:67 is omitted - corresponds to 159-350
+    + x=65 \to 78 arcsec from left edge
+  + Total length = 154 1.2 = 185 arcsec
+
+** Extract maps from MUSE cubes
+
++ This is copied from Raman project
+  + [[id:90BA9F0F-DEF4-47FB-AE68-722524E169F1][Remove continuum from cube]]
++ But we change the wavelengths because we are working with wavsec0
+  + Total range is 4595 \to 5191 \AA
+
+#+begin_src python :tangle muse/subtract-continuum-wavsec0.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from numpy.polynomial import Chebyshev as T
+  import itertools
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+  wavpix = np.arange(nwav)
+
+  # Two pairs of adjacent sections for the true continuum
+
+  # Wavelength sections of clean continuum (lots of small sections)
+  clean_sections = [
+      [4610.0, 4616.0], [4624.0, 4627.0], # between C II, N II, O II
+      [4690.0, 4697.0], [4720.0, 4730.0], # between He I and Ar IV
+      [4746.0, 4750.0], [4760.0, 4765.0], # between Fe III lines
+      [4782.0, 4786.0], [4820.0, 4830.0], # next to Hb
+      [4910.0, 4916.0], [5060.0, 5080.0], # to the red
+      [5090.0, 5100.0], [5170.0, 5185.0], # to the red
+  ]
+
+  cont_slices = []
+  for wavs in clean_sections:
+      wavs = 1e-10*np.array(wavs)
+      _, _, wpix = w.world_to_pixel_values([0, 0], [0, 0], wavs)
+      cont_slices.append(slice(*wpix.astype(int)))
+
+
+  # Use median over each section to avoid weak lines
+  cont_maps = np.array([np.median(hdu.data[_, :, :], axis=0) for _ in cont_slices])
+  cont_wavpix = np.array([np.median(wavpix[_], axis=0) for _ in cont_slices])
+  # Inefficient but simple algorithm - loop over spaxels
+  bgdata = np.empty_like(hdu.data)
+  for j, i in itertools.product(range(ny), range(nx)):
+      # Fit polynomial to BG
+      try:
+          p = T.fit(cont_wavpix, cont_maps[:, j, i], deg=2)
+          # and fill in the BG spectrum of this spaxel
+          bgdata[:, j, i] = p(wavpix)
+      except:
+          bgdata[:, j, i] = np.nan
+
+
+
+  for suffix, cube in [
+          ["cont", bgdata],
+          ["cont-sub", hdu.data - bgdata],
+          # ["cont-div", hdu.data/bgdata],
+  ]:
+      outfile = infile.replace(".fits", f"-{suffix}.fits")
+      fits.PrimaryHDU(header=hdu.header, data=cube).writeto(
+          f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+#+end_src
+
+#+name: subtract-cont
+#+header: :var DATADIR="../OrionMuse"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/subtract-continuum-wavsec0.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: subtract-cont
+: Written muse-hr-data-wavsec0-rebin05x05-cont.fits
+: Written muse-hr-data-wavsec0-rebin05x05-cont-sub.fits
+
+
+Now we do a simple extraction of the whole V1 multiplet
+
+#+name: oii-v1-sections
+| pix1 | pix2 |    wav1 |    wav2 | O II V1 lines | Others                  | Label           |
+|------+------+---------+---------+---------------+-------------------------+-----------------|
+|   38 |   44 |  4627.3 |  4632.4 |               | N II 4631, [Ni II] 4628 | N_II-4631       |
+|   44 |   49 |  4632.4 | 4636.65 |               | N III 4634              | N_III-4634      |
+|   49 |   62 | 4636.65 |  4646.0 | 4639, 4642    | N III 4641, N II 4643   | O_II-V1-4639-42 |
+|   62 |   71 |  4646.0 |  4654.5 | 4649, 4651    |                         | O_II-V1-4649-51 |
+|   79 |   83 | 4662.15 |  4664.7 | 4662          | (Red wing of 4658)      | O_II-V1-4662    |
+|   90 |  102 |  4671.5 | 4680.85 | 4674, 4676    |                         | O_II-V1-4674-76 |
+|  101 |  119 | 4679.15 | 4694.45 |               | He II 4686 abs          | He_II-4686      |
+
+#+begin_src python :tangle muse/extract-o_ii-v1-sum.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+  outfile = f"o_ii-v1-sum{SUFFIX}.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+
+
+  # Wavelength sections of O II V1 multiplet
+  v1_sections = [
+      [49, 71], [79, 83], [90, 102]
+  ]
+
+  im = np.zeros((ny, nx))
+  for i1, i2 in v1_sections:
+      im += np.sum(hdu.data[i1:i2, :, :], axis=0)
+
+  fits.PrimaryHDU(header=w.celestial.to_header(), data=im).writeto(
+          f"{OUTDIR}/{outfile}", overwrite=True)
+  print(f"Written {outfile}")
+#+end_src
+
+#+name: extract-o-ii-v1
+#+header: :var DATADIR="../Orion-HH-data/MUSE"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/extract-o_ii-v1-sum.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: extract-o-ii-v1
+: Written o_ii-v1-sum.fits
+
+#+header: :var TAB=oii-v1-sections
+#+begin_src python :tangle muse/extract-o_ii-v1-sections.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+  wavpix = np.arange(nwav)
+  _, _, wavs = w.pixel_to_world_values([0]*nwav, [0]*nwav, wavpix)
+  wavs *= 1.e10
+  for i1, i2, _, _, _, _, label in TAB:
+      outfile = f"{label}-sum{SUFFIX}.fits"
+      imsum = np.sum(hdu.data[i1:i2, :, :], axis=0)
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imsum
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+      outfile = f"{label}-wav{SUFFIX}.fits"
+      imwav = np.sum(hdu.data[i1:i2, :, :]*wavs[i1:i2, None, None], axis=0)/imsum
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imwav
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+#+end_src
+
+#+name: extract-o-ii-v1-sections
+#+header: :var DATADIR="../Orion-HH-data/MUSE"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/extract-o_ii-v1-sections.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: extract-o-ii-v1-sections
+#+begin_example
+Written N_II-4631-sum-rebin05x05.fits
+Written N_II-4631-wav-rebin05x05.fits
+Written N_III-4634-sum-rebin05x05.fits
+Written N_III-4634-wav-rebin05x05.fits
+Written O_II-V1-4639-42-sum-rebin05x05.fits
+Written O_II-V1-4639-42-wav-rebin05x05.fits
+Written O_II-V1-4649-51-sum-rebin05x05.fits
+Written O_II-V1-4649-51-wav-rebin05x05.fits
+Written O_II-V1-4662-sum-rebin05x05.fits
+Written O_II-V1-4662-wav-rebin05x05.fits
+Written O_II-V1-4674-76-sum-rebin05x05.fits
+Written O_II-V1-4674-76-wav-rebin05x05.fits
+Written He_II-4686-sum-rebin05x05.fits
+Written He_II-4686-wav-rebin05x05.fits
+#+end_example
+
+#+begin_src python 
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from pathlib import Path 
+
+  datadir = Path("../Orion-HH-data/MUSE")
+  hdu5007, = fits.open(datadir / "linesum-O_III-5007.fits")
+  hdu4650, = fits.open(datadir / "O_II-V1-4649-51-sum.fits")
+  hdu4640, = fits.open(datadir / "O_II-V1-4639-42-sum.fits")
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu5007.data
+  ).writeto(datadir / "O_II-V1-4649-51-over-5007.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4640.header,
+      data=hdu4640.data/hdu5007.data
+  ).writeto(datadir / "O_II-V1-4639-42-over-5007.fits", overwrite=True)
+#+end_src
+
+#+RESULTS:
+: None
+
+
+
+** Fit Gaussians to O II multiple
++ 4649, 4651 are blended
++ 4642, 4639 are blended with N II and N III too
++ 4674 and 4676 are blended
++ 4631 is pure N II
++ 4607 is pure N II
+*** Make a template for the O II V1 multiplet

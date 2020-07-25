@@ -1,0 +1,48 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+point(83.8197659,-5.3881404) # point=circle
+point(83.8197258,-5.3881568) # point=circle
+point(83.8196881,-5.3881639) # point=circle
+point(83.8196410,-5.3881826) # point=circle
+point(83.8196009,-5.3881850) # point=circle
+point(83.8195514,-5.3881850) # point=circle
+point(83.8195114,-5.3881850) # point=circle
+point(83.8195939,-5.3880348) # point=circle
+point(83.8195585,-5.3880372) # point=circle
+point(83.8195279,-5.3880395) # point=circle
+point(83.8194949,-5.3880372) # point=circle
+point(83.8194548,-5.3880278) # point=circle
+point(83.8194100,-5.3880254) # point=circle
+point(83.8193747,-5.3880137) # point=circle
+point(83.8193346,-5.3879879) # point=circle
+point(83.8192615,-5.3879691) # point=circle
+point(83.8192286,-5.3879691) # point=circle
+point(83.8191908,-5.3879691) # point=circle
+point(83.8191555,-5.3879621) # point=circle
+point(83.8191154,-5.3879480) # point=circle
+point(83.8190706,-5.3879433) # point=circle
+point(83.8196481,-5.3882483) # point=circle
+point(83.8196009,-5.3882554) # point=circle
+point(83.8195302,-5.3882530) # point=circle
+point(83.8194619,-5.3882413) # point=circle
+point(83.8193794,-5.3882225) # point=circle
+point(83.8193110,-5.3881873) # point=circle
+point(83.8192333,-5.3881686) # point=circle
+ellipse(83.8190125,-5.4016819,0.572",1.150",38.598528) # color=white
+ellipse(83.8207204,-5.3995142,0.193",0.253",359.99987) # color=black text={III knot}
+ellipse(83.8207183,-5.3993042,0.156",0.361",345.67622) # color=black text={III knot N}
+ellipse(83.8206137,-5.3996194,0.193",0.253",20.157697) # color=black text={III knot S}
+ellipse(83.8206521,-5.3993404,0.246",0.577",359.99987) # color=black text={III apex}
+ellipse(83.8208362,-5.3989708,0.236",0.828",343.92067) # color=black text={III apex N}
+ellipse(83.8208079,-5.3996747,0.227",0.514",23.434966) # color=black text={III apex S}
+ellipse(83.8204642,-5.4001422,0.280",1.156",53.960002) # color=black text={III lower wing}
+ellipse(83.8200000,-5.4004439,0.298",0.911",62.396309) # color=black text={III lower wing S}
+ellipse(83.8200167,-5.3993003,0.393",0.683",17.825502) # color=black text={II a}
+ellipse(83.8196704,-5.3989622,0.365",0.586",7.3045749) # color=black text={II c}
+ellipse(83.8197958,-5.3992428,0.410",0.650",26.359181) # color=black text={II b}
+box(83.8202600,-5.3994617,0.528",1.276",35.857738) # color=black text={II BG 01} dash=1
+box(83.8192288,-5.3991017,0.528",1.276",35.857738) # color=black text={II BG 02} dash=1
+box(83.8211296,-5.3995575,0.764",2.017",13.516755) # color=black text={III BG 01} dash=1
+box(83.8206017,-5.4004675,0.764",2.017",50.937541) # color=black text={III BG 02} dash=1
+# ruler(83.8200228,-5.3992965,83.8196477,-5.3989462) ruler=fk5 arcsec
