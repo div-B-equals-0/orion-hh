@@ -2546,8 +2546,9 @@ python muse/multibin-map-orl.py ../Orion-HH-data/MUSE linesum-O_III-5007.fits O_
       fileroot = sys.argv[1]
       threshold = float(sys.argv[2])
       STEEPNESS = float(sys.argv[3])
+      SUFFIX = sys.argv[4]
   except IndexError:
-      sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS')
+      sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS SUFFIX')
 
 
   refhdu = fits.open(datadir / "linesum-O_III-5007-bin001.fits")["SCALED"]
@@ -2562,38 +2563,32 @@ python muse/multibin-map-orl.py ../Orion-HH-data/MUSE linesum-O_III-5007.fits O_
       header=hdu.header,
       data=outim,
   ).writeto(
-      datadir / f"{fileroot}-multibin.fits",
+      datadir / f"{fileroot}-multibin{SUFFIX}.fits",
       overwrite=True,
   )
 
 #+end_src
-#+begin_src sh :results silent
-  python muse/multibin-combine.py O_II-V1-4649-51-sum 5e8 1.5
-#+end_src
 
 #+begin_src sh :results silent
-  python muse/multibin-combine.py O_II-V1-4639-42-sum 5e8 1.5
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-combine.py $line 2e9 1.5 -coarse-2e9-1p5
+  done
 #+end_src
 
-#+begin_src sh :results silent
-  python muse/multibin-combine.py N_III-4634-sum 5e8 1.5
-#+end_src
-
-#+begin_src sh :results silent
-  python muse/multibin-combine.py N_II-4631-sum 5e8 1.5
-#+end_src
-
-#+begin_src sh :results silent
-  python muse/multibin-combine.py linesum-O_III-5007 5e8 1.5
-#+end_src
 
 
 
 *** TODO Do extinction correction
 
-*** TODO Subtract the N II and N III contamination from 4639-42 image
+*** DONE Subtract the N II and N III contamination from 4639-42 image
+CLOSED: [2020-07-26 Sun 13:59]
 + Find scale factor from Adal spectra
+  + N_II-4643 = 0.5 N_II-4631
+  + N_III-4641 = 1.5 N_III-4634
+
 *** Take ratio of V1 to 5007 for the two main sections
+#+header: :var SUFFIX="-coarse-2e9-1p5"
 #+begin_src python 
   import sys
   import numpy as np
@@ -2602,21 +2597,37 @@ python muse/multibin-map-orl.py ../Orion-HH-data/MUSE linesum-O_III-5007.fits O_
   from pathlib import Path 
 
   datadir = Path("../Orion-HH-data/MUSE")
-  hdu5007, = fits.open(datadir / "linesum-O_III-5007-multibin.fits")
-  hdu4650, = fits.open(datadir / "O_II-V1-4649-51-sum-multibin.fits")
-  hdu4640, = fits.open(datadir / "O_II-V1-4639-42-sum-multibin.fits")
+  hdu5007, = fits.open(datadir /  f"linesum-O_III-5007-multibin{SUFFIX}.fits")
+  hdu4650, = fits.open(datadir / f"O_II-V1-4649-51-sum-multibin{SUFFIX}.fits")
+  hdu4640, = fits.open(datadir / f"O_II-V1-4639-42-sum-multibin{SUFFIX}.fits")
+  hdu4631, = fits.open(datadir / f"N_II-4631-sum-multibin{SUFFIX}.fits")
+  hdu4634, = fits.open(datadir / f"N_III-4634-sum-multibin{SUFFIX}.fits")
+
   fits.PrimaryHDU(
       header=hdu4650.header,
       data=hdu4650.data/hdu5007.data
-  ).writeto(datadir / "O_II-V1-4649-51-over-5007-multibin.fits", overwrite=True)
+  ).writeto(datadir / f"O_II-V1-4649-51-over-5007-multibin{SUFFIX}.fits", overwrite=True)
   fits.PrimaryHDU(
       header=hdu4640.header,
       data=hdu4640.data/hdu5007.data
-  ).writeto(datadir / "O_II-V1-4639-42-over-5007-multibin.fits", overwrite=True)
+  ).writeto(datadir / f"O_II-V1-4639-42-over-5007-multibin{SUFFIX}.fits", overwrite=True)
   fits.PrimaryHDU(
       header=hdu4650.header,
       data=hdu4650.data/hdu4640.data
-  ).writeto(datadir / "O_II-V1-4649-51-over-4639-42-multibin.fits", overwrite=True)
+  ).writeto(datadir / f"O_II-V1-4649-51-over-4639-42-multibin{SUFFIX}.fits", overwrite=True)
+
+  # Correct the 4639-42 for the N_II and N_III
+  hdu4640.data -= 0.5*hdu4631.data + 1.5*hdu4634.data
+
+  fits.PrimaryHDU(
+      header=hdu4640.header,
+      data=hdu4640.data/hdu5007.data
+  ).writeto(datadir / f"O_II-V1-4639-42-minus-N_II_III-over-5007-multibin{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu4640.data
+  ).writeto(datadir / f"O_II-V1-4649-51-over-4639-42-minus-N_II_III-multibin{SUFFIX}.fits", overwrite=True)
+
 #+end_src
 
 #+RESULTS:

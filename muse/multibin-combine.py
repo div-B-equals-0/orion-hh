@@ -9,8 +9,9 @@ try:
     fileroot = sys.argv[1]
     threshold = float(sys.argv[2])
     STEEPNESS = float(sys.argv[3])
+    SUFFIX = sys.argv[4]
 except IndexError:
-    sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS')
+    sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS SUFFIX')
 
 
 refhdu = fits.open(datadir / "linesum-O_III-5007-bin001.fits")["SCALED"]
@@ -25,6 +26,6 @@ fits.PrimaryHDU(
     header=hdu.header,
     data=outim,
 ).writeto(
-    datadir / f"{fileroot}-multibin.fits",
+    datadir / f"{fileroot}-multibin{SUFFIX}.fits",
     overwrite=True,
 )
