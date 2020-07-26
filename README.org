@@ -2230,18 +2230,7 @@ python muse/subtract-continuum-wavsec0.py $DATADIR $SUFFIX $OUTDIR
 : Written muse-hr-data-wavsec0-rebin05x05-cont-sub.fits
 
 
-Now we do a simple extraction of the whole V1 multiplet
-
-#+name: oii-v1-sections
-| pix1 | pix2 |    wav1 |    wav2 | O II V1 lines | Others                  | Label           |
-|------+------+---------+---------+---------------+-------------------------+-----------------|
-|   38 |   44 |  4627.3 |  4632.4 |               | N II 4631, [Ni II] 4628 | N_II-4631       |
-|   44 |   49 |  4632.4 | 4636.65 |               | N III 4634              | N_III-4634      |
-|   49 |   62 | 4636.65 |  4646.0 | 4639, 4642    | N III 4641, N II 4643   | O_II-V1-4639-42 |
-|   62 |   71 |  4646.0 |  4654.5 | 4649, 4651    |                         | O_II-V1-4649-51 |
-|   79 |   83 | 4662.15 |  4664.7 | 4662          | (Red wing of 4658)      | O_II-V1-4662    |
-|   90 |  102 |  4671.5 | 4680.85 | 4674, 4676    |                         | O_II-V1-4674-76 |
-|  101 |  119 | 4679.15 | 4694.45 |               | He II 4686 abs          | He_II-4686      |
+*** Now we do a simple extraction of the whole V1 multiplet
 
 #+begin_src python :tangle muse/extract-o_ii-v1-sum.py :eval no
   import sys
@@ -2288,6 +2277,20 @@ python muse/extract-o_ii-v1-sum.py $DATADIR $SUFFIX $OUTDIR
 #+RESULTS: extract-o-ii-v1
 : Written o_ii-v1-sum.fits
 
+
+*** Extraction of multiplet in 4 sections
+
+#+name: oii-v1-sections
+| pix1 | pix2 |    wav1 |    wav2 | O II V1 lines | Others                  | Label           |
+|------+------+---------+---------+---------------+-------------------------+-----------------|
+|   38 |   44 |  4627.3 |  4632.4 |               | N II 4631, [Ni II] 4628 | N_II-4631       |
+|   44 |   49 |  4632.4 | 4636.65 |               | N III 4634              | N_III-4634      |
+|   49 |   62 | 4636.65 |  4646.0 | 4639, 4642    | N III 4641, N II 4643   | O_II-V1-4639-42 |
+|   62 |   71 |  4646.0 |  4654.5 | 4649, 4651    |                         | O_II-V1-4649-51 |
+|   79 |   83 | 4662.15 |  4664.7 | 4662          | (Red wing of 4658)      | O_II-V1-4662    |
+|   90 |  102 |  4671.5 | 4680.85 | 4674, 4676    |                         | O_II-V1-4674-76 |
+|  101 |  119 | 4679.15 | 4694.45 |               | He II 4686 abs          | He_II-4686      |
+
 #+header: :var TAB=oii-v1-sections
 #+begin_src python :tangle muse/extract-o_ii-v1-sections.py :eval no
   import sys
@@ -2303,7 +2306,9 @@ python muse/extract-o_ii-v1-sum.py $DATADIR $SUFFIX $OUTDIR
       sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
 
   infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+  infile_bg = f"muse-hr-data-wavsec0{SUFFIX}-cont.fits"
   hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  hdubg = fits.open(f"{DATADIR}/{infile_bg}")["DATA"]
   w = WCS(hdu)
   nwav, ny, nx = hdu.data.shape
   wavpix = np.arange(nwav)
@@ -2317,11 +2322,20 @@ python muse/extract-o_ii-v1-sum.py $DATADIR $SUFFIX $OUTDIR
           data=imsum
       ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
       print(f"Written {outfile}")
+
       outfile = f"{label}-wav{SUFFIX}.fits"
       imwav = np.sum(hdu.data[i1:i2, :, :]*wavs[i1:i2, None, None], axis=0)/imsum
       fits.PrimaryHDU(
           header=w.celestial.to_header(),
           data=imwav
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+
+      outfile = f"{label}-bg{SUFFIX}.fits"
+      imsum = np.sum(hdubg.data[i1:i2, :, :], axis=0)
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imsum
       ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
       print(f"Written {outfile}")
 #+end_src
@@ -2352,6 +2366,234 @@ Written He_II-4686-sum-rebin05x05.fits
 Written He_II-4686-wav-rebin05x05.fits
 #+end_example
 
+
+
+*** Do multibinning of V1 images
+
+#+BEGIN_SRC python :tangle muse/multibin-map-orl.py :eval no
+  import sys
+  from pathlib import Path
+  from distutils.dep_util import newer, newer_group
+  import numpy as np
+  sys.path.append("/Users/will/Dropbox/multibin-maps")
+  from rebin_utils import downsample, oversample, pad_array
+  from astropy.io import fits
+
+  nlist = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  mingoods = [2, 2, 2, 2, 2, 2, 2, 2, 2]
+
+
+  try:
+      datadir = Path(sys.argv[1])
+      infile = sys.argv[2]
+      contfile = sys.argv[3]
+      cont_threshold = float(sys.argv[4])
+  except:
+      sys.exit('Usage: {} DATADIR INFILE CONTFILE CONT_THRESHOLD'.format(sys.argv[0]))
+
+
+  hdu = fits.open(datadir / infile)[0]
+  if hdu.data is None:
+      hdu = fits.open(datadir / infile)[1]
+  hdr = hdu.header
+  # Maximum binning
+  nmax = nlist[-1]
+
+  # continuum image
+  chdu = fits.open(datadir / contfile)[0]
+  if chdu.data is None:
+      chdu = fits.open(datadir / contfile)[1]
+
+  # Pad arrays to nearest multiple of nmax
+  im = pad_array(hdu.data, nmax)
+  cim = pad_array(chdu.data, nmax)
+
+  w = np.ones_like(im)
+  starmask = cim > cont_threshold
+
+  # If we pad the starmask and combine it with the padded image, then we
+  # automatically deal with the case where the input files have already
+  # been padded
+  m =  np.isfinite(im) & (~pad_array(starmask, nmax))
+
+  for n, mingood in zip(nlist, mingoods):
+      im[~m] = 0.0
+      outfile = infile.replace('.fits', '-bin{:03d}.fits'.format(n))
+      if n == nlist[0]:
+          # Do dependency checking on the first iteration
+          if not newer(datadir / infile, datadir / outfile):
+              # Bail out if dependency not newer than target
+              sys.exit(outfile + ' is already up to date.')
+      print('Saving', outfile)
+      # Save both the scaled image and the weights, but at the full resolution
+      fits.HDUList([
+          fits.PrimaryHDU(),
+          fits.ImageHDU(data=oversample(im, n), header=hdr, name='scaled'),
+          fits.ImageHDU(data=oversample(w, n), header=hdr, name='weight'),
+      ]).writeto(datadir / outfile, clobber=True)
+      # Now do the rebinning by a factor of two
+      [im,], m, w = downsample([im,], m, weights=w, mingood=mingood)
+
+
+#+END_SRC
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE O_II-V1-4649-51-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving O_II-V1-4649-51-sum-bin001.fits
+: Saving O_II-V1-4649-51-sum-bin002.fits
+: Saving O_II-V1-4649-51-sum-bin004.fits
+: Saving O_II-V1-4649-51-sum-bin008.fits
+: Saving O_II-V1-4649-51-sum-bin016.fits
+: Saving O_II-V1-4649-51-sum-bin032.fits
+: Saving O_II-V1-4649-51-sum-bin064.fits
+: Saving O_II-V1-4649-51-sum-bin128.fits
+: Saving O_II-V1-4649-51-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE O_II-V1-4639-42-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving O_II-V1-4639-42-sum-bin001.fits
+: Saving O_II-V1-4639-42-sum-bin002.fits
+: Saving O_II-V1-4639-42-sum-bin004.fits
+: Saving O_II-V1-4639-42-sum-bin008.fits
+: Saving O_II-V1-4639-42-sum-bin016.fits
+: Saving O_II-V1-4639-42-sum-bin032.fits
+: Saving O_II-V1-4639-42-sum-bin064.fits
+: Saving O_II-V1-4639-42-sum-bin128.fits
+: Saving O_II-V1-4639-42-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE N_III-4634-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving N_III-4634-sum-bin001.fits
+: Saving N_III-4634-sum-bin002.fits
+: Saving N_III-4634-sum-bin004.fits
+: Saving N_III-4634-sum-bin008.fits
+: Saving N_III-4634-sum-bin016.fits
+: Saving N_III-4634-sum-bin032.fits
+: Saving N_III-4634-sum-bin064.fits
+: Saving N_III-4634-sum-bin128.fits
+: Saving N_III-4634-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE N_II-4631-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving N_II-4631-sum-bin001.fits
+: Saving N_II-4631-sum-bin002.fits
+: Saving N_II-4631-sum-bin004.fits
+: Saving N_II-4631-sum-bin008.fits
+: Saving N_II-4631-sum-bin016.fits
+: Saving N_II-4631-sum-bin032.fits
+: Saving N_II-4631-sum-bin064.fits
+: Saving N_II-4631-sum-bin128.fits
+: Saving N_II-4631-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE He_II-4686-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving He_II-4686-sum-bin001.fits
+: Saving He_II-4686-sum-bin002.fits
+: Saving He_II-4686-sum-bin004.fits
+: Saving He_II-4686-sum-bin008.fits
+: Saving He_II-4686-sum-bin016.fits
+: Saving He_II-4686-sum-bin032.fits
+: Saving He_II-4686-sum-bin064.fits
+: Saving He_II-4686-sum-bin128.fits
+: Saving He_II-4686-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE linesum-O_III-5007.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving linesum-O_III-5007-bin001.fits
+: Saving linesum-O_III-5007-bin002.fits
+: Saving linesum-O_III-5007-bin004.fits
+: Saving linesum-O_III-5007-bin008.fits
+: Saving linesum-O_III-5007-bin016.fits
+: Saving linesum-O_III-5007-bin032.fits
+: Saving linesum-O_III-5007-bin064.fits
+: Saving linesum-O_III-5007-bin128.fits
+: Saving linesum-O_III-5007-bin256.fits
+
+
+*** Combine multibinned images 
++ Try a different strategy this time
+  + Use a high s/n image, such as O_III-5007, as a template
+  + Make a series of masks at different levels on this image
+  + Use those to select the multigrid levels to combine
+
+#+begin_src python :eval no :tangle muse/multibin-combine.py
+  import sys
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+
+  datadir = Path("~/Dropbox/Orion-HH-data/MUSE").expanduser()
+
+  try:
+      fileroot = sys.argv[1]
+      threshold = float(sys.argv[2])
+      STEEPNESS = float(sys.argv[3])
+  except IndexError:
+      sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS')
+
+
+  refhdu = fits.open(datadir / "linesum-O_III-5007-bin001.fits")["SCALED"]
+  outim = np.empty_like(refhdu.data)
+  nlist = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  for n in reversed(nlist):
+      hdu = fits.open(datadir / f"{fileroot}-bin{n:03d}.fits")["SCALED"]
+      mask = refhdu.data >= threshold/n**STEEPNESS
+      outim[mask] = hdu.data[mask]
+
+  fits.PrimaryHDU(
+      header=hdu.header,
+      data=outim,
+  ).writeto(
+      datadir / f"{fileroot}-multibin.fits",
+      overwrite=True,
+  )
+
+#+end_src
+#+begin_src sh :results silent
+  python muse/multibin-combine.py O_II-V1-4649-51-sum 5e8 1.5
+#+end_src
+
+#+begin_src sh :results silent
+  python muse/multibin-combine.py O_II-V1-4639-42-sum 5e8 1.5
+#+end_src
+
+#+begin_src sh :results silent
+  python muse/multibin-combine.py N_III-4634-sum 5e8 1.5
+#+end_src
+
+#+begin_src sh :results silent
+  python muse/multibin-combine.py N_II-4631-sum 5e8 1.5
+#+end_src
+
+#+begin_src sh :results silent
+  python muse/multibin-combine.py linesum-O_III-5007 5e8 1.5
+#+end_src
+
+
+
+*** TODO Do extinction correction
+
+*** TODO Subtract the N II and N III contamination from 4639-42 image
++ Find scale factor from Adal spectra
+*** Take ratio of V1 to 5007 for the two main sections
 #+begin_src python 
   import sys
   import numpy as np
@@ -2360,28 +2602,38 @@ Written He_II-4686-wav-rebin05x05.fits
   from pathlib import Path 
 
   datadir = Path("../Orion-HH-data/MUSE")
-  hdu5007, = fits.open(datadir / "linesum-O_III-5007.fits")
-  hdu4650, = fits.open(datadir / "O_II-V1-4649-51-sum.fits")
-  hdu4640, = fits.open(datadir / "O_II-V1-4639-42-sum.fits")
+  hdu5007, = fits.open(datadir / "linesum-O_III-5007-multibin.fits")
+  hdu4650, = fits.open(datadir / "O_II-V1-4649-51-sum-multibin.fits")
+  hdu4640, = fits.open(datadir / "O_II-V1-4639-42-sum-multibin.fits")
   fits.PrimaryHDU(
       header=hdu4650.header,
       data=hdu4650.data/hdu5007.data
-  ).writeto(datadir / "O_II-V1-4649-51-over-5007.fits", overwrite=True)
+  ).writeto(datadir / "O_II-V1-4649-51-over-5007-multibin.fits", overwrite=True)
   fits.PrimaryHDU(
       header=hdu4640.header,
       data=hdu4640.data/hdu5007.data
-  ).writeto(datadir / "O_II-V1-4639-42-over-5007.fits", overwrite=True)
+  ).writeto(datadir / "O_II-V1-4639-42-over-5007-multibin.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu4640.data
+  ).writeto(datadir / "O_II-V1-4649-51-over-4639-42-multibin.fits", overwrite=True)
 #+end_src
 
 #+RESULTS:
 : None
+** Calculate a T from V1/5007 as in Peimbert-squared
+** Compare with C II fluorescent
 
-
-
++ Use the 6463 line to remove the recombination contribution from 7231
++ With O II, try to subtract a fraction of [O III] 5007 from 4651, assuming a T
+** Look at the O I and [O II] lines
++ This gives another T estimate for the singly-ionized metals zone
 ** Fit Gaussians to O II multiple
 + 4649, 4651 are blended
 + 4642, 4639 are blended with N II and N III too
 + 4674 and 4676 are blended
 + 4631 is pure N II
 + 4607 is pure N II
+
+
 *** Make a template for the O II V1 multiplet

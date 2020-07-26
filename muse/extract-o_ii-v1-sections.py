@@ -12,7 +12,9 @@ except IndexError:
     sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
 
 infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+infile_bg = f"muse-hr-data-wavsec0{SUFFIX}-cont.fits"
 hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+hdubg = fits.open(f"{DATADIR}/{infile_bg}")["DATA"]
 w = WCS(hdu)
 nwav, ny, nx = hdu.data.shape
 wavpix = np.arange(nwav)
@@ -26,10 +28,19 @@ for i1, i2, _, _, _, _, label in TAB:
         data=imsum
     ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
     print(f"Written {outfile}")
+
     outfile = f"{label}-wav{SUFFIX}.fits"
     imwav = np.sum(hdu.data[i1:i2, :, :]*wavs[i1:i2, None, None], axis=0)/imsum
     fits.PrimaryHDU(
         header=w.celestial.to_header(),
         data=imwav
+    ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+    print(f"Written {outfile}")
+
+    outfile = f"{label}-bg{SUFFIX}.fits"
+    imsum = np.sum(hdubg.data[i1:i2, :, :], axis=0)
+    fits.PrimaryHDU(
+        header=w.celestial.to_header(),
+        data=imsum
     ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
     print(f"Written {outfile}")
