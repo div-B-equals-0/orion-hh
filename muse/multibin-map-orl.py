@@ -46,11 +46,6 @@ m =  np.isfinite(im) & (~pad_array(starmask, nmax))
 for n, mingood in zip(nlist, mingoods):
     im[~m] = 0.0
     outfile = infile.replace('.fits', '-bin{:03d}.fits'.format(n))
-    if n == nlist[0]:
-        # Do dependency checking on the first iteration
-        if not newer(datadir / infile, datadir / outfile):
-            # Bail out if dependency not newer than target
-            sys.exit(outfile + ' is already up to date.')
     print('Saving', outfile)
     # Save both the scaled image and the weights, but at the full resolution
     fits.HDUList([
