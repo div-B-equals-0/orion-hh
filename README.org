@@ -2111,7 +2111,7 @@ Measurements of features in [Fe III] lines
 
 
 
-* Permitted lines
+* TODO Permitted lines
 + Extract O II and C II lines from MUSE
 + For the O II lines, we need to isolate the 4649 blens
 + For C II pure recomb lines 
@@ -2122,11 +2122,22 @@ Measurements of features in [Fe III] lines
   + 6151.43 - might be good
   + 6461.96 - weak but should be clear
     + This is definitely the best bet for C II lines
+    + Escalante:2012a have it being all recombination
+    + Whereas 7231 and 7236 are 20 to 40% fluorescent in IC 418
 + N II lines
   + These are generally weak and must be a mixture of recombination and fluorescence
 + Si II lines
   + These are much stronger, also mixture
-
++ More O II lines from Manu/Adal
+  + 4609, 4610 - Escalante:2012a says is 100% recombination
++ [ ] Excitation of O II V1
+  + Multiplet (quartet) is 3s ^4P \to 3p ^4D
+  + Ground state is 2p3 ^4S
+    + Resonant absorption 2p3 ^4S \to 3d ^4P (429.650 \to 429.716 \AA)
+      + so that is 2.12 Rydbergs
+    + Followed by decay to 3p terms
+    + Need to make a diagram and work out if it is feasible
+  + Velocity gradients in Big Arc will tend to make fluorescence more efficient
 
 ** Revisiting the Adal and Manu analysis
 + The Adal spectra are plotted for 6 different sections of Slit 6
@@ -2984,6 +2995,84 @@ CLOSED: [2020-07-26 Sun 13:59]
 : None
 
 #+call: oii-ORL-CEL-temperature(SUFFIX="multibin-vfine-1e8-1p5")
+
+#+RESULTS:
+: None
+
+
+*** Relation between \Delta T and t^2
++ This is for T([O III]) instead of T([S III]) but we will assume that is close enough
++ Peimbert & Peimbert (2013) equations 10, 11
+  + give T(4363/4959) and T(V1/4959)
+  + in terms of T_0(O++) and t^2(O++)
++ For convenience, put t0 = T_0/1e4 K
++ Then we have
+  + T(4363/4959) / T_0 = 1 + 0.5 (9.13/t0 - 2.68) t^2 = 1 + a t^2
+  + T(V1/4959) / T_0 = 1 + 0.5 (2.916/t0 - 3.095 + 0.415/(2.916/t0 + 0.415)) t^2 = 1 + b t^2
+  + \Delta T / T_0 = (a - b) t^2
++ Variation of the t^2 coefficients with t0
+  |   t0 |    a |    b | a - b |
+  |------+------+------+-------|
+  |  0.7 | 5.18 | 0.58 | 4.6   |
+  | 0.75 | 4.75 | 0.44 | 4.31  |
+  |  0.8 | 4.37 | 0.33 | 4.04  |
+  | 0.85 | 4.03 | 0.22 | 3.81  |
+  #+TBLFM: $2=0.5 (9.13/$1 - 2.68);f2::$3=0.5 (2.916/$1 - 3.095 + 0.415/(2.916/$1 + 0.415));f2::$4=$2 - $3
++ So both T are positively biased wrt mean T_0, especially T(4363/4959)
++ We expect T_0 to be similar to, but slightly lower than T(V1/4959)
+  + Taking T_0 = 7500 +/- 200 K gives (a - b) = 4.31 +/- 0.12
+  + This implies \Delta T = 7500 (4.31 +/- 0.12) t^2 = (32325 +/- 900) t^2 
+  + Or t^2 = (0.031 +/- 0.001) (\Delta T / 1000 K)
+
+
+*** Plane-of sky t^2
++ This can be crudely estimated from the standard deviation of T([S III])
++ Measured in a few representative boxes
+  |  T mean |  stddev |    t^2 |
+  |---------+---------+--------|
+  |    8284 | 228.662 | 0.0008 |
+  | 8222.34 | 267.187 | 0.0011 |
+  | 8262.28 | 148.677 | 0.0003 |
+  | 8165.87 |  314.53 | 0.0015 |
+  |---------+---------+--------|
+  | 7756.21 | 347.089 | 0.0020 |
+  | 7690.31 |  183.44 | 0.0006 |
+  | 7665.54 | 202.199 | 0.0007 |
+  | 7658.65 | 218.946 | 0.0008 |
+  #+TBLFM: $3=($2/$1)**2;f4
++ Below the line are from T(V1/4959), although only for medium and coarse gridding since otherwise noise dominates
++ Anyway, it looks like plane-of-sky t^2 is about 0.001 for either diagnostic
+*** Combine the excess maps
++ Only allow positive values
+#+begin_src python 
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from pathlib import Path 
+
+
+  datadir = Path("../Orion-HH-data/MUSE")
+
+  im = None
+  for suffix in [
+          "coarse-2e9-1p5",
+          "medium-1e9-1p5",
+          "fine-3e8-1p5",
+  #        "vfine-1e8-1p5",
+  ]:
+      hdu, = fits.open(datadir / f"O_II-V1-sum-excess-multibin-{suffix}.fits")
+      if im is None:
+          im = np.empty_like(hdu.data)
+      m = hdu.data > 0.0
+      im[m] = hdu.data[m]
+
+  fits.PrimaryHDU(
+      header=hdu.header,
+      data=im,
+  ).writeto(datadir / f"O_II-V1-sum-excess-combo.fits", overwrite=True)
+ 
+#+end_src
 
 #+RESULTS:
 : None
