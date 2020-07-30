@@ -1,0 +1,1050 @@
+* TODO Permitted lines
++ Extract O II and C II lines from MUSE
++ For the O II lines, we need to isolate the 4649 blend
++ For C II pure recomb lines 
+  + We have 4620 supposedly ?!
+    + Very weak and there may be another line at 4621
+  + Also 4803 but blended with N II and [Co II]
+  + 5342.40 - very weak
+  + 6151.43 - might be good
+  + 6461.96 - weak but should be clear
+    + This is definitely the best bet for C II lines
+    + Escalante:2012a have it being all recombination
+    + Whereas 7231 and 7236 are 20 to 40% fluorescent in IC 418
++ N II lines
+  + These are generally weak and must be a mixture of recombination and fluorescence
++ Si II lines
+  + These are much stronger, also mixture
++ More O II lines from Manu/Adal
+  + 4609, 4610 - Escalante:2012a says is 100% recombination
+    + Terms are in LK coupling scheme
+      + 3d 2D5/2–4f F[4]o7/2
+      + 3d 2D3/2–4f F[2]o5/2
+    + Unfortunately, there is an [Fe III] line at 4607
+    + Also N II 4607 but that is weaker
+    + 4607 to 4610 are blended in Manu and MUSE
+    + The O II lines are well separated from [Fe III] in Adal
+  + 4596
++ [ ] Excitation of O II V1
+  + Multiplet (quartet) is 3s ^4P \to 3p ^4D
+    + Storey:2017a has more rigorous terminology
+    + But backwards: UPPER \to LOWER
+    + 2s^{2} 2p^{2}(.^{3}P) 3p .^{4}D_{o} \to  2s^{2} 2p^{2}(.^{3}P) 3s .^{4}P_{e}
+    + ~2s22p2(3P)3p 4Do    -   2s22p2(3P)3s 4Pe~
+    + E.g., 4649.13 is index 8790
+  + Ground state is 2p3 ^4S
+    + Resonant absorption 2p3 ^4S \to 3d ^4P (429.650 \to 429.716 \AA)
+      + so that is 2.12 Rydbergs
+    + Followed by decay to 3p terms
+    + Need to make a diagram and work out if it is feasible
+  + Velocity gradients in Big Arc will tend to make fluorescence more efficient
+  + Interestingly, the analogous N I multiplet is at 8680-8719
+    + N I and O II are identical in electron configuration
+    + We see all these lines nicely in the MUSE data
+    + They are all at least 95% fluoresced
++ Problem of the 3d-4f lines
+  + These should not have a fluorescent component
+    + /except that maybe they might if intercombination lines are important/
+  + But they give the same abundances as the other lines
++ What states can we have
+  + 3 outer electrons
+  + Ground state is 2p^3 ^4S
+    + 2S+1 = 4 => S = 3/2 so all 3 spins are aligned
+    + L=0 so J = 3/2
+  + Pumped state: one electron goes from 2p \to 3d
+    + L = 0 \to 1 for E1 transition so must be a ^4P state
+    + In fact *only* ^4P levels can be directly pumped from ground
+      + At least I would have thought, although Escalante also mention ^4S \to ^4D transition, which has \Delta L = 2, so must be quadrupole
+    + So 2p^2 3d ^4P has L=1, S=3/2, J= 5/2, 3/2, 1/2
+  + If we pump the 3d .^{4}P level then we need the transition
+    + 3d .^{4}P_{e} \to 3p .^{4}D_{o} in order to populate the upper level of V1
+    + Storey has the following components:
+      |  IND |     wav | 2JI | 2JF | Other         | Manu  |
+      |------+---------+-----+-----+---------------+-------|
+      | 8494 | 3864.13 |   1 |   1 | Si II 3863    | Blend |
+      | 8493 | 3872.44 |   1 |   3 | [Ne III] 3869 |       |
+      | 8515 | 3874.09 |   3 |   1 | He I 3878     |       |
+      | 8514 | 3882.45 |   3 |   3 | H I 3889      | ?     |
+      | 8566 | 3893.52 |   5 |   3 | H I 3889      |       |
+      | 8513 | 3896.30 |   3 |   5 |               | faint |
+      | 8565 | 3907.45 |   5 |   5 |               | yes   |
+      | 8564 | 3926.58 |   5 |   7 | He I 3927     |       |
+    + Unfortunately, most will be blended with other lines
+  + We should also get another route down via 3p .^{4}S:
+    + 3d .^{4}P_{e} \to 3p .^{4}S_{o} followed by 3p .^{4}S_{o} \to 3s .^{4}P_{e}
+      + which ends at same lower level as V1
+    + 3d .^{4}P_{e} \to 3p .^{4}S_{o} or ~2s22p2(3P)3d 4Pe    -   2s22p2(3P)3p 4So~
+      |  IND |     wav | 2JI | 2JF | Other                    | Manu   | MUSE   | Adal              |
+      |------+---------+-----+-----+--------------------------+--------+--------+-------------------|
+      | 8489 | 4890.86 |   1 |   3 | [Fe II] 4890             | Blend? | Blend? | weak but resolved |
+      | 8507 | 4906.83 |   3 |   3 | [Fe II] 4905             | Blend? | Blend  | Weak              |
+      | 8559 | 4924.53 |   5 |   3 | He I 4922, [Fe III] 4925 | Blend? | No     | Possibly          |
+    + 3p .^{4}S_{o} \to 3s .^{4}P_{e} or ~2s22p2(3P)3p 4So    -   2s22p2(3P)3s 4Pe~
+      |  IND |     wav | 2JI | 2JF | Other       | Manu |
+      |------+---------+-----+-----+-------------+------|
+      | 8730 | 3712.74 |   3 |   1 | H I 3712    | No   |
+      | 8729 | 3727.32 |   3 |   3 | [O II] 3726 | No   |
+      | 8728 | 3749.48 |   3 |   5 | H I 3750    | No   |
+    + So this is the *cursed multiplet* - no chance of ever seeing it
+** Analyze the pumping line
++ This is now in a separate file:
+  + [[file:oii-fluorescence.org]]
+** Revisiting the Adal and Manu analysis
++ The Adal spectra are plotted for 6 different sections of Slit 6
+  | x range |         |
+  |---------+---------|
+  |    0:40 | Red bay |
+  |   40:50 |         |
+  |   50:62 |         |
+  |   67:80 |         |
+  |   80:95 |         |
+  |  95:154 |         |
+  + Numbers x correspond to pixels of length 1.2 arcsec along slit
+  + Note that 62:67 is omitted - corresponds to 159-350
+    + x=65 \to 78 arcsec from left edge
+  + Total length = 154 1.2 = 185 arcsec
+
+** Extract maps from MUSE cubes
+
++ This is copied from Raman project
+  + [[id:90BA9F0F-DEF4-47FB-AE68-722524E169F1][Remove continuum from cube]]
++ But we change the wavelengths because we are working with wavsec0
+  + Total range is 4595 \to 5191 \AA
+
+#+begin_src python :tangle muse/subtract-continuum-wavsec0.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from numpy.polynomial import Chebyshev as T
+  import itertools
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+  wavpix = np.arange(nwav)
+
+  # Two pairs of adjacent sections for the true continuum
+
+  # Wavelength sections of clean continuum (lots of small sections)
+  clean_sections = [
+      [4610.0, 4616.0], [4624.0, 4627.0], # between C II, N II, O II
+      [4690.0, 4697.0], [4720.0, 4730.0], # between He I and Ar IV
+      [4746.0, 4750.0], [4760.0, 4765.0], # between Fe III lines
+      [4782.0, 4786.0], [4820.0, 4830.0], # next to Hb
+      [4910.0, 4916.0], [5060.0, 5080.0], # to the red
+      [5090.0, 5100.0], [5170.0, 5185.0], # to the red
+  ]
+
+  cont_slices = []
+  for wavs in clean_sections:
+      wavs = 1e-10*np.array(wavs)
+      _, _, wpix = w.world_to_pixel_values([0, 0], [0, 0], wavs)
+      cont_slices.append(slice(*wpix.astype(int)))
+
+
+  # Use median over each section to avoid weak lines
+  cont_maps = np.array([np.median(hdu.data[_, :, :], axis=0) for _ in cont_slices])
+  cont_wavpix = np.array([np.median(wavpix[_], axis=0) for _ in cont_slices])
+  # Inefficient but simple algorithm - loop over spaxels
+  bgdata = np.empty_like(hdu.data)
+  for j, i in itertools.product(range(ny), range(nx)):
+      # Fit polynomial to BG
+      try:
+          p = T.fit(cont_wavpix, cont_maps[:, j, i], deg=2)
+          # and fill in the BG spectrum of this spaxel
+          bgdata[:, j, i] = p(wavpix)
+      except:
+          bgdata[:, j, i] = np.nan
+
+
+
+  for suffix, cube in [
+          ["cont", bgdata],
+          ["cont-sub", hdu.data - bgdata],
+          # ["cont-div", hdu.data/bgdata],
+  ]:
+      outfile = infile.replace(".fits", f"-{suffix}.fits")
+      fits.PrimaryHDU(header=hdu.header, data=cube).writeto(
+          f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+#+end_src
+
+#+name: subtract-cont
+#+header: :var DATADIR="../OrionMuse"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/subtract-continuum-wavsec0.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: subtract-cont
+: Written muse-hr-data-wavsec0-rebin05x05-cont.fits
+: Written muse-hr-data-wavsec0-rebin05x05-cont-sub.fits
+
+
+*** Now we do a simple extraction of the whole V1 multiplet
+
+#+begin_src python :tangle muse/extract-o_ii-v1-sum.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+  outfile = f"o_ii-v1-sum{SUFFIX}.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+
+
+  # Wavelength sections of O II V1 multiplet
+  v1_sections = [
+      [49, 71], [79, 83], [90, 102]
+  ]
+
+  im = np.zeros((ny, nx))
+  for i1, i2 in v1_sections:
+      im += np.sum(hdu.data[i1:i2, :, :], axis=0)
+
+  fits.PrimaryHDU(header=w.celestial.to_header(), data=im).writeto(
+          f"{OUTDIR}/{outfile}", overwrite=True)
+  print(f"Written {outfile}")
+#+end_src
+
+#+name: extract-o-ii-v1
+#+header: :var DATADIR="../Orion-HH-data/MUSE"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/extract-o_ii-v1-sum.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: extract-o-ii-v1
+: Written o_ii-v1-sum.fits
+
+
+*** Extraction of multiplet in 4 sections
+
+#+name: oii-v1-sections
+| pix1 | pix2 |    wav1 |    wav2 | O II V1 lines | Others                  | Label           |
+|------+------+---------+---------+---------------+-------------------------+-----------------|
+|   38 |   44 |  4627.3 |  4632.4 |               | N II 4631, [Ni II] 4628 | N_II-4631       |
+|   44 |   49 |  4632.4 | 4636.65 |               | N III 4634              | N_III-4634      |
+|   49 |   62 | 4636.65 |  4646.0 | 4639, 4642    | N III 4641, N II 4643   | O_II-V1-4639-42 |
+|   62 |   71 |  4646.0 |  4654.5 | 4649, 4651    |                         | O_II-V1-4649-51 |
+|   79 |   83 | 4662.15 |  4664.7 | 4662          | (Red wing of 4658)      | O_II-V1-4662    |
+|   90 |  102 |  4671.5 | 4680.85 | 4674, 4676    |                         | O_II-V1-4674-76 |
+|  101 |  119 | 4679.15 | 4694.45 |               | He II 4686 abs          | He_II-4686      |
+
+#+header: :var TAB=oii-v1-sections
+#+begin_src python :tangle muse/extract-o_ii-v1-sections.py :eval no
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  try:
+      DATADIR = sys.argv[1]
+      SUFFIX = sys.argv[2]
+      OUTDIR = sys.argv[3]
+  except IndexError:
+      sys.exit(f"Usage: {sys.argv[0]} DATADIR SUFFIX OUTDIR")
+
+  infile = f"muse-hr-data-wavsec0{SUFFIX}-cont-sub.fits"
+  infile_bg = f"muse-hr-data-wavsec0{SUFFIX}-cont.fits"
+  hdu = fits.open(f"{DATADIR}/{infile}")["DATA"]
+  hdubg = fits.open(f"{DATADIR}/{infile_bg}")["DATA"]
+  w = WCS(hdu)
+  nwav, ny, nx = hdu.data.shape
+  wavpix = np.arange(nwav)
+  _, _, wavs = w.pixel_to_world_values([0]*nwav, [0]*nwav, wavpix)
+  wavs *= 1.e10
+  for i1, i2, _, _, _, _, label in TAB:
+      outfile = f"{label}-sum{SUFFIX}.fits"
+      imsum = np.sum(hdu.data[i1:i2, :, :], axis=0)
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imsum
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+
+      outfile = f"{label}-wav{SUFFIX}.fits"
+      imwav = np.sum(hdu.data[i1:i2, :, :]*wavs[i1:i2, None, None], axis=0)/imsum
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imwav
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+
+      outfile = f"{label}-bg{SUFFIX}.fits"
+      imsum = np.sum(hdubg.data[i1:i2, :, :], axis=0)
+      fits.PrimaryHDU(
+          header=w.celestial.to_header(),
+          data=imsum
+      ).writeto(f"{OUTDIR}/{outfile}", overwrite=True)
+      print(f"Written {outfile}")
+#+end_src
+
+#+name: extract-o-ii-v1-sections
+#+header: :var DATADIR="../Orion-HH-data/MUSE"
+#+header: :var SUFFIX="-rebin05x05"
+#+header: :var OUTDIR="../Orion-HH-data/MUSE"
+#+begin_src sh :results verbatim
+python muse/extract-o_ii-v1-sections.py $DATADIR $SUFFIX $OUTDIR
+#+end_src
+
+#+RESULTS: extract-o-ii-v1-sections
+#+begin_example
+Written N_II-4631-sum-rebin05x05.fits
+Written N_II-4631-wav-rebin05x05.fits
+Written N_III-4634-sum-rebin05x05.fits
+Written N_III-4634-wav-rebin05x05.fits
+Written O_II-V1-4639-42-sum-rebin05x05.fits
+Written O_II-V1-4639-42-wav-rebin05x05.fits
+Written O_II-V1-4649-51-sum-rebin05x05.fits
+Written O_II-V1-4649-51-wav-rebin05x05.fits
+Written O_II-V1-4662-sum-rebin05x05.fits
+Written O_II-V1-4662-wav-rebin05x05.fits
+Written O_II-V1-4674-76-sum-rebin05x05.fits
+Written O_II-V1-4674-76-wav-rebin05x05.fits
+Written He_II-4686-sum-rebin05x05.fits
+Written He_II-4686-wav-rebin05x05.fits
+#+end_example
+
+
+
+*** Do multibinning of V1 images
+
+#+BEGIN_SRC python :tangle muse/multibin-map-orl.py :eval no
+  import sys
+  from pathlib import Path
+  from distutils.dep_util import newer, newer_group
+  import numpy as np
+  sys.path.append("/Users/will/Dropbox/multibin-maps")
+  from rebin_utils import downsample, oversample, pad_array
+  from astropy.io import fits
+
+  nlist = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  mingoods = [2, 2, 2, 2, 2, 2, 2, 2, 2]
+
+
+  try:
+      datadir = Path(sys.argv[1])
+      infile = sys.argv[2]
+      contfile = sys.argv[3]
+      cont_threshold = float(sys.argv[4])
+  except:
+      sys.exit('Usage: {} DATADIR INFILE CONTFILE CONT_THRESHOLD'.format(sys.argv[0]))
+
+
+  hdu = fits.open(datadir / infile)[0]
+  if hdu.data is None:
+      hdu = fits.open(datadir / infile)[1]
+  hdr = hdu.header
+  # Maximum binning
+  nmax = nlist[-1]
+
+  # continuum image
+  chdu = fits.open(datadir / contfile)[0]
+  if chdu.data is None:
+      chdu = fits.open(datadir / contfile)[1]
+
+  # Pad arrays to nearest multiple of nmax
+  im = pad_array(hdu.data, nmax)
+  cim = pad_array(chdu.data, nmax)
+
+  w = np.ones_like(im)
+  starmask = cim > cont_threshold
+
+  # If we pad the starmask and combine it with the padded image, then we
+  # automatically deal with the case where the input files have already
+  # been padded
+  m =  np.isfinite(im) & (~pad_array(starmask, nmax))
+
+  for n, mingood in zip(nlist, mingoods):
+      im[~m] = 0.0
+      outfile = infile.replace('.fits', '-bin{:03d}.fits'.format(n))
+      print('Saving', outfile)
+      # Save both the scaled image and the weights, but at the full resolution
+      fits.HDUList([
+          fits.PrimaryHDU(),
+          fits.ImageHDU(data=oversample(im, n), header=hdr, name='scaled'),
+          fits.ImageHDU(data=oversample(w, n), header=hdr, name='weight'),
+      ]).writeto(datadir / outfile, clobber=True)
+      # Now do the rebinning by a factor of two
+      [im,], m, w = downsample([im,], m, weights=w, mingood=mingood)
+
+
+#+END_SRC
+ 
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE O_II-V1-4649-51-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving O_II-V1-4649-51-sum-bin001.fits
+: Saving O_II-V1-4649-51-sum-bin002.fits
+: Saving O_II-V1-4649-51-sum-bin004.fits
+: Saving O_II-V1-4649-51-sum-bin008.fits
+: Saving O_II-V1-4649-51-sum-bin016.fits
+: Saving O_II-V1-4649-51-sum-bin032.fits
+: Saving O_II-V1-4649-51-sum-bin064.fits
+: Saving O_II-V1-4649-51-sum-bin128.fits
+: Saving O_II-V1-4649-51-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE O_II-V1-4639-42-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving O_II-V1-4639-42-sum-bin001.fits
+: Saving O_II-V1-4639-42-sum-bin002.fits
+: Saving O_II-V1-4639-42-sum-bin004.fits
+: Saving O_II-V1-4639-42-sum-bin008.fits
+: Saving O_II-V1-4639-42-sum-bin016.fits
+: Saving O_II-V1-4639-42-sum-bin032.fits
+: Saving O_II-V1-4639-42-sum-bin064.fits
+: Saving O_II-V1-4639-42-sum-bin128.fits
+: Saving O_II-V1-4639-42-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE N_III-4634-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving N_III-4634-sum-bin001.fits
+: Saving N_III-4634-sum-bin002.fits
+: Saving N_III-4634-sum-bin004.fits
+: Saving N_III-4634-sum-bin008.fits
+: Saving N_III-4634-sum-bin016.fits
+: Saving N_III-4634-sum-bin032.fits
+: Saving N_III-4634-sum-bin064.fits
+: Saving N_III-4634-sum-bin128.fits
+: Saving N_III-4634-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE N_II-4631-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving N_II-4631-sum-bin001.fits
+: Saving N_II-4631-sum-bin002.fits
+: Saving N_II-4631-sum-bin004.fits
+: Saving N_II-4631-sum-bin008.fits
+: Saving N_II-4631-sum-bin016.fits
+: Saving N_II-4631-sum-bin032.fits
+: Saving N_II-4631-sum-bin064.fits
+: Saving N_II-4631-sum-bin128.fits
+: Saving N_II-4631-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE He_II-4686-sum.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving He_II-4686-sum-bin001.fits
+: Saving He_II-4686-sum-bin002.fits
+: Saving He_II-4686-sum-bin004.fits
+: Saving He_II-4686-sum-bin008.fits
+: Saving He_II-4686-sum-bin016.fits
+: Saving He_II-4686-sum-bin032.fits
+: Saving He_II-4686-sum-bin064.fits
+: Saving He_II-4686-sum-bin128.fits
+: Saving He_II-4686-sum-bin256.fits
+
+#+begin_src sh :results verbatim
+python muse/multibin-map-orl.py ../Orion-HH-data/MUSE linesum-O_III-5007.fits O_II-V1-4649-51-bg.fits 1.0e7
+#+end_src
+
+#+RESULTS:
+: Saving linesum-O_III-5007-bin001.fits
+: Saving linesum-O_III-5007-bin002.fits
+: Saving linesum-O_III-5007-bin004.fits
+: Saving linesum-O_III-5007-bin008.fits
+: Saving linesum-O_III-5007-bin016.fits
+: Saving linesum-O_III-5007-bin032.fits
+: Saving linesum-O_III-5007-bin064.fits
+: Saving linesum-O_III-5007-bin128.fits
+: Saving linesum-O_III-5007-bin256.fits
+
+
+
+**** Redo multibinning for extinction-corrected maps
+
+Have a more generous continuum mask, since otherwise we get bad extinction around th2A
+
+#+begin_src sh :results verbatim
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum He_II-4686-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-map-orl.py ../Orion-HH-data/MUSE ${line}-excorr.fits O_II-V1-4649-51-bg.fits 2.0e6
+  done
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Saving O_II-V1-4649-51-sum-excorr-bin001.fits
+Saving O_II-V1-4649-51-sum-excorr-bin002.fits
+Saving O_II-V1-4649-51-sum-excorr-bin004.fits
+Saving O_II-V1-4649-51-sum-excorr-bin008.fits
+Saving O_II-V1-4649-51-sum-excorr-bin016.fits
+Saving O_II-V1-4649-51-sum-excorr-bin032.fits
+Saving O_II-V1-4649-51-sum-excorr-bin064.fits
+Saving O_II-V1-4649-51-sum-excorr-bin128.fits
+Saving O_II-V1-4649-51-sum-excorr-bin256.fits
+Saving O_II-V1-4639-42-sum-excorr-bin001.fits
+Saving O_II-V1-4639-42-sum-excorr-bin002.fits
+Saving O_II-V1-4639-42-sum-excorr-bin004.fits
+Saving O_II-V1-4639-42-sum-excorr-bin008.fits
+Saving O_II-V1-4639-42-sum-excorr-bin016.fits
+Saving O_II-V1-4639-42-sum-excorr-bin032.fits
+Saving O_II-V1-4639-42-sum-excorr-bin064.fits
+Saving O_II-V1-4639-42-sum-excorr-bin128.fits
+Saving O_II-V1-4639-42-sum-excorr-bin256.fits
+Saving N_III-4634-sum-excorr-bin001.fits
+Saving N_III-4634-sum-excorr-bin002.fits
+Saving N_III-4634-sum-excorr-bin004.fits
+Saving N_III-4634-sum-excorr-bin008.fits
+Saving N_III-4634-sum-excorr-bin016.fits
+Saving N_III-4634-sum-excorr-bin032.fits
+Saving N_III-4634-sum-excorr-bin064.fits
+Saving N_III-4634-sum-excorr-bin128.fits
+Saving N_III-4634-sum-excorr-bin256.fits
+Saving N_II-4631-sum-excorr-bin001.fits
+Saving N_II-4631-sum-excorr-bin002.fits
+Saving N_II-4631-sum-excorr-bin004.fits
+Saving N_II-4631-sum-excorr-bin008.fits
+Saving N_II-4631-sum-excorr-bin016.fits
+Saving N_II-4631-sum-excorr-bin032.fits
+Saving N_II-4631-sum-excorr-bin064.fits
+Saving N_II-4631-sum-excorr-bin128.fits
+Saving N_II-4631-sum-excorr-bin256.fits
+Saving linesum-O_III-5007-excorr-bin001.fits
+Saving linesum-O_III-5007-excorr-bin002.fits
+Saving linesum-O_III-5007-excorr-bin004.fits
+Saving linesum-O_III-5007-excorr-bin008.fits
+Saving linesum-O_III-5007-excorr-bin016.fits
+Saving linesum-O_III-5007-excorr-bin032.fits
+Saving linesum-O_III-5007-excorr-bin064.fits
+Saving linesum-O_III-5007-excorr-bin128.fits
+Saving linesum-O_III-5007-excorr-bin256.fits
+#+end_example
+
+
+*** Combine multibinned images 
++ Try a different strategy this time
+  + Use a high s/n image, such as O_III-5007, as a template
+  + Make a series of masks at different levels on this image
+  + Use those to select the multigrid levels to combine
+
+#+begin_src python :eval no :tangle muse/multibin-combine.py
+  import sys
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+
+  datadir = Path("~/Dropbox/Orion-HH-data/MUSE").expanduser()
+
+  try:
+      fileroot = sys.argv[1]
+      threshold = float(sys.argv[2])
+      STEEPNESS = float(sys.argv[3])
+      SUFFIX = sys.argv[4]
+  except IndexError:
+      sys.exit(f'Usage: {sys.argv[0]} FILEROOT THRESHOLD STEEPNESS SUFFIX')
+
+
+  refhdu = fits.open(datadir / "linesum-O_III-5007-bin001.fits")["SCALED"]
+  outim = np.empty_like(refhdu.data)
+  nlist = [1, 2, 4, 8, 16, 32, 64, 128, 256]
+  for n in reversed(nlist):
+      hdu = fits.open(datadir / f"{fileroot}-bin{n:03d}.fits")["SCALED"]
+      mask = refhdu.data >= threshold/n**STEEPNESS
+      outim[mask] = hdu.data[mask]
+
+  fits.PrimaryHDU(
+      header=hdu.header,
+      data=outim,
+  ).writeto(
+      datadir / f"{fileroot}-multibin{SUFFIX}.fits",
+      overwrite=True,
+  )
+
+#+end_src
+
+#+begin_src sh :results silent
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-combine.py ${line}-excorr 2e9 1.5 -coarse-2e9-1p5
+  done
+#+end_src
+
+
+#+begin_src sh :results silent
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-combine.py ${line}-excorr 1e9 1.5 -medium-1e9-1p5
+  done
+#+end_src
+
+#+begin_src sh :results silent
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-combine.py ${line}-excorr 3e8 1.5 -fine-3e8-1p5
+  done
+#+end_src
+
+#+begin_src sh :results silent
+  LINES="O_II-V1-4649-51-sum O_II-V1-4639-42-sum N_III-4634-sum N_II-4631-sum linesum-O_III-5007"
+  for line in $LINES; do
+      python muse/multibin-combine.py ${line}-excorr 1e8 1.5 -vfine-1e8-1p5
+  done
+#+end_src
+
+
+This makes maps of the [S III] temperature on the same grids as used 
+
+#+begin_src sh
+line=muse-derived-Te-iii
+python muse/multibin-combine.py ${line} 2e9 1.5 -coarse-2e9-1p5
+python muse/multibin-combine.py ${line} 1e9 1.5 -medium-1e9-1p5
+python muse/multibin-combine.py ${line} 3e8 1.5 -fine-3e8-1p5
+python muse/multibin-combine.py ${line} 1e8 1.5 -vfine-1e8-1p5
+#+end_src
+
+#+RESULTS:
+
+*** DONE Do extinction correction
+CLOSED: [2020-07-26 Sun 15:22]
++ De-reddening must be done at the highest resolution, so before the multibinning
+  + There is very little noise in the Balmer decrement map, so this is OK
++ In the Orion MUSE project I de-reddened [S III] 6313/9069 using Ha to Pa a
++ But then I did another version
+  + [[id:7778E7D1-3209-481E-B301-163D5AEB8BAB][Do extinction correction for all lines]]
+  + This used the Hb/Ha map and the Blagrave extinction law from pyneb
+
+
+
+#+BEGIN_SRC python :eval no :tangle muse/correct-for-extinction.py
+  import sys
+  from pathlib import Path
+  import numpy as np
+  import pyneb
+  from astropy.io import fits
+
+  # Set up Blagrave 2007 extinction law
+  REDCORR = pyneb.extinction.red_corr.RedCorr(
+      law='CCM89 Bal07', R_V=5.5, cHbeta=1.0)
+
+  def flambda(wav):
+      """Find [(A_lam / A_Hb) - 1] as function of wavelength `wav`
+
+      This is the same as given in Table 2 of Blagrave et al (2007)
+
+      """
+      return np.log10(REDCORR.getCorrHb(wav))
+
+
+  def CHb_from_RHbHa(RHbHa, balmer0=2.874):
+      """Find base-10 extinction at H beta from balmer decrement `RHbHa`
+
+      Assumes that the intrinsic Balmer decrement is `balmer0`
+
+      """
+      return np.log10(balmer0*RHbHa) / flambda(6563)
+
+
+  def CHb_from_R6563_9229(RBaPa, RBaPa0=112.0):
+      """Find base-10 extinction at H beta from 6563/9229 decrement `RBaPa`
+
+      Assumes that the intrinsic decrement is `RBaPa0`
+
+      """
+      return np.log10(RBaPa/RBaPa0) / (flambda(9229) - flambda(6563))
+
+
+
+  DATADIR = Path("../Orion-HH-data/MUSE")
+
+  if __name__ == '__main__':
+
+      try:
+          prefix = sys.argv[1]
+          wav = int(sys.argv[2])
+      except IndexError:
+          print(f'Usage: {sys.argv[0]} LINEID WAV')
+
+      hb_ha = fits.open(DATADIR / 'ratio-4861-6563.fits')[0].data
+      chb = CHb_from_RHbHa(hb_ha)
+      clam = (1.0 + flambda(wav))*chb
+      fn = f"{prefix}.fits"
+      hdu = fits.open(DATADIR / fn)[0]
+      fn_new = f"{prefix}-excorr.fits"
+      fits.PrimaryHDU(
+          data=hdu.data*10**clam,
+          header=hdu.header
+      ).writeto(DATADIR / fn_new, overwrite=True)
+      print(fn_new)
+
+#+END_SRC
+
+#+begin_src sh
+python muse/correct-for-extinction.py linesum-O_III-5007 5007
+#+end_src
+
+#+RESULTS:
+: linesum-O_III-5007-excorr.fits
+
+#+begin_src sh
+python muse/correct-for-extinction.py O_II-V1-4649-51-sum 4650
+python muse/correct-for-extinction.py O_II-V1-4639-42-sum 4640
+python muse/correct-for-extinction.py N_II-4631-sum 4631
+python muse/correct-for-extinction.py N_III-4634-sum 4634
+#+end_src
+
+#+RESULTS:
+| O_II-V1-4649-51-sum-excorr.fits |
+| O_II-V1-4639-42-sum-excorr.fits |
+| N_II-4631-sum-excorr.fits       |
+| N_III-4634-sum-excorr.fits      |
+
+*** DONE Subtract the N II and N III contamination from 4639-42 image
+CLOSED: [2020-07-26 Sun 13:59]
++ Find scale factor from Adal spectra
+  + N_II-4643 = 0.5 N_II-4631
+  + N_III-4641 = 1.5 N_III-4634
+
+*** Take ratio of V1 to 5007 for the two main sections
+#+name: oii-v1-ratios-corrected
+#+header: :var SUFFIX="excorr-multibin-coarse-2e9-1p5"
+#+begin_src python 
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from pathlib import Path 
+
+  datadir = Path("../Orion-HH-data/MUSE")
+  hdu5007, = fits.open(datadir /  f"linesum-O_III-5007-{SUFFIX}.fits")
+  hdu4650, = fits.open(datadir / f"O_II-V1-4649-51-sum-{SUFFIX}.fits")
+  hdu4640, = fits.open(datadir / f"O_II-V1-4639-42-sum-{SUFFIX}.fits")
+  hdu4631, = fits.open(datadir / f"N_II-4631-sum-{SUFFIX}.fits")
+  hdu4634, = fits.open(datadir / f"N_III-4634-sum-{SUFFIX}.fits")
+
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu5007.data
+  ).writeto(datadir / f"O_II-V1-4649-51-over-5007-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4640.header,
+      data=hdu4640.data/hdu5007.data
+  ).writeto(datadir / f"O_II-V1-4639-42-over-5007-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu4640.data
+  ).writeto(datadir / f"O_II-V1-4649-51-over-4639-42-{SUFFIX}.fits", overwrite=True)
+
+  # Correct the 4639-42 for the N_II and N_III
+  hdu4640.data -= 0.5*hdu4631.data + 1.5*hdu4634.data
+
+  fits.PrimaryHDU(
+      header=hdu4640.header,
+      data=hdu4640.data/hdu5007.data
+  ).writeto(datadir / f"O_II-V1-4639-42-minus-N_II_III-over-5007-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hdu4650.data/hdu4640.data
+  ).writeto(datadir / f"O_II-V1-4649-51-over-4639-42-minus-N_II_III-{SUFFIX}.fits", overwrite=True)
+
+#+end_src
+
+#+RESULTS:
+: None
+
+#+call: oii-v1-ratios-corrected(SUFFIX="excorr-multibin-medium-1e9-1p5")
+
+#+RESULTS:
+: None
+
+#+call: oii-v1-ratios-corrected(SUFFIX="excorr-multibin-fine-3e8-1p5")
+
+#+RESULTS:
+: None
+
+#+call: oii-v1-ratios-corrected(SUFFIX="excorr-multibin-vfine-1e8-1p5")
+
+#+RESULTS:
+: None
+
+** Ratios within the V1 multiplet
++ In the Manu spectra I calculated various ratios
+  + Dominant feature is a radial gradient from inside to outside
+  + Ratios are with respect to sum 4639+4649+4651+4662+4676
+    + I think 4642 is not included because of contamination
+    + And 4676 must include 4674
+  + From the table below, the ratio of the blends 4650/4640 is only predicted to vary by 15%
+    |     Ratio | Inner | Outer |
+    |-----------+-------+-------|
+    |      4639 |  0.14 |  0.17 |
+    |      4642 |  0.38 |  0.34 |
+    |-----------+-------+-------|
+    |      4649 |  0.42 |  0.30 |
+    |      4651 |  0.15 |  0.18 |
+    |-----------+-------+-------|
+    |      4662 |  0.15 |   0.2 |
+    |      4676 |  0.10 |  0.10 |
+    |-----------+-------+-------|
+    |      4640 |  0.52 |  0.51 |
+    |      4650 |  0.57 |  0.48 |
+    | 4650/4640 |  1.10 |  0.94 |
+    |-----------+-------+-------|
+    #+TBLFM: @8$2..@8$3=vsum(@I..@II)::@9$2..@9$3=vsum(@II..@III)::@10$2..@10$3=@-1/@-2;f2
+  + This is broadly with what we get from MUSE
++ In the Adal spectra we have all the lines and 6 regions
+  + Best to have the table transposed
+  + Line strengths in units of 0.0001 with respect to 4959
+    | Zone | 4639 | 4642 | 4649 | 4651 | 4662 | 4674 | 4676 |  Sum | 40+50/Sum | 50/40 | 50/5007 | 40/5007 |
+    |------+------+------+------+------+------+------+------+------+-----------+-------+---------+---------|
+    | A    |  4.0 |  8.3 | 11.4 |  4.0 |  4.9 |  0.9 |  2.9 | 36.4 |      0.76 |  1.25 |     5.3 |     4.2 |
+    | B    |  4.6 |  8.1 | 12.8 |  4.2 |  4.9 |  0.9 |  2.9 | 38.4 |      0.77 |  1.34 |     5.8 |     4.4 |
+    | C    |  4.5 |  8.3 | 12.8 |  4.5 |  5.0 |  0.9 |  2.8 | 38.8 |      0.78 |  1.35 |     5.9 |     4.4 |
+    | D    |  3.8 |  7.2 | 10.6 |  3.5 |  4.0 |  0.8 |  2.4 | 32.3 |      0.78 |  1.28 |     4.8 |     3.8 |
+    | E    |  3.9 |  7.2 | 10.7 |  3.7 |  4.0 |  0.7 |  2.3 | 32.5 |      0.78 |  1.30 |     4.9 |     3.8 |
+    | F    |  5.0 |  8.5 | 10.4 |  5.1 |  5.4 |  1.1 |  3.3 | 38.8 |      0.75 |  1.15 |     5.3 |     4.6 |
+    #+TBLFM: $9=vsum($2..$8)::$10=vsum($2..$5)/$9;f2::$11=($4+$5)/($2+$3);f2::$12=($4 + $5) / 2.91817;f1::$13=($2 + $3) / 2.91817;f1
+  + So the absolute values of 50/40 are a bit larger than Manu's, but the trend is the same
+    + Increases towards center
+  + The sum of the 4640 blend and 4650 blend are about 0.77 of the total sum
+    + There is a slight dependence on density, but the variation is only 4%
+
+
+** Calculate a T from V1/5007 as in Peimbert-squared
++ Supposedly we have
+  : Sum_V1/4959 = 6.56e-5*((T/1.e4)**-0.415)*np.exp(29160.0/T)
++ Theoretically: 5007/4959 = 2.91817
++ And we can estimate Sum_V1 = (4640 + 4650)/0.77
++ Make a table
+  |     T | 1e4 Sum_V1/4959 |
+  |-------+-----------------|
+  |  6000 |           104.6 |
+  |  6500 |            69.6 |
+  |  7000 |            49.0 |
+  |  7250 |            41.8 |
+  |  7500 |            36.1 |
+  |  7750 |            31.4 |
+  |  8000 |            27.6 |
+  |  8500 |            21.7 |
+  |  9000 |            17.5 |
+  | 10000 |            12.1 |
+  | 11000 |             8.9 |
+  | 12000 |             6.9 |
+  #+TBLFM: $2=6.56e-5 (($1/1.e4)**-0.415) exp(29160.0/$1) 10000; f1
++ So the Adal measurements suggest T = 7500 +/- 200 K
+  + [S III] measurements give T = 8500 +/- 300 K
+  + This is consistent with the factor of 0.9 I found for T(4363/5007) vs T(V1/4959)
++ Convert our measurements into a T map
++ Also calculate difference and ratio with [S III] temperature
++ And finally, calculate "excess" V1 emission
+  + That is calculate expected ratio V1/4959 from [S III] temperature
+  + Then multiply this by S(4959) and subtract from S(V1)
+
+#+name: oii-ORL-CEL-temperature
+#+header: :var SUFFIX="multibin-medium-1e9-1p5"
+#+begin_src python 
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from pathlib import Path 
+
+  datadir = Path("../Orion-HH-data/MUSE")
+  hdu4650, = fits.open(datadir / f"O_II-V1-4649-51-over-5007-excorr-{SUFFIX}.fits")
+  hdu4640, = fits.open(datadir / f"O_II-V1-4639-42-minus-N_II_III-over-5007-excorr-{SUFFIX}.fits")
+  hduTiii, = fits.open(datadir / f"muse-derived-Te-iii-{SUFFIX}.fits")
+  hdu5007, = fits.open(datadir / f"linesum-O_III-5007-excorr-{SUFFIX}.fits")
+
+  def func_ratio_v1_4959(T):
+      return 6.56e-5*((T/1.e4)**-0.415)*np.exp(29160.0/T)
+
+  # Grid of 10 K increments
+  Tgrid = np.linspace(5000.0, 15000.0, 1001)
+  Rgrid = func_ratio_v1_4959(Tgrid)
+  # Reverse arrays since we need ratio in ascending order for np.interp
+  Rgrid = Rgrid[::-1]
+  Tgrid = Tgrid[::-1]
+
+  RATIO_4640_50_OVER_SUM = 0.77
+  RATIO_5007_4959 = 2.91817
+  ratio_v1_4959 = RATIO_5007_4959*(hdu4640.data + hdu4650.data)/RATIO_4640_50_OVER_SUM
+
+  T = np.interp(ratio_v1_4959, Rgrid, Tgrid)
+  T[hdu4650.data < 0.0] = np.nan
+  T[T == Tgrid.max()] = np.nan
+  T[T == Tgrid.min()] = np.nan
+
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=ratio_v1_4959
+  ).writeto(datadir / f"O_II-V1-sum-over-4959-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=T,
+  ).writeto(datadir / f"T_Op2_ORL_CEL-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=hduTiii.data - T,
+  ).writeto(datadir / f"Delta_T-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=T/hduTiii.data,
+  ).writeto(datadir / f"T_ratio-{SUFFIX}.fits", overwrite=True)
+
+  ratio_from_T_SIII = func_ratio_v1_4959(hduTiii.data)
+  V1_from_T_S_III = ratio_from_T_SIII*hdu5007.data/RATIO_5007_4959
+  V1_total = (hdu4640.data + hdu4650.data)*hdu5007.data/RATIO_4640_50_OVER_SUM
+  V1_excess = V1_total - V1_from_T_S_III
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=V1_excess,
+  ).writeto(datadir / f"O_II-V1-sum-excess-{SUFFIX}.fits", overwrite=True)
+  fits.PrimaryHDU(
+      header=hdu4650.header,
+      data=V1_excess/V1_from_T_S_III,
+  ).writeto(datadir / f"O_II-V1-sum-frac-excess-{SUFFIX}.fits", overwrite=True)
+
+
+
+#+end_src
+
+#+RESULTS: oii-ORL-CEL-temperature
+: None
+
+#+call: oii-ORL-CEL-temperature(SUFFIX="multibin-coarse-2e9-1p5")
+
+#+RESULTS:
+: None
+
+#+call: oii-ORL-CEL-temperature(SUFFIX="multibin-fine-3e8-1p5")
+
+#+RESULTS:
+: None
+
+#+call: oii-ORL-CEL-temperature(SUFFIX="multibin-vfine-1e8-1p5")
+
+#+RESULTS:
+: None
+
+
+*** Relation between \Delta T and t^2
++ This is for T([O III]) instead of T([S III]) but we will assume that is close enough
++ Peimbert & Peimbert (2013) equations 10, 11
+  + give T(4363/4959) and T(V1/4959)
+  + in terms of T_0(O++) and t^2(O++)
++ For convenience, put t0 = T_0/1e4 Koii
++ Then we have
+  + T(4363/4959) / T_0 = 1 + 0.5 (9.13/t0 - 2.68) t^2 = 1 + a t^2
+  + T(V1/4959) / T_0 = 1 + 0.5 (2.916/t0 - 3.095 + 0.415/(2.916/t0 + 0.415)) t^2 = 1 + b t^2
+  + \Delta T / T_0 = (a - b) t^2
++ Variation of the t^2 coefficients with t0
+  |   t0 |    a |    b | a - b |
+  |------+------+------+-------|
+  |  0.7 | 5.18 | 0.58 | 4.6   |
+  | 0.75 | 4.75 | 0.44 | 4.31  |
+  |  0.8 | 4.37 | 0.33 | 4.04  |
+  | 0.85 | 4.03 | 0.22 | 3.81  |
+  #+TBLFM: $2=0.5 (9.13/$1 - 2.68);f2::$3=0.5 (2.916/$1 - 3.095 + 0.415/(2.916/$1 + 0.415));f2::$4=$2 - $3
++ So both T are positively biased wrt mean T_0, especially T(4363/4959)
++ We expect T_0 to be similar to, but slightly lower than T(V1/4959)
+  + Taking T_0 = 7500 +/- 200 K gives (a - b) = 4.31 +/- 0.12
+  + This implies \Delta T = 7500 (4.31 +/- 0.12) t^2 = (32325 +/- 900) t^2 
+  + Or t^2 = (0.031 +/- 0.001) (\Delta T / 1000 K)
+
+
+*** Plane-of sky t^2
++ This can be crudely estimated from the standard deviation of T([S III])
++ Measured in a few representative boxes
+  |  T mean |  stddev |    t^2 |
+  |---------+---------+--------|
+  |    8284 | 228.662 | 0.0008 |
+  | 8222.34 | 267.187 | 0.0011 |
+  | 8262.28 | 148.677 | 0.0003 |
+  | 8165.87 |  314.53 | 0.0015 |
+  |---------+---------+--------|
+  | 7756.21 | 347.089 | 0.0020 |
+  | 7690.31 |  183.44 | 0.0006 |
+  | 7665.54 | 202.199 | 0.0007 |
+  | 7658.65 | 218.946 | 0.0008 |
+  #+TBLFM: $3=($2/$1)**2;f4
++ Below the line are from T(V1/4959), although only for medium and coarse gridding since otherwise noise dominates
++ Anyway, it looks like plane-of-sky t^2 is about 0.001 for either diagnostic
+*** Combine the excess maps
++ Only allow positive values
+#+begin_src python 
+  import sys
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from pathlib import Path 
+
+
+  datadir = Path("../Orion-HH-data/MUSE")
+
+  im = None
+  for suffix in [
+          "coarse-2e9-1p5",
+          "medium-1e9-1p5",
+          "fine-3e8-1p5",
+  #        "vfine-1e8-1p5",
+  ]:
+      hdu, = fits.open(datadir / f"O_II-V1-sum-excess-multibin-{suffix}.fits")
+      if im is None:
+          im = np.empty_like(hdu.data)
+      m = hdu.data > 0.0
+      im[m] = hdu.data[m]
+
+  fits.PrimaryHDU(
+      header=hdu.header,
+      data=im,
+  ).writeto(datadir / f"O_II-V1-sum-excess-combo.fits", overwrite=True)
+ 
+#+end_src
+
+#+RESULTS:
+: None
+
+** Compare with C II fluorescent
++ Use the 6463 line to remove the recombination contribution from 7231
++ With O II, try to subtract a fraction of [O III] 5007 from 4651, assuming a T
++ The excess O II certainly looks very much like fluorescence
+  + Many of the detailed morphologies are the same between O II and C II
++ The fractional excess is about 0.8 times the T(S_III) prediction in the Big Arc
+  + But much higher around Trapezium
++ A more realistic approach would be to combine T(S_III) with a t^2 value derived from plane-of-sky variations
+  + This might give a slightly larger predicted S(V1), so slightly less excess
+
+** Look at the O I and [O II] lines
++ This gives another T estimate for the singly-ionized metals zone
+** Fit Gaussians to O II multiple
++ 4649, 4651 are blended
++ 4642, 4639 are blended with N II and N III too
++ 4674 and 4676 are blended
++ 4631 is pure N II
++ 4607 is pure N II
+
+
+*** Make a template for the O II V1 multiplet
