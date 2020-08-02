@@ -24,6 +24,7 @@
     + Also N II 4607 but that is weaker
     + 4607 to 4610 are blended in Manu and MUSE
     + The O II lines are well separated from [Fe III] in Adal
+    + Discussed further below
   + 4596
 + [ ] Excitation of O II V1
   + Multiplet (quartet) is 3s ^4P \to 3p ^4D
@@ -42,10 +43,35 @@
     + N I and O II are identical in electron configuration
     + We see all these lines nicely in the MUSE data
     + They are all at least 95% fluoresced
-+ Problem of the 3d-4f lines
+    + [ ] We could look at the equivalent of the 3d-4f lines in N I
++ Case of the 3d-4f lines
   + These should not have a fluorescent component
     + /except that maybe they might if intercombination lines are important/
-  + But they give the same abundances as the other lines
+  + But they give the same abundances as the other lines (in Eduardo HH 529 data)
+  + Strongest lines:
+    + 4303.8: I \approx 0.63e-4 Hb  (Escalante:2013a)
+      + Compare with 4649 \approx 6.7e-4 Hb
+        + ODell:2010a have 4959/Hb = 0.7 to 1.0 in slits 10 and 11, which cover area of Adal's slit 6
+        + Adal has 4649/4959 = 10 \to 12 times 1e-4
+        + Eduardo (cut 2) has I(4649.13) = 11.4 in nebula and 24 in shock !!
+      + Eduardo 4959/Hb in cut 2
+        + 1.15 in nebula
+        + 1.67 in shock
+      + Seen in Manu data - about 5 times weaker than 4317 and 4320 (3s ^4P - 3p ^4P)
+        + Which are themselves about 4 times weaker than V1
+        + E.g., Manu has 4649 = 1.13 x cont
+        + I(4304) = 0.01 x cont, so 13 x weaker than 4649 => I(4304) = 0.77 1e-4 I(Hb)
+        + Within the errors, this is consistent with Escalante predicted, especially if we add in the 4303.5 contribution: 0.09 + 0.63 = 0.72
+      + Observed in Eduardo: I = 2.0 (cut 3) and 2.1 (cut 2 neb), and 4.6 (cut 2 shock) !!!
+    + 4277 complex
+      + Strongest component: 4275.5 with predicted I = 0.84
+        + Blended with [Fe II] 4276.84 in Manu
+        + Observed in Eduardo with observed I = 1.6
+    + 4609.3: predicted I \approx 0.66e-4 Hb  (Escalante:2013a)
+      + Also, weaker component at 4610.2
+      + Seen in Manu, but blend with [Fe III] 4607
+      + Very well isolated in Adal: I(4609) = 1e-4 I(4959)
+      + So this has observed intensity that maybe is slightly higher than predicted (by about 30%)
 + What states can we have
   + 3 outer electrons
   + Ground state is 2p^3 ^4S
@@ -86,6 +112,232 @@
       | 8729 | 3727.32 |   3 |   3 | [O II] 3726 | No   |
       | 8728 | 3749.48 |   3 |   5 | H I 3750    | No   |
     + So this is the *cursed multiplet* - no chance of ever seeing it
+** Summary of the types of O II lines and what they tell us
+1) The singly-excited lines can be pumped by radiative recombination or fluorescence
+   - The low-L quartet transitions might have a fluorescent contribution
+     + The s-pumped multiplets (descendants of 4s ^4P)
+       + 4s ^4P \to 3p ^4D
+       + include V1: 3p ^4D \to 3s ^4P
+     + The d-pumped multiplets (descendants of 3d ^4P and 3d ^4D)
+       + 3d ^4P,D \to 3p ^4P
+       + 3p ^4P \to 3s ^4P
+     + Note that the d-pumped lines have a small s-pumping contribution and vice-versa
+   - The high-L transitions should be pure recombination
+     - They are described by LK coupling instead of LS coupling
+     - mainly 4f D,F,G \to 3d ^4P,D,F
+   - The low-L doublet transitions can also have fluorescence (maybe)
+2) The core-excited lines are mainly dielectronic recombination
+   - But Escalante:2012a say that could also be other routes (including fluorescence)
+   - They are called ~with parentage other than ^3P~ in Fang:2013a
+     - They all have parentage of ^1D
+   - Assuming that they are from DR, they can give T diagnostics
+** Eduardo O II strengths
+
+|             | 4590.97 | 4595.96 | 4649 | 4649/4591 | 4275.55 | 4649/4276 | 4189.79 | 4649/4190 | 4276/4591 | 4089.29 | 4649/4089 |
+|-------------+---------+---------+------+-----------+---------+-----------+---------+-----------+-----------+---------+-----------|
+| Cut 1 shock |         |         | 34.2 | 34.20 / 0 |         | 34.20 / 0 |         | 34.20 / 0 |       0/0 |         | 34.20 / 0 |
+| Cut 2 shock |     4.2 |     2.0 | 25.8 |      6.14 |     2.8 |      9.21 |     4.7 |      5.49 |      0.67 |         | 25.80 / 0 |
+| Cut 3 shock |     5.4 |         | 26.5 |      4.91 |         | 26.50 / 0 |     7.5 |      3.53 |      0.00 |         | 26.50 / 0 |
+|-------------+---------+---------+------+-----------+---------+-----------+---------+-----------+-----------+---------+-----------|
+| Cut 1 neb   |     2.7 |     2.2 | 11.2 |      4.15 |     1.4 |      8.00 |     2.3 |      4.87 |      0.52 |     2.5 |      4.48 |
+| Cut 2 neb   |     2.4 |     2.0 | 12.2 |      5.08 |     1.7 |      7.18 |     2.0 |      6.10 |      0.71 |     3.1 |      3.94 |
+| Cut 3 neb   |     2.4 |     1.5 | 12.9 |      5.38 |     1.6 |      8.06 |     2.1 |      6.14 |      0.67 |     2.6 |      4.96 |
+| Cut 4       |     2.5 |     2.0 | 12.6 |      5.04 |     1.9 |      6.63 |     2.3 |      5.48 |      0.76 |     2.5 |      5.04 |
+#+TBLFM: $5=$4/$2;f2::$7=$4/$6;f2::$9=$4/$8;f2::$10=$6/$2;f2::$12=$4/$11;f2
+
+** Te, ne diagnostics from O II
++ Eduardo uses components of V1 as density indicator
+  + This is fine and is what everyone does
++ Then they use 3d-4f lines 4089.29, 4275.55 as Te indicators
+  + But 4089.29 is disfavored because it is affected by a ghost
+  + Why these? The T sensitivity is not very high
+  + Variation in ratio between 3000 \to 10000 K (Case B @ 1e4 pcc)
+    1. 4649/4276: 5.58 \to 7.52 - factor of 1.35 increasing with T
+       + 3s-3p / 3d-4f
+    2. 4649/4089: 2.99 \to 3.98 - factor of 1.33 increasing with T
+       + 3s-3p / 3d-4f
+    3. 4649/4190: 5.59 \to 3.43 - factor of 1.63 decreasing with T
+       + 3s-3p / DR 
+    4. 4649/4591: 6.00 \to 3.70 - factor of 1.62 decreasing with T
+       + 3s-3p / DR 
+    5. 4276/4591: 1.08 \to 0.49 - factor of 2.20 decreasing with T
+       + 3d-4f / DR
+  + So, T-diagnostics 1 and 2 are what Eduardo uses
+    + He gets values of 6.6 to 9.2 for 4649/4276, which would actually suggest T > 16,000 K for HH 529-II shock
+    + Average nebula is 7.47 +/- 0.34, which gives 9800 +/- 1500 K, which is a bit high
+    + Uncertainties are quite high however, so this is probably consistent with what is shown in Fig 8 of HH 529 paper
+    + If there were a 20% fluorescence contribution to V1 as suggested by MUSE analysis, then this would bring the nebula ratio down to 6.23 +/- 0.28, which implies T = 5300 +/- 600 K, which is now a bit on the low side
+    + For 4649/4089, average nebula is 4.60 +/- 0.25, which implies T = 15,200 +/- 2000 K
+    + Again, with a 20% fluorescence contribution to 4649, this is reduced to 3.83 +/- 0.21 = T = 8900 +/- 1700 K
+    + So averaging the 4649/4276 and 4649/4089 gives 12,500 +/- 2700 K, *or* 7100 +/- 2000 K after correcting for 20% fluorescence
+  + T-diagnostics 3 and 4 are what Fang:2013a use for NGC 7009
+    + Nebula has 4649/4591 = 4.15 \to 5.38 = 4.9 +/- 0.3 => T = 4500 +/- 500 K
+    + Nebula has 4649/4190 = 4.87 \to 6.14 = 5.65 +/- 0.30 => T = 3100 +/- 200 K
+    + With the 20% fluorescence correction, these become:
+      + 4649/4591 = 4.1 +/- 0.2  => T = 7000 +/- 1000 K
+      + 4649/4190 = 4.71 +/- 0.25 => T = 3900 +/- 500 K
+    + This is better, but still too low, so maybe the fluorescence correction should be higher
+  + Finally, T-diagnostic 5 should eliminate dependence on fluorescence (unless the DR lines are fluoresced)
+    + Nebula 4276/4591 = 0.67 +/- 0.05 => T = 6000 +/- 700 K
+
+| log10(T) |   4089.29 |   4275.55 |   4649.13 | 4649/4276 | 4649/4089 |   4189.79 |   4189.58 | 4649/4190 |   4590.97 | 4649/4591 | 4276/4591 |
+|----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+|    2.000 | 1.229E-23 | 7.288E-24 | 2.827E-23 |      3.88 |      2.30 | 1.680E-26 | 6.926E-28 |   1616.11 | 7.061E-26 |    400.37 | 103.21    |
+|    2.100 | 9.925E-24 | 5.993E-24 | 2.270E-23 |      3.79 |      2.29 | 1.362E-26 | 5.075E-28 |   1606.80 | 5.696E-26 |    398.53 | 105.21    |
+|    2.200 | 8.023E-24 | 4.872E-24 | 1.824E-23 |      3.74 |      2.27 | 1.105E-26 | 3.777E-28 |   1596.12 | 4.627E-26 |    394.21 | 105.30    |
+|    2.300 | 6.351E-24 | 3.870E-24 | 1.443E-23 |      3.73 |      2.27 | 8.854E-27 | 2.810E-28 |   1579.64 | 3.731E-26 |    386.76 | 103.73    |
+|    2.400 | 5.110E-24 | 3.080E-24 | 1.160E-23 |      3.77 |      2.27 | 7.259E-27 | 2.183E-28 |   1551.36 | 3.091E-26 |    375.28 | 99.64     |
+|    2.500 | 4.097E-24 | 2.435E-24 | 9.339E-24 |      3.84 |      2.28 | 6.212E-27 | 1.909E-28 |   1458.56 | 2.626E-26 |    355.64 | 92.73     |
+|    2.600 | 3.286E-24 | 1.923E-24 | 7.555E-24 |      3.93 |      2.30 | 6.740E-27 | 2.900E-28 |   1074.68 | 2.444E-26 |    309.12 | 78.68     |
+|    2.700 | 2.639E-24 | 1.521E-24 | 6.150E-24 |      4.04 |      2.33 | 1.204E-26 | 8.153E-28 |    478.40 | 2.859E-26 |    215.11 | 53.20     |
+|    2.800 | 2.120E-24 | 1.205E-24 | 5.031E-24 |      4.18 |      2.37 | 2.754E-26 | 2.295E-27 |    168.63 | 4.359E-26 |    115.42 | 27.64     |
+|    2.900 | 1.701E-24 | 9.577E-25 | 4.130E-24 |      4.31 |      2.43 | 5.714E-26 | 5.130E-27 |     66.32 | 7.246E-26 |     57.00 | 13.22     |
+|    3.000 | 1.368E-24 | 7.610E-25 | 3.406E-24 |      4.48 |      2.49 | 9.909E-26 | 9.173E-27 |     31.46 | 1.129E-25 |     30.17 | 6.74      |
+|    3.100 | 1.098E-24 | 6.051E-25 | 2.817E-24 |      4.66 |      2.57 | 1.446E-25 | 1.357E-26 |     17.81 | 1.562E-25 |     18.03 | 3.87      |
+|    3.200 | 8.801E-25 | 4.809E-25 | 2.334E-24 |      4.85 |      2.65 | 1.834E-25 | 1.727E-26 |     11.63 | 1.926E-25 |     12.12 | 2.50      |
+|    3.300 | 7.032E-25 | 3.816E-25 | 1.934E-24 |      5.07 |      2.75 | 2.087E-25 | 1.952E-26 |      8.47 | 2.157E-25 |      8.97 | 1.77      |
+|    3.400 | 5.595E-25 | 3.019E-25 | 1.603E-24 |      5.31 |      2.87 | 2.193E-25 | 2.012E-26 |      6.70 | 2.244E-25 |      7.14 | 1.35      |
+|    3.500 | 4.435E-25 | 2.381E-25 | 1.328E-24 |      5.58 |      2.99 | 2.182E-25 | 1.934E-26 |      5.59 | 2.214E-25 |      6.00 | 1.08      |
+|    3.600 | 3.495E-25 | 1.871E-25 | 1.099E-24 |      5.87 |      3.14 | 2.092E-25 | 1.764E-26 |      4.84 | 2.107E-25 |      5.22 | 0.89      |
+|    3.700 | 2.743E-25 | 1.463E-25 | 9.083E-25 |      6.21 |      3.31 | 1.953E-25 | 1.547E-26 |      4.31 | 1.954E-25 |      4.65 | 0.75      |
+|    3.800 | 2.142E-25 | 1.139E-25 | 7.502E-25 |      6.59 |      3.50 | 1.786E-25 | 1.318E-26 |      3.91 | 1.776E-25 |      4.22 | 0.64      |
+|    3.900 | 1.665E-25 | 8.827E-26 | 6.197E-25 |      7.02 |      3.72 | 1.600E-25 | 1.098E-26 |      3.62 | 1.584E-25 |      3.91 | 0.56      |
+|    4.000 | 1.289E-25 | 6.812E-26 | 5.124E-25 |      7.52 |      3.98 | 1.402E-25 | 8.974E-27 |      3.43 | 1.385E-25 |      3.70 | 0.49      |
+|    4.100 | 9.936E-26 | 5.236E-26 | 4.255E-25 |      8.13 |      4.28 | 1.201E-25 | 7.217E-27 |      3.34 | 1.184E-25 |      3.59 | 0.44      |
+|    4.200 | 7.644E-26 | 4.015E-26 | 3.568E-25 |      8.89 |      4.67 | 1.004E-25 | 5.714E-27 |      3.36 | 9.901E-26 |      3.60 | 0.41      |
+|    4.300 | 5.915E-26 | 3.094E-26 | 3.059E-25 |      9.89 |      5.17 | 8.202E-26 | 4.456E-27 |      3.54 | 8.115E-26 |      3.77 | 0.38      |
+|    4.400 | 4.707E-26 | 2.448E-26 | 2.740E-25 |     11.19 |      5.82 | 6.552E-26 | 3.424E-27 |      3.97 | 6.575E-26 |      4.17 | 0.37      |
+|----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
+#+TBLFM: $5=$4/$3;f2::$6=$4/$2;f2::$9=$4/($7+$8);f2::$12=$3/$10;f2
+
+** Potential diagnostics of fluorescence
+*** Other 3d-4f lines that Eduardo uses in his Table 13
++ Values given as (Storey XXX) are effective recomb rates for Case B at 1e4 K and 1e4 pcc
++ 4087.15
+  + Manu sees blend at 4085
+    + 4085.11 3p ^4D - 3d ^4F (feeds into V1) (Storey 6.2e-26)
+    + 4086.59 3d ^4F - 4f D 2[2] (Storey 8.5e-28)
+    + 4086.71 3d ^4F - 4f D 2[2] (Storey 3.6e-29)
+    + 4087.15 3d ^4F - 4f G 2[3] (Storey 4.4e-26)
+    + 4087.56 3p ^2P - 4s ^4P (Storey 1.4e-31) intercombination
+  + Eduardo sees 4085.11 and 4087.15 with same strength in nebula: 1.8e-4 Hb
++ 4089.29
+  + Manu sees blend
+    + 4088.27 3d ^4F - 4f G 2[5] (Storey 2.4e-27)
+    + 4089.29 3d ^4F - 4f G 2[5] (Storey 1.29e-25)
+    + 4090.27 3p ^2D - 4d ^4F (Storey 2.5e-30)
+    + 4092.93 3p ^4D - 3d ^4F (Storey 4.2e-26)
++ 4095.64
++ 4097.26
++ 4275.55
+*** O II V1 / 4610
++ This can be measured in Adal slits easily
++ Trickier in Manu because of blend with [Fe III] 4607
++ Take 4649 / 4609 to be definite
++ 4610 is a blend:
+  + 4609.44 3d.^{2}D_e - 4f F 2[4]
+  + 4610.20 3d.^{2}D_e - 4f F 2[2]
++ 4649 is
+  + 4649.13 V1 3s.^{4}P - 3p.^{4}D_o
++ Adal measurements - units of 1e-4 I(4959)
+  | Zone | 4649 | 4610 | 4649/4610 |
+  |------+------+------+-----------|
+  | A    | 11.4 |  1.2 |      9.50 |
+  | B    | 12.8 |  1.0 |     12.80 |
+  | C    | 12.8 |  1.0 |     12.80 |
+  | D    | 10.6 |  1.0 |     10.60 |
+  | E    | 10.7 |  1.1 |      9.73 |
+  | F    | 10.4 |  1.2 |      8.67 |
+  #+TBLFM: $4=$2/$3;f2
++ UVES observations (Adal HH202 and Eduardo HH529 are missing the 4610 lines)
++ Storey recomb ratios
+  + Case B, 3000-1e4 K, 1e4 pcc: 
+    |   T |   4649.13 |   4609.44 |   4610.20 | 4649/4610 |
+    |-----+-----------+-----------+-----------+-----------|
+    | 3.5 | 1.328E-24 | 1.989E-25 | 5.794E-26 |      5.17 |
+    | 3.6 | 1.099E-24 | 1.555E-25 | 4.562E-26 |      5.46 |
+    | 3.7 | 9.083E-25 | 1.210E-25 | 3.578E-26 |      5.79 |
+    | 3.8 | 7.502E-25 | 9.373E-26 | 2.793E-26 |      6.17 |
+    | 3.9 | 6.197E-25 | 7.231E-26 | 2.170E-26 |      6.59 |
+    | 4.0 | 5.124E-25 | 5.553E-26 | 1.678E-26 |      7.09 |
+    #+TBLFM: $5=$2/($3+$4);f2
+  + Case B, 3000-1e4 K, 1e3 pcc: 
+    |   T |   4649.13 |   4609.44 |   4610.20 | 4649/4610 |
+    |-----+-----------+-----------+-----------+-----------|
+    | 3.5 | 9.742E-25 | 1.844E-25 | 5.151E-26 |      4.13 |
+    | 3.6 | 7.725E-25 | 1.396E-25 | 3.960E-26 |      4.31 |
+    | 3.7 | 6.114E-25 | 1.053E-25 | 3.030E-26 |      4.51 |
+    | 3.8 | 4.832E-25 | 7.947E-26 | 2.303E-26 |      4.71 |
+    | 3.9 | 3.823E-25 | 5.946E-26 | 1.746E-26 |      4.97 |
+    | 4.0 | 3.031E-25 | 4.432E-26 | 1.318E-26 |      5.27 |
+    #+TBLFM: $5=$2/($3+$4);f2
+  + Case B, 3000-1e4 K, 1e5 pcc: 
+    |   T |   4649.13 |   4609.44 |   4610.20 | 4649/4610 |
+    |-----+-----------+-----------+-----------+-----------|
+    | 3.5 | 1.407E-24 | 2.046E-25 | 5.929E-26 |      5.33 |
+    | 3.6 | 1.172E-24 | 1.610E-25 | 4.683E-26 |      5.64 |
+    | 3.7 | 9.757E-25 | 1.262E-25 | 3.684E-26 |      5.98 |
+    | 3.8 | 8.122E-25 | 9.859E-26 | 2.885E-26 |      6.37 |
+    | 3.9 | 6.758E-25 | 7.661E-26 | 2.248E-26 |      6.82 |
+    | 4.0 | 5.627E-25 | 5.922E-26 | 1.743E-26 |      7.34 |
+    #+TBLFM: $5=$2/($3+$4);f2
+
+
+
+*** O II 4317 / 4304 
++ Ratio 
+  + 4317.0: 3s.^{4}P_{1/2} - 3p.^{4}P_{3/2}^o
+    + Minor contribution from 4317.7 3d-4f
+    + Also 4319.6 of same multiplet
+  + 4303.8: 3d.^{4}P_{5/2} - 4f.D[3]^o_{5/2}
++ Ratio from Escalante:2013a
+  + With fluorescence: 1.58/0.63 = 2.51
+  + Just recombination: 0.605 1.58/0.63 = 1.52
++ [X] Should check theoretical ratio from Storey
+  + Full range is 0.56 to 1.2
+  + Case B, 3000-1e4 K, 1e4 pcc: 
+    |   T |   4303.82 |   4317.14 | 4317/4303 |
+    |-----+-----------+-----------+-----------|
+    | 3.5 | 2.236E-25 | 1.864E-25 | 0.83      |
+    | 3.6 | 1.768E-25 | 1.534E-25 | 0.87      |
+    | 3.7 | 1.397E-25 | 1.264E-25 | 0.90      |
+    | 3.8 | 1.100E-25 | 1.042E-25 | 0.95      |
+    | 3.9 | 8.619E-26 | 8.586E-26 | 1.00      |
+    | 4.0 | 6.700E-26 | 7.073E-26 | 1.06      |
+    #+TBLFM: $4=$3/$2;f2
+  + Case B, 3000-1e4 K, 1e3 pcc:
+    |   T |   4303.82 |   4317.14 | 4317/4303 |
+    |-----+-----------+-----------+-----------|
+    | 3.5 | 4.019E-25 | 2.261E-25 | 0.56      |
+    | 3.6 | 3.309E-25 | 1.876E-25 | 0.57      |
+    | 3.7 | 2.718E-25 | 1.557E-25 | 0.57      |
+    | 3.8 | 2.222E-25 | 1.292E-25 | 0.58      |
+    | 3.9 | 1.804E-25 | 1.071E-25 | 0.59      |
+    | 4.0 | 1.453E-25 | 8.883E-26 | 0.61      |
+    #+TBLFM: $4=$3/$2;f2
+  + Case B, 3000-1e4 K, 1e5 pcc:
+    |   T |   4303.82 |   4317.14 | 4317/4303 |
+    |-----+-----------+-----------+-----------|
+    | 3.5 | 2.051E-25 | 1.827E-25 |      0.89 |
+    | 3.6 | 1.603E-25 | 1.501E-25 |      0.94 |
+    | 3.7 | 1.251E-25 | 1.234E-25 |      0.99 |
+    | 3.8 | 9.731E-26 | 1.013E-25 |      1.04 |
+    | 3.9 | 7.529E-26 | 8.326E-26 |      1.11 |
+    | 4.0 | 5.779E-26 | 6.836E-26 |      1.18 |
+    #+TBLFM: $4=$3/$2;f2
++ Ratio from Manu
+  + As high as 3
+  + As low as 1
++ Ratio from Eduardo
+  + cut 2 nebula: 0.028/0.021 = 1.33
+  + cut 2 shock: 0.071/0.046 = 1.54
+  + cut 3 nebula: 0.026/0.020 = 1.30
+  + cut 1 nebula: 0.019/0.018 = 1.06
+  + cut 4 nebula: 0.027/0.026 = 1.04
++ Ratio from Adal HH202
+  + Nebula: 0.021/0.027 = 0.78 +/- 0.3
+  + Shocks: 0.045/0.016 = 2.8 +/- 1
++ So in summary, the ratios are generally higher than the recombination predictions
 ** Analyze the pumping line
 + This is now in a separate file:
   + [[file:oii-fluorescence.org]]
@@ -103,6 +355,14 @@
   + Note that 62:67 is omitted - corresponds to 159-350
     + x=65 \to 78 arcsec from left edge
   + Total length = 154 1.2 = 185 arcsec
+*** Adal's V1 line strengths
++ In units of 1e-4 I(4959) \approx 1e-4 I(Hb) in the bright zones
++ 4649: 10 \to 12
++ 4642: 7 \to 8
++ These are about 50% higher than predictions of Escalante:2012a for IC 418
++ More details are given down here in [[id:CD92418A-24FF-44D1-AF09-D5D09E84D1BA][Ratios within the V1 multiplet]]
+  + Sum V1 = 32 \to 36 in these units
+  + If interpreted in terms of recombination, this implies T = 7500 \to 7750 K
 
 ** Extract maps from MUSE cubes
 
@@ -792,6 +1052,9 @@ CLOSED: [2020-07-26 Sun 13:59]
 : None
 
 ** Ratios within the V1 multiplet
+:PROPERTIES:
+:ID:       CD92418A-24FF-44D1-AF09-D5D09E84D1BA
+:END:
 + In the Manu spectra I calculated various ratios
   + Dominant feature is a radial gradient from inside to outside
   + Ratios are with respect to sum 4639+4649+4651+4662+4676
@@ -814,7 +1077,7 @@ CLOSED: [2020-07-26 Sun 13:59]
     | 4650/4640 |  1.10 |  0.94 |
     |-----------+-------+-------|
     #+TBLFM: @8$2..@8$3=vsum(@I..@II)::@9$2..@9$3=vsum(@II..@III)::@10$2..@10$3=@-1/@-2;f2
-  + This is broadly with what we get from MUSE
+  + This is broadly consistent with what we get from MUSE
 + In the Adal spectra we have all the lines and 6 regions
   + Best to have the table transposed
   + Line strengths in units of 0.0001 with respect to 4959
