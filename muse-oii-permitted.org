@@ -131,6 +131,42 @@
    - They are called ~with parentage other than ^3P~ in Fang:2013a
      - They all have parentage of ^1D
    - Assuming that they are from DR, they can give T diagnostics
+*** The four types of O++ temperature
+1. T(CEL) : 4363 / 5007
+   - Strongly biased to high-T
+   - d R / d T > 0
+2. T(ORL-CEL) : V1 Sum / 4959
+   - Mostly unbiased (slightly to high-T)
+   - d R / d T < 0
+   - R increases with fluorescence
+   - => T decreases with fluorescence
+3. T(3d-4f) : V1 Sum / V48a Sum or 4649/4089
+   - Biased to low-T
+   - d R / d T > 0
+   - R increases with fluorescence
+   - => T increases with fluorescence
+4. T(DR) : V1 Sum / V15 Sum or 4649/4591
+   - Mostly unbiased (slightly low-T)
+   - d R / d T < 0
+   - R increases with fluorescence
+   - => T decreases with fluorescence (?)
+     - That is, assuming that V15 is not fluoresced
+
+**** Expected T ordering from t^2 fluctuations 
++ T(3d-4f) < T(DR) ~= T(ORL-CEL) < T(CEL)
++ Example: NGC 7009
+  + T(3d-4f) = 1000 K
+  + T(DR) = 3000 K
+  + T(ORL-CEL) = ?
+  + T(CEL) = 10,000 K 
+
+**** Expected T ordering from fluorescence
++ T(DR) < T(ORL-CEL) < T(CEL) < T(3d-4f)
+  + Example: Orion (Eduardo nebula)
+    + T(DR) = 4500 K
+    + T(ORL-CEL) = 8000 K
+    + T(CEL) = 8500 K
+    + T(3d-4f) = 10,000 K
 ** Eduardo O II strengths
 
 |             | 4590.97 | 4595.96 | 4649 | 4649/4591 | 4275.55 | 4649/4276 | 4189.79 | 4649/4190 | 4276/4591 | 4089.29 | 4649/4089 |
@@ -179,6 +215,26 @@
     + This is better, but still too low, so maybe the fluorescence correction should be higher
   + Finally, T-diagnostic 5 should eliminate dependence on fluorescence (unless the DR lines are fluoresced)
     + Nebula 4276/4591 = 0.67 +/- 0.05 => T = 6000 +/- 700 K
+    + So this is still a bit on the low side, especially since it is a lower limit if there is fluorescent contribution to V15 4591
++ Manu results
+  + 4649/4591 is noisy but varies from 9.0 +/- 2.0 in inner nebula to 6.0 +/- 3.0 in outer nebula
+    + V1-sum fractional excess is about 1.0 close to Trapezium and is about 0.5 in Big Arc
+    + So this could mean that corrected 4649/4591 = 4.0 in both cases => T = 7500 +/- 4000 K
+    + Yes, that makes sense
++ Adal results
+  + 
+
+
+
+** Theoretical recombination line ratios from Storey for Case B @ 1e4 pcc
++ The 3d-4f lines have a steeper fall of emissivity with T than the V1 lines
+  + This gives one type of T diagnostic, such as 4649/4089 (V1/V48a) or 4649/4276 (V1/V67) 
+  + E.g., Fig 17 of Fang:2013a, where the theoretical curve agrees reasonably well with what I have calculated from Storey (presumably because they use the same source)
+    + Note that they measure 4649/4089 = 2.5 for Saturn Nebula, which is much lower than in Orion, and which implies a low T \approx 1000 - 1500 K
++ The ^1D parentage lines (core-excited) have an emissivity that rises with T (dielectronic recombination)
+  + This gives the second type of T diagnostic, such as 4649/4591 (V1/V15) or 4649/4190 (V1/V36)
+  + There are also M101 and M105 lines, but these are either weak or masked by other lines in Manu spectra
+  + Also 4347 line (V16), but it is stuck among stronger lines of V2 (3s-3p ^4P) at 4345 and 4349
 
 | log10(T) |   4089.29 |   4275.55 |   4649.13 | 4649/4276 | 4649/4089 |   4189.79 |   4189.58 | 4649/4190 |   4590.97 | 4649/4591 | 4276/4591 |
 |----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------+-----------|
