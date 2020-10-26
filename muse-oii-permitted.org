@@ -112,6 +112,9 @@
       | 8729 | 3727.32 |   3 |   3 | [O II] 3726 | No   |
       | 8728 | 3749.48 |   3 |   5 | H I 3750    | No   |
     + So this is the *cursed multiplet* - no chance of ever seeing it
+** The paper
++ Moved to its own repo
++ [[file:~/Dropbox/orion-oii-paper/]]
 ** Summary of the types of O II lines and what they tell us
 1) The singly-excited lines can be pumped by radiative recombination or fluorescence
    - The low-L quartet transitions might have a fluorescent contribution
@@ -286,6 +289,17 @@
 + 4095.64
 + 4097.26
 + 4275.55
+*** Diagnostics from Bastin thesis
++ These have overlap with other lines, but he has particular combinations, which he chooses because:
+  1. Limited case sensitivity - I need to check up on this for other ratios
+  2. Unaffected by blending
+  3. Stronger lines
++ Ones he chooses are:
++ 4661/4089
+  + This is V1/3d-4f, so should be diagnostic of T and fluorescence, but also weakly of density
++ 4414/4089
+  + 4414.9 is a doublet line in 3s-3p, so will be rad recomb plus maybe fluorescence
+  + In Orion it is in blend with [Fe II] 4413.78, which is slightly brighter
 *** O II V1 / 4610
 + This can be measured in Adal slits easily
 + Trickier in Manu because of blend with [Fe III] 4607

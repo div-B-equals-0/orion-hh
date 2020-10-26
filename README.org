@@ -1651,7 +1651,7 @@ This is now in a separate file because it was too big:
 #+name: rgb-channels-1996
 | final502-radec | 130 |  750 |
 | final658-radec | 200 | 2200 |
-| final673-radec |  70 | 500  |
+| final673-radec |  70 |  500 |
 
 #+name: window-1996
 | 1354 | 1369 | 760 | 600 |
@@ -2118,3 +2118,137 @@ Measurements of features in [Fe III] lines
 
 
 
+
+
+* Dealing with the referee report
+[2020-10-12 Mon]
+
+** Referee report
+#+begin_example
+  This paper provides an abundance analysis for two photoionized
+  HH objects in the Orion nebula. A main conclusion from the work
+  is that iron appears depleted, but some is released into the
+  gas phase by the HH shock. There is also quite a bit of
+  discussion about fluctuations, and abundance discrepancy factors
+  between collisionally-excited lines and recombination
+  lines, as well as some proper motion and velocity measurements.
+  My overall reactions reading through this were (a) wow, this is
+  a lot of work, it takes effort to sift through hundreds of line
+  ratios, and (b) the data look lovely and the analysis seems
+  very thorough - meticulous error bars on everything, nuances
+  of each line understood, even tidbits associated with 'ghost' lines.
+  The writing style is clear. It's an impressive work that
+  certainly deserves publication in MNRAS.
+
+  I do have a couple of comments, and then a few minor ones.
+
+  (*) One consequence of being so thorough is that the paper
+  does drag, and is rather long. I'll leave it to the authors
+  to consider, but I saw little use in all the details of
+  Table 13 and 14 (or even Tables 10-12), or the long discussions of
+  each line ratio in section 8. I'm not sure how useful the whole
+  t^2 formalism is for a shocked filamentary object. I
+  don't know what we learn from that, really. Some of these tables
+  and discussion might live more happily in an Appendix. It's up
+  to the authors, but they should take a step back from this
+  tome of data and be sure that the primary takeaways
+  stand out from the details, taking care to only include
+  tables that are relevant to the main messages.
+
+  (*) An important assumption that underlies this entire analysis
+  is that a single temperature and density, with some
+  fluctuations, characterizes the emitting gas. This assumption
+  is only true if the cooling zone behind the shock does not
+  emit enough to alter the spectrum, so the shock merely
+  serves to create a dense blob that can be photoionized
+  by the ambient radiation. However, this point is not really
+  made until the first paragraph in section 11 on page 24,
+  with a quick reference to Henney 2002.  There is then a
+  reference to compression ~ M^2, but this is for the non-magnetic
+  case, and even a small seed field changes that in
+  HH shocks (see 2015 ApJ 811, 12).
+
+  I feel that this issue warrants discussion much earlier. I
+  would mention it in the introduction at the level it is
+  mentioned in section 11, and then make a new subsection
+  that would go in front of section 4.1, and be a bit
+  more pedagogical. A radiative shock wave is not amenable to
+  standard Te/Ne analysis because there is no single Te, Ne.
+  That's why so little information exists on abundances in HH
+  objects.  As radiation increases the first effect is to ionize
+  the preshock gas, which can increase flux in some lines (e.g.
+  HH 47D has strong [O II] because zeta Pup and gamma Vel
+  ionize O to O+, so a weak shock shows [O II]). The next
+  level up in ionization is that ionization enhances forbidden
+  lines by kicking out electrons in the cooling zone. Then
+  as ionization increases, the sheaths of jets get
+  photoionized, like in Carina, and finally you photoionize
+  the whole thing so that nothing goes below about 8000K.
+  After that there is some point where you just don't see the
+  cooling zone at all.
+
+  The paper should argue based on some
+  rough numbers that the radiation field is high enough in Orion
+  that you are in the last category. Are we really sure that
+  the enhanced OIII abundance in HH 529 doesn't arise in
+  some way from the shocked cooling zone? At some point if you
+  move HH 529 away from the photoionizing sources it's going
+  to look more like a preionized shock with a cooling zone,
+  like HH 47D. Note, a shock can be 'fully ionized' in the
+  sense that it has no OI, yet still be affected by the
+  cooling zone behind the shock in that it will enhance
+  OIII relative to OII. I have to wonder if this also affects
+  the ADF in HH 529.
+
+  Some minor comments
+
+  Fig 1 caption: The labeling is unclear. It took a while for
+  me to realize that I, II, and III were roman numerals and
+  not |, ||, ||| indicative of slit positions or something.
+  The authors need to move the labels a bit away from
+  the objects and then mark them with arrows, e.g.
+  II ----> (points to object)
+
+  p 2: add a reference to Fig 1 inside the parentheses for
+  the O'Dell/Henney reference: \citep[][; Fig~1]{odellhenney08}
+  so the reader knows the objects are labeled in the figure.
+
+  p13: Table 10 should note these are logarithmic abundances
+  with n(H) defined to be 12.
+
+  p25: The compression really gives the magnetosonic Mach number.
+  Some inclusion of magnetic field discussion is needed here.
+
+  Finally, some discussion of Fe destruction in HH shocks is
+  needed. A paper just out sees evidence for it in the Mach disk
+  component of HH 32 (2020 AJ 160, 165), and references in that paper
+  will guide to some other attempts to measure this.
+#+end_example
+
+
+** New version of Figure 1
++ [[file:proper-motions/hh529-finding-chart.pdf]]
++ Reply to referee
+  : We have made the suggested changes to Fig 1 in order to make the labelling clearer.  In addition, we have changed the font to make it more obvious that I, II, and III are roman numerals. 
+** Shock versus shell emission
+:PROPERTIES:
+:EXPORT_OPTIONS: ^:t
+:DESCRIPTION:
+:END:
++ Energy flux through shock is 0.5 m n_0 V^3 = 0.5 m n_0 M^3 c_0^3
+  + Units erg/cm^2/s 
++ Equilibrium cooling from shell is \Lambda n_2^2 h
+  + Same units:
+  + n_2 = (V/c_0)^2 n_0 =  M^2 n_0
+  + \Lambda = 2e-24 erg cm^3 / s at 1e4 K
++ Ratio is
+  + 0.5 m n_0 M^3 c_0^3 / \Lambda M^4 n_0^2 h
+  + = (0.5 m c_0^3 / \Lambda) 1/ M n_0 h
+  + = 5e17 cm^-2 / M n_0 h
+  + h = R / M^2
+  + So Ratio = 5e17 M / R n_0
+    + n_0 = 100 pcc
+    + R = 10 arcsec = 6e17 cm
+    + M = 8 or so
+    + => Ratio = 0.067
+    + So not /that/ small!
