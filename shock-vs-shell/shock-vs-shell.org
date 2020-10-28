@@ -1,0 +1,112 @@
+* HH 529-II,III reply to referee
+
+** Shock versus shell emission
+
+A fundamental assumption of the present analysis is that
+
+
+*** Parameters of the HH 529 II and III shocks
++ There are two possibilities for the shocks
+  1. They may be propagating into the nebula
+  2. They may be internal working surfaces in the jet beam
++ From HH 529 III we get a total speed of hypot(35, 57) = 67 km/s at an inclination of 60 deg from the plane of the sky
++ From HH 529 II, we have
+  | comp | Vr       | Vt       | V            | i            |
+  |------+----------+----------+--------------+--------------|
+  | II a | 50 +/- 5 | 21 +/- 9 | 54.2 +/- 5.8 | 67.2 +/- 9.0 |
+  | II b | 57 +/- 5 | 26 +/- 5 | 62.6 +/- 5.0 | 65.5 +/- 4.6 |
+  #+TBLFM: $4=sqrt($2**2 + $3**2);f1::$5=arctan($2/$3);f1
++ These are consistent with what is in the paper: about 60 km/s for HH 529 II
+
+
+*** 
+*** Typing practice
+
+
+*** Post-shock temperature and density
+\[
+T = \frac{3 \mu m_p}{16 k} V^2 
+\]
+
+|  V |     T |   M^2 |
+|----+-------+------|
+| 20 | 5.9e3 |  2.8 |
+| 30 | 1.3e4 |  6.3 |
+| 40 | 2.4e4 | 11.1 |
+| 50 | 3.7e4 | 17.4 |
+| 60 | 5.3e4 |   25 |
+| 70 | 7.2e4 | 34.0 |
+| 80 | 9.4e4 | 44.4 |
+| 90 | 1.2e5 | 56.3 |
+#+TBLFM: $2=3 0.5 1.3 $mp ($1 $km)**2 / 16 $k ; s2::$3=($1/12)**2 ; f1
+
+So, on the assumption of a terminal bow shock, we get a Mach number of around 5 to 6 and a post-shock T of around 60,000 K, with a compression factor of 30
+
+
+*** Mach angle
++ Compare width with distance from source (in Orion S?)
++ This can give a Mach angle, which could restrict the jet velocity
++ Except that hoop stresses in a magnetized jet could keep it from expanding
+*** Different velocities
++ Ambient velocity V_a
++ Jet velocity V_j
++ Working surface velocity V_ws
++ V_j > V_ws > V_a
++ n_a (V_ws - V_a)^2 = n_j (V_j - V_ws)^2 = n_ws c_0^2
++ Put \alpha = n_j / n_a
++ put \beta = V_a / V_j
++ put u = V_ws / V_j
++ n_a V_j^2 (u - \beta)^2 = \alpha n_a V_j^2 (1 - u)^2
+  + (u - \beta)^2 = \alpha (1 - u)^2
+  + u^2 - 2\beta u + \beta^2 = \alpha - 2\alpha u + \alpha u^2
+  + (1 - \alpha) u^2 + 2(\alpha - \beta) + (\beta^2 - \alpha) = 0
++ u = [-2(\alpha - \beta) \pm sqrt(4(\alpha - \beta)^2 - 4 (1 - \alpha) (\beta^2 - \alpha))] / 2 (1 - \alpha)
+  + u = [-(\alpha - \beta) \pm sqrt(\alpha^2 - 2\alpha\beta + \beta^2 - \beta^2 + \alpha + \alpha\beta^2 - \alpha^2) ] / (1 - \alpha)
+  + u = [-(\alpha - \beta) \pm (1 - \beta) sqrt(\alpha) ] / (1 - \alpha)
+  + u = [(1 - \beta) \alpha^{1/2} - (\alpha - \beta)] / (1 - \alpha)
+
+|     \alpha |    \beta |    u | (1 - u)/u | (u - \beta)/u |
+|-------+------+------+-----------+-----------|
+|  0.01 |    0 | 0.09 |     10.11 |      1.00 |
+|   0.1 |    0 | 0.24 |      3.17 |      1.00 |
+|   0.3 |    0 | 0.35 |      1.86 |      1.00 |
+|  1.01 |    0 | 0.50 |      1.00 |      1.00 |
+|   3.0 |    0 | 0.63 |      0.59 |      1.00 |
+|  10.0 |    0 | 0.76 |      0.32 |      1.00 |
+| 100.0 |    0 | 0.91 |      0.10 |      1.00 |
+|-------+------+------+-----------+-----------|
+|  0.01 | 0.25 | 0.32 |      2.13 |      0.22 |
+|   0.1 | 0.25 | 0.43 |      1.33 |      0.42 |
+|   0.3 | 0.25 | 0.52 |      0.92 |      0.52 |
+|  1.01 | 0.25 | 0.63 |      0.59 |      0.60 |
+|   3.0 | 0.25 | 0.73 |      0.37 |      0.66 |
+|  10.0 | 0.25 | 0.82 |      0.22 |      0.70 |
+| 100.0 | 0.25 | 0.93 |      0.08 |      0.73 |
+|-------+------+------+-----------+-----------|
+|  0.01 |  0.5 | 0.55 |      0.82 |      0.09 |
+|   0.1 |  0.5 | 0.62 |      0.61 |      0.19 |
+|   0.3 |  0.5 | 0.68 |      0.47 |      0.26 |
+|  1.01 |  0.5 | 0.75 |      0.33 |      0.33 |
+|   3.0 |  0.5 | 0.82 |      0.22 |      0.39 |
+|  10.0 |  0.5 | 0.88 |      0.14 |      0.43 |
+| 100.0 |  0.5 | 0.95 |      0.05 |      0.47 |
+|-------+------+------+-----------+-----------|
+|  0.01 | 0.75 | 0.77 |      0.30 |      0.03 |
+|   0.1 | 0.75 | 0.81 |      0.23 |      0.07 |
+|   0.3 | 0.75 | 0.84 |      0.19 |      0.11 |
+|  1.01 | 0.75 | 0.88 |      0.14 |      0.15 |
+|   3.0 | 0.75 | 0.91 |      0.10 |      0.18 |
+|  10.0 | 0.75 | 0.94 |      0.06 |      0.20 |
+| 100.0 | 0.75 | 0.98 |      0.02 |      0.23 |
+#+TBLFM: $3=((1 - $2) sqrt($1)  - ($1 - $2))/(1 - $1);f2::$4=(1 - $3)/$3;f2::$5=($3 - $2)/$3;f2
+
++ So u is the speed of WS in terms of jet speed
++ 4th column gives inner shock jump in terms of WS speed
++ 5th column gives outer shock jump in terms of WS speed
+
+** Magnetic field - Alfven speed versus sound speed
+
+*** Talk about how H II regions are thermally dominated
++ Low Alfvén speed, compared with sound speed 
++ Need to consider jet shock (Mach disk) and H II region shock (bow shock) separately
+  + Although if we are at an internal working surface, then this might not be an important distinction 
