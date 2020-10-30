@@ -19,8 +19,7 @@ A fundamental assumption of the present analysis is that
 + These are consistent with what is in the paper: about 60 km/s for HH 529 II
 
 
-*** 
-*** Typing practice
+
 
 
 *** Post-shock temperature and density
@@ -28,7 +27,7 @@ A fundamental assumption of the present analysis is that
 T = \frac{3 \mu m_p}{16 k} V^2 
 \]
 
-|  V |     T |   M^2 |
+|  V |   \Delta T |   M^2 |
 |----+-------+------|
 | 20 | 5.9e3 |  2.8 |
 | 30 | 1.3e4 |  6.3 |
@@ -41,6 +40,11 @@ T = \frac{3 \mu m_p}{16 k} V^2
 #+TBLFM: $2=3 0.5 1.3 $mp ($1 $km)**2 / 16 $k ; s2::$3=($1/12)**2 ; f1
 
 So, on the assumption of a terminal bow shock, we get a Mach number of around 5 to 6 and a post-shock T of around 60,000 K, with a compression factor of 30
+
+For an internal working surface, such as for HH 529-II, the \alpha ratio should be of order unity, whereas \beta is probably \ge 0.5.  If we take \alpha = 1, and \beta = 0.5, then the inner and outer shock velocities are 1/3 of the WS velocity, so about 20 km/s: M = 2.
+
+This is consistent with the relatively small velocity width of the HH 529 II profile. 
+
 
 
 *** Mach angle
@@ -64,6 +68,15 @@ So, on the assumption of a terminal bow shock, we get a Mach number of around 5 
   + u = [-(\alpha - \beta) \pm sqrt(\alpha^2 - 2\alpha\beta + \beta^2 - \beta^2 + \alpha + \alpha\beta^2 - \alpha^2) ] / (1 - \alpha)
   + u = [-(\alpha - \beta) \pm (1 - \beta) sqrt(\alpha) ] / (1 - \alpha)
   + u = [(1 - \beta) \alpha^{1/2} - (\alpha - \beta)] / (1 - \alpha)
++ Special case of \alpha = 1
+  + This is singular, so do an expansion:
+    + \alpha = 1 + \varepsilon
+    + u = [(1 - \beta) (1 + 0.5\varepsilon) - (1 - \beta) - \varepsilon] / (-\varepsilon)
+    + u = [1 - 0.5 (1 - \beta)] = 0.5 (1 + \beta)
+    + Same as using l'Hôpital's rule
+    + V_1s / V_WS = (1 - \beta) / (1 + \beta)
+    + V_2s / V_WS = (1 - \beta) / (1 + \beta)
+    + So the two shock velocities are the same
 
 |     \alpha |    \beta |    u | (1 - u)/u | (u - \beta)/u |
 |-------+------+------+-----------+-----------|
@@ -103,7 +116,66 @@ So, on the assumption of a terminal bow shock, we get a Mach number of around 5 
 + So u is the speed of WS in terms of jet speed
 + 4th column gives inner shock jump in terms of WS speed
 + 5th column gives outer shock jump in terms of WS speed
+**** Graph of the velocities versus \alpha
 
+#+begin_src python :results file :return figfile
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import seaborn as sns
+
+  figfile = "shock-velocities.pdf"
+  alpha = np.logspace(-1.5, 1.5, 200)
+  betas = [0.0, 0.25, 0.50, 0.75]
+
+  VWS = 65.0
+
+  fig, [axu, axi, axo] = plt.subplots(
+      3,
+      1,
+      sharex=True,
+      figsize=(6, 6),
+  )
+  for beta in betas:
+      u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
+      Vi = VWS*(1 - u)/u
+      Vo = VWS*(u - beta)/u
+      axu.plot(alpha, u)
+      m = Vi > 11.0
+      axi.plot(alpha[m], Vi[m], label=fr"$\beta = {beta:.2f}$")
+      m = Vo > 11.0
+      axo.plot(alpha[m], Vo[m])
+
+  for ax in axo, axi:
+      ax.axhline(11.0, lw=0.5, ls="--", color="k")
+  ax.legend(ncol=2, loc="upper right").set_title(
+      "Velocity ratio: " + r"$\beta = V_\mathrm{env} / V_\mathrm{jet}$",
+  )
+
+  axo.set(
+      xscale="log",
+      xlabel=r"Density ratio: $\alpha = n_{\mathrm{jet}} / n_{\mathrm{env}}$",
+      ylabel=r"$V_\mathrm{s1}$, km / s",
+      ylim=[0, 80],
+  )
+  axi.set(
+      ylabel=r"$V_\mathrm{s2}$, km / s",
+      ylim=[0, 200],
+  )
+  axu.set(
+      ylabel=r"$u = V_\mathrm{WS} / V_\mathrm{j}$",
+      ylim=[0, None],
+  )
+
+  sns.despine()
+  fig.tight_layout()
+  fig.savefig(figfile)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:shock-velocities.pdf]]
+ 
 ** Magnetic field - Alfven speed versus sound speed
 
 *** Talk about how H II regions are thermally dominated
