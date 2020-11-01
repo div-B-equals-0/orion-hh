@@ -45,7 +45,16 @@ For an internal working surface, such as for HH 529-II, the \alpha ratio should 
 
 This is consistent with the relatively small velocity width of the HH 529 II profile. 
 
+Compare with
+\[
+c^2 = k T_0 / \mu m_H \Rightarrow T_0 = \mu m_H c^2 / k 
+\]
+so that
+\[
+\frac{T}{T_0} = 1 + \frac{3}{16} M^2
+\]
 
+*** 
 
 *** Mach angle
 + Compare width with distance from source (in Orion S?)
@@ -122,6 +131,7 @@ This is consistent with the relatively small velocity width of the HH 529 II pro
   import numpy as np
   from matplotlib import pyplot as plt
   import seaborn as sns
+  sns.set_color_codes("deep")
 
   figfile = "shock-velocities.pdf"
   alpha = np.logspace(-1.5, 1.5, 200)
@@ -133,27 +143,41 @@ This is consistent with the relatively small velocity width of the HH 529 II pro
       3,
       1,
       sharex=True,
-      figsize=(6, 6),
+      figsize=(4, 5),
   )
-  for beta in betas:
+
+  styles = [
+      dict(lw=0.7, color=(0.2, 0.1, 0.05), alpha=1.0),
+      dict(lw=1.0, color=(0.5, 0.3, 0.1), alpha=1.0),
+      dict(lw=1.4, color=(0.7, 0.45, 0.15), alpha=1.0),
+      dict(lw=2.0, color=(0.8, 0.5, 0.2), alpha=1.0),
+  ]
+
+  for beta, style in zip(betas, styles):
       u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
       Vi = VWS*(1 - u)/u
       Vo = VWS*(u - beta)/u
-      axu.plot(alpha, u)
+      axu.plot(alpha, u, **style)
       m = Vi > 11.0
-      axi.plot(alpha[m], Vi[m], label=fr"$\beta = {beta:.2f}$")
+      axi.plot(alpha[m], Vi[m], label=fr"$\beta = {beta:.2f}$", **style)
       m = Vo > 11.0
-      axo.plot(alpha[m], Vo[m])
+      axo.plot(alpha[m], Vo[m], **style)
 
   for ax in axo, axi:
-      ax.axhline(11.0, lw=0.5, ls="--", color="k")
-  ax.legend(ncol=2, loc="upper right").set_title(
-      "Velocity ratio: " + r"$\beta = V_\mathrm{env} / V_\mathrm{jet}$",
+      ax.axhspan(0.0, 11.0, color="k", alpha=0.2, zorder=-101)
+      ax.axhline(11.0, lw=0.7, ls="-", color="k", zorder=-100)
+  fig.legend(
+      ncol=2,
+      loc="upper right",
+      bbox_to_anchor=(0.98, 0.72),
+      fontsize="small",
+  ).set_title(
+      "Velocity ratio: " + r"$\beta = V_\mathrm{env}\, / \,V_\mathrm{jet}$",
   )
 
   axo.set(
       xscale="log",
-      xlabel=r"Density ratio: $\alpha = n_{\mathrm{jet}} / n_{\mathrm{env}}$",
+      xlabel=r"Density ratio: $\alpha = \rho_{\mathrm{jet}} \, / \, \rho_{\mathrm{env}}$",
       ylabel=r"$V_\mathrm{s1}$, km / s",
       ylim=[0, 80],
   )
@@ -162,7 +186,7 @@ This is consistent with the relatively small velocity width of the HH 529 II pro
       ylim=[0, 200],
   )
   axu.set(
-      ylabel=r"$u = V_\mathrm{WS} / V_\mathrm{j}$",
+      ylabel=r"$u = V_\mathrm{WS} \, / \, V_\mathrm{jet}$",
       ylim=[0, None],
   )
 
