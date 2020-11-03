@@ -192,9 +192,9 @@
 + They are matched to the same value of n_2 when it has cooled back down to the equilibrium T
 + In all cases, the [O III] comes from the part of the cooling zone where 10 kK < T < 40 kK, which is just before it gets back to the equilibrium T
 + The summed [O III] emission from the cooling zone is higher in the slower shocks
-+ I initially thought this was just because the gas has a slower exhaust for higher Mach number shocks M \to 1/M
++ This is because the gas has a slower exhaust for higher Mach number shocks M \to 1/M
   + And so the cooling layer is thinner for the higher-M shocks  because dx \approx u_2 t_cool
-+ But it turns out that the effect is stronger than this can explain, so there must be something else going on too
+  + I thought there was something else going on too, but that is just because I had not put the distances in physical units properly - all sorted now
 ** Shock versus shell emission
 
 A fundamental assumption of the present analysis is that
