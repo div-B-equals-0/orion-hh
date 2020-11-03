@@ -1,5 +1,200 @@
 * HH 529-II,III reply to referee
 
+** Re-derive the shock jump conditions
++ I am having doubts about whether to use the adiabatic or isothermal sound speed.
++ The shock adiabat is given by
+  \[
+  \frac{\gamma}{\gamma - 1} (P_2 v_2 - P_1 v_1) = 0.5 (v_1 + v_2) (P_2 - P_1)
+  \]
++ But where v_1, v_2 are specific volumes = 1/\rho
++ c_s = (\gamma P / \rho)^{1/2}
++ P = n k T = \rho c_s^2 / \gamma = (R/\mu) \rho T
++ c_s^2 = \gamma P V
+*** Working through Zel'dovich & Raizer
++ The whole chapter is available in Google Books
+  + Again, V = 1/\rho is specific volume
++ upstream velocity
+  + u_0^2 = V_0^2 (p_1 - p_0) / (V_0 - V_1)
++ post-shock velocity
+  + u_1^2 = V_1^2 (p_1 - p_0) / (V_0 - V_1)
+
+*** Using stuff from Wikipedia
++ The page on [[https://en.wikipedia.org/wiki/Normal_shock_tables][Normal shock tables]] is useful
+  + Except M_1, M_2 on that page are M_0, M_1 in our notation
++ They have (in my notation)
+  \[
+  M_1^2 = \frac{(\gamma - 1) M_0^2 + 2} {2\gamma M_0^2 - (\gamma - 1)}
+  \]
++ Which for \gamma = 5/3 yields
+  \[
+  M_1^2 = \frac{M_0^2 + 3} {5 M_0^2 - 1}
+  \]
++ Which is the same as I had before, so this is clearly the adiabatic Mach number
++ For T_1/T_0 we have dependence on
+  + G1 \equiv (\gamma-1)/2 = 1/3
+  + G2 \equiv 2\gamma/(\gamma-1) = 5
+  + 1/(G1 + G2) = 3/16
+    \[
+    \frac{T_1}{T_0} = (1 + G1 M^2_0) (G2 - M_0^{-2}) / (G1 + G2)
+    \]
+  + For \gamma=5/3 this gives T_1/T_0 = (3 + M_0^2) (5 - 1/M_0^2) / 16
+    + Put M_0 = 1 + x
+      + M_0^2 = 1 + 2 x
+      + 1/M_0^2 = 1 - 2x
+      + (3 + M_0^2) (5 - 1/M_0^2) / 16 = (4 + 2x) (4 + 2x) /16
+        = (16 + 16 x) / 16 = 1 + x = M_0
+    + Or just multiply out:
+      + (15 + 5M^2 - 3/M^2 - 1)/16
+      + No, that does not help
+ 
+  
+
+
+*** So what does that mean for the rest of it?
++ Just that the isothermal Mach number is sqrt(\gamma) = 1.291 times larger than the adiabatic Mach number.
++ So the post-shock density is the same: n_1/n_0 = 4 M_0^2 / (M_0^2 + 3)
++ But the post-cooling density is higher n_2/n_0 = \gamma M_0^2 = 5 M_0^2 / 3
++ Repeat the table, but with adiabatic Mach number
+  |   M_0 | T_1/T_0 | n_1/n_0 |  n_2/n_0 |  h/r |  H/r |
+  |------+-------+-------+--------+------+------|
+  | 1.01 |  1.01 |  1.01 |   1.70 | 0.38 | 0.50 |
+  |  1.1 |  1.10 |  1.15 |   2.02 | 0.35 | 0.46 |
+  |  1.2 |  1.19 |  1.30 |   2.40 | 0.32 | 0.42 |
+  |  1.5 |  1.49 |  1.71 |   3.75 | 0.26 | 0.36 |
+  |  2.0 |  2.08 |  2.29 |   6.67 | 0.19 | 0.30 |
+  |  3.0 |  3.67 |  3.00 |  15.00 | 0.13 | 0.26 |
+  |  4.0 |  5.86 |  3.37 |  26.67 | 0.10 | 0.25 |
+  |  6.0 | 12.12 |  3.69 |  60.00 | 0.06 | 0.23 |
+  |  8.0 | 20.87 |  3.82 | 106.67 | 0.05 | 0.23 |
+  | 10.0 | 32.12 |  3.88 | 166.67 | 0.04 | 0.23 |
+  #+TBLFM: $2=(3 + $1**2) (5 - 1/$1**2)/16;f2::$3=4 $1**2/($1**2 + 3);f2::$4=5 $1**2 / 3;f2::$5=0.5 / $1 sqrt(5/3) ;f2::$6=0.5 $1 / $3 sqrt($2) ;f2
+
+
+*** Working out the thickness of the equilibrium shocked layer
++ Assume a steady state, where gas flows out sideways at a fraction \eta of the isothermal sound speed
+  + Mdot in = \pi r^2 n_0 m M_0 c_s
+  + Mdot out = 2 \pi r h n_2 m \eta c_s / \gamma^{1/2}
+  + h/r = (1/2) n_0 M_0 \gamma^{1/2} / n_2 \eta = 1 / 2 M_0 \gamma^{1/2} \eta
+  + This is given above
++ Version with no cooling, H
+  + If there is no cooling, then we need to use n_1 for the density, but the speed will be higher by a factor of sqrt(T_1/T_0)
+  + Mdot out = 2 \pi r h n_1 m \eta c_s sqrt(T_1/T_0)
+  + H/r = (1/2) n_0 M_0 / n_1 sqrt(T_1/T_0) \eta
+*** The cooling length vs the shell thickness
++ Apparently this is 3 u_1 k (T_1 - T_0) / n_1 [\Lambda(T_1) - \Gamma(T_1)]
+  + Note that I changed T_1 to (T_1 - T_0) since we only need to get down to the equilibrium T, not to zero
++
+
+#+begin_src python :return tab
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import seaborn as sns
+  sns.set_color_codes("deep")
+
+  figfile = "cooling-length.pdf"
+
+  T0 = 8500
+  CS = 13.7
+  ARCSEC = 410 * 1.49597870691e13
+  R = 1 # outflow radius in arcsec
+  # Mach number
+  mach = np.array([
+      1.01, 1.1, 1.2, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5,
+      6.0, 7.0, 8.0, 9.0, 10.0, 12.0,
+      15.0, 20.0
+  ])
+  # pre-shock velocity
+  v0 = mach*CS
+  # initial compression ratio
+  n1_n0 = 4*mach**2 / (mach**2 + 3)
+  # initial post-shock velocity
+  v1 = v0 / n1_n0
+  # post-shock temperature ratio
+  T1_T0 = (3 + mach**2) * (5 - 1/mach**2) / 16
+  # Cooling
+  Lam1 = 3.3e-24 * (T1_T0 * T0 / 1e4)**2.3
+  Lam2 = 1e-20 / (T1_T0 * T0 / 1e4)
+  k = 3
+  Lambda = (Lam1**(-k) + Lam2**(-k))**(-1/k)
+  Gamma = (T0/1e4)**2.8 * 3.3e-24 / np.sqrt(T1_T0 * T0 / 1e4)
+  Lambda_0 = 3.3e-24 * (T0 / 1e4)**2.3
+
+  # Final compression
+  n2_n0 = (5./3.) * mach**2
+
+  n2 = 1e4
+  n0 = n2 / n2_n0
+  n1 = n0 * n1_n0
+
+  # Cooling length in cm
+  dcool = 3*(1e5 * v1) * 1.3806503e-16 * (T1_T0 - 1.0)*T0 / (n1 * (Lambda - Gamma))
+  # shell thickness in cm
+  h = R*ARCSEC / (mach * 2 * np.sqrt(5./3.))
+  # alternative shell thickness if cooling inefficient
+  H =  R*ARCSEC * mach / (2 * T1_T0**0.5 * n1_n0)
+
+  # KE flux through shock
+  ke_flux = 0.5 * 1.3 * 1.67262158e-24 * n0 * (v0 * 1e5)**3
+  # Radiative flux from shell
+  shell_flux = n2**2 * h * Lambda_0
+  # Radiative flux from cooling zone
+  cool_flux = n1**2 * np.minimum(dcool, H) * Lambda
+  data = {
+      "M_0" : mach,
+      "u_0" : np.round(v0, 1),
+      "u_1" : np.round(v1, 1),
+      "u_2" : np.round(v0/n2_n0, 1),
+      "T_1" : np.round(T1_T0*T0/1000, 1),
+      "d_cool": np.round(dcool/ARCSEC, 3),
+      "h": np.round(h/ARCSEC, 3),
+      "H": np.round(H/ARCSEC, 3),
+      "n_0":  np.round(n0),
+      "n_1":  np.round(n1),
+      # "n_2":  np.round(n2*np.ones_like(n0)),
+      "shock/shell": np.round(ke_flux / shell_flux, 4),
+      "cool/shell": np.round(cool_flux / shell_flux, 4),
+  }
+
+  tab = [list(data.keys()), None] + list(zip(*data.values()))
+#+end_src
+
+#+RESULTS:
+|   M_0 |    u_0 |   u_1 |  u_2 |     T_1 |  d_cool |     h |     H |     n_0 |     n_1 | shock/shell | cool/shell |
+|------+-------+------+-----+--------+--------+-------+-------+--------+--------+-------------+------------|
+| 1.01 |  13.8 | 13.6 | 8.1 |    8.6 |  0.021 | 0.383 | 0.495 | 5882.0 | 5970.0 |      0.0317 |     0.0195 |
+|  1.1 |  15.1 | 13.1 | 7.5 |    9.3 |   0.02 | 0.352 | 0.457 | 4959.0 | 5701.0 |      0.0376 |     0.0228 |
+|  1.2 |  16.4 | 12.7 | 6.8 |   10.2 |   0.02 | 0.323 | 0.423 | 4167.0 | 5405.0 |      0.0448 |     0.0266 |
+|  1.5 |  20.5 | 12.0 | 5.5 |   12.7 |  0.019 | 0.258 | 0.358 | 2667.0 | 4571.0 |        0.07 |     0.0393 |
+|  2.0 |  27.4 | 12.0 | 4.1 |   17.7 |   0.02 | 0.194 | 0.303 | 1500.0 | 3429.0 |      0.1244 |     0.0664 |
+|  2.5 |  34.2 | 12.7 | 3.3 |   23.8 |  0.022 | 0.155 | 0.276 |  960.0 | 2595.0 |      0.1943 |     0.1022 |
+|  3.0 |  41.1 | 13.7 | 2.7 |   31.2 |  0.024 | 0.129 | 0.261 |  667.0 | 2000.0 |      0.2799 |     0.1469 |
+|  3.5 |  47.9 | 14.9 | 2.3 |   39.8 |  0.026 | 0.111 | 0.252 |  490.0 | 1574.0 |      0.3809 |     0.2005 |
+|  4.0 |  54.8 | 16.3 | 2.1 |   49.8 |  0.027 | 0.097 | 0.245 |  375.0 | 1263.0 |      0.4975 |     0.2628 |
+|  4.5 |  61.6 | 17.7 | 1.8 |   61.1 |  0.029 | 0.086 | 0.241 |  296.0 | 1032.0 |      0.6297 |     0.3336 |
+|  5.0 |  68.5 | 19.2 | 1.6 |   73.8 |   0.03 | 0.077 | 0.238 |  240.0 |  857.0 |      0.7774 |      0.413 |
+|  5.5 |  75.4 | 20.7 | 1.5 |   87.7 |  0.032 |  0.07 | 0.235 |  198.0 |  722.0 |      0.9406 |     0.5009 |
+|  6.0 |  82.2 | 22.3 | 1.4 |  103.0 |  0.037 | 0.065 | 0.233 |  167.0 |  615.0 |      1.1194 |     0.5972 |
+|  7.0 |  95.9 | 25.4 | 1.2 |  137.6 |  0.069 | 0.055 | 0.231 |  122.0 |  462.0 |      1.5237 |     0.8153 |
+|  8.0 | 109.6 | 28.7 | 1.0 |  177.4 |  0.163 | 0.048 | 0.229 |   94.0 |  358.0 |      1.9901 |     1.0671 |
+|  9.0 | 123.3 | 32.0 | 0.9 |  222.6 |  0.361 | 0.043 | 0.228 |   74.0 |  286.0 |      2.5187 |     0.8553 |
+| 10.0 | 137.0 | 35.3 | 0.8 |  273.0 |  0.739 | 0.039 | 0.227 |   60.0 |  233.0 |      3.1095 |     0.5136 |
+| 12.0 | 164.4 | 42.0 | 0.7 |  389.9 |  2.584 | 0.032 | 0.226 |   42.0 |  163.0 |      4.4777 |     0.2109 |
+| 15.0 | 205.5 | 52.1 | 0.5 |  605.1 | 12.076 | 0.026 | 0.225 |   27.0 |  105.0 |      6.9964 |     0.0703 |
+| 20.0 | 274.0 | 69.0 | 0.4 | 1069.9 | 89.067 | 0.019 | 0.224 |   15.0 |   60.0 |      12.438 |     0.0169 |
+*** Interpretation of the above table
++ The cooling length is remarkably constant for the low-velocity shocks
+  + Up to Mach number of 6: about 80 km/s
+  + That is the point where we get the minimum shell thickness: h + d_cool = 0.1 arcsec
+  + This is for R = 1 arcsec, so relative thickness is about 10%
++ For faster shocks
+** Insights from the JaneWR shock models
++ These are for shocks between 68 and 153 km/s
++ They are matched to the same value of n_2 when it has cooled back down to the equilibrium T
++ In all cases, the [O III] comes from the part of the cooling zone where 10 kK < T < 40 kK, which is just before it gets back to the equilibrium T
++ The summed [O III] emission from the cooling zone is higher in the slower shocks
++ I initially thought this was just because the gas has a slower exhaust for higher Mach number shocks M \to 1/M
+  + And so the cooling layer is thinner for the higher-M shocks  because dx \approx u_2 t_cool
++ But it turns out that the effect is stronger than this can explain, so there must be something else going on too
 ** Shock versus shell emission
 
 A fundamental assumption of the present analysis is that
@@ -137,7 +332,8 @@ so that
   alpha = np.logspace(-1.5, 1.5, 200)
   betas = [0.0, 0.25, 0.50, 0.75]
 
-  VWS = 65.0
+  VWS = 70.0                      # Velocity of working surface
+  CS = 13.7                       # Adiabatic sound speed
 
   fig, [axu, axi, axo] = plt.subplots(
       3,
@@ -158,14 +354,14 @@ so that
       Vi = VWS*(1 - u)/u
       Vo = VWS*(u - beta)/u
       axu.plot(alpha, u, **style)
-      m = Vi > 11.0
+      m = Vi > CS
       axi.plot(alpha[m], Vi[m], label=fr"$\beta = {beta:.2f}$", **style)
-      m = Vo > 11.0
+      m = Vo > CS
       axo.plot(alpha[m], Vo[m], **style)
 
   for ax in axo, axi:
-      ax.axhspan(0.0, 11.0, color="k", alpha=0.2, zorder=-101)
-      ax.axhline(11.0, lw=0.7, ls="-", color="k", zorder=-100)
+      ax.axhspan(0.0, CS, color="k", alpha=0.2, zorder=-101)
+      ax.axhline(CS, lw=0.7, ls="-", color="k", zorder=-100)
   fig.legend(
       ncol=2,
       loc="upper right",

@@ -81,7 +81,8 @@ $^{3}$Instituto de Radioastronom\'ia y Astrof\'isica, Universidad Nacional Aut\'
 \end{figure}
 
 \newcommand\Mach{\ensuremath{\mathcal{M}}}
-\newcommand\shock{\ensuremath{_{\mathrm{s}}}}
+\newcommand\shock{\ensuremath{_{\mathrm{sh}}}}
+\newcommand\sound{\ensuremath{c_{\mathrm{s}}}}
 Since the material in the HH outflows is moving highly supersonically
 with respect to the ionized sound speed in the nebula
 it will give rise to shocks where the flow and nebula interact
@@ -91,20 +92,33 @@ if its velocity varies with time \citep{Raga:1990a}.
 It is important to investigate the degree to which direct excitation by the shocks
 might be affecting our emission line analysis.
 
-A hydrodynamic shock is characterized by its Mach number \(\Mach = V\shock / c_0\),
-where \(V\shock\) is the shock velocity and \(c_0\) is the upstream ionized sound speed.
+A hydrodynamic shock is characterized by its Mach number \(\Mach = V\shock / \sound\),
+where \(V\shock\) is the shock velocity and \(\sound\) is the pre-shock adiabatic sound speed.
 On passing through the shock, the gas is heated 
 \citep{ZelDovich:1969a} to a temperature \(T_1\),
 which is higher than the equilibrium photoionized temperature, \(T_0\):
 \begin{equation}
-  \label{eq:T-vs-mach}
+  \label{eq:T1-T0}
   \frac{T_1}{T_0} = \frac{1}{16} \bigl( 5 \Mach^2 - 1 \bigr)
   \bigl( 1 + 3\Mach^{-2} \bigr),
 \end{equation}
+while at the same time it is compressed by a factor
+\begin{equation}
+  \label{eq:rho1-rho0}
+  \frac{\rho_1}{\rho_0} = \frac{4 \Mach^2}{\Mach^2 + 3} .
+\end{equation}
+In both cases, a ratio of specific heats \(\gamma = 5/3\) is assumed,
+as is appropriate for ionized and atomic gas. 
+The post-shock gas then cools in a radiative relaxation layer
+until it returns to the equilibrium temperature \(T_2 \approx T_0\),
+reaching a final density compression factor of 
+\begin{equation}
+  \label{eq:rho2-rho0}
+  \frac{\rho_2}{\rho_0} = \frac53 \Mach^2 .
+\end{equation}
 
-
-The isothermal sound speed in the ionized gas is given by
-\(c_0 = (k T / \mu m_{\mathrm{H}})^{1/2}\),
+The adiabatic sound speed in the equilibrium ionized gas is given by
+\(\sound = (\gamma k T / \mu m_{\mathrm{H}})^{1/2}\),
 where \(k\) is the Boltzmann constant, \(T\) is the temperature,
 \(m_{\mathrm{H}}\) is the hydrogen mass
 and \(\mu\) is the mean atomic mass per particle.
@@ -112,7 +126,7 @@ Assuming that all He is singly ionized with
 \(y = \mathrm{He/H} = 0.087\) (Table~\ref{tab:total_abundances_rls}) yields
 \(\bar{m} \approx (1 + 4 y) / (2 + 2 y) \approx 0.62\),
 which combined with \(T = \SI{8480}{K}\) (Table~\ref{tab:pc})
-implies a sound speed of \(\approx\SI{11}{km.s^{-1}}\). 
+implies an adiabatic sound speed of \(\approx\SI{13.7}{km.s^{-1}}\). 
 
 Clumpy jets \citep{Yirak:2009a, Yirak:2012a}.  Double working surfaces \citep{Raga:2017b}.   
 
