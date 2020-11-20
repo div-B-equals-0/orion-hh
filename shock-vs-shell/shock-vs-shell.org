@@ -96,7 +96,10 @@
   T0 = 8500
   CS = 13.7
   ARCSEC = 410 * 1.49597870691e13
-  R = 1 # outflow radius in arcsec
+  R = 1.63 # outflow radius in arcsec (GIVES 1e16 cm)
+  MU_E = 1.24                     # Mean mass per electron
+  M_H = 1.67262158e-24            # Hydrogen mass
+
   # Mach number
   mach = np.array([
       1.01, 1.1, 1.2, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5,
@@ -134,7 +137,7 @@
   H =  R*ARCSEC * mach / (2 * T1_T0**0.5 * n1_n0)
 
   # KE flux through shock
-  ke_flux = 0.5 * 1.3 * 1.67262158e-24 * n0 * (v0 * 1e5)**3
+  ke_flux = 0.5 * MU_E * M_H * n0 * (v0 * 1e5)**3
   # Radiative flux from shell
   shell_flux = n2**2 * h * Lambda_0
   # Radiative flux from cooling zone
@@ -161,26 +164,26 @@
 #+RESULTS:
 |   M_0 |    u_0 |   u_1 |  u_2 |     T_1 |  d_cool |     h |     H |     n_0 |     n_1 | shock/shell | cool/shell |
 |------+-------+------+-----+--------+--------+-------+-------+--------+--------+-------------+------------|
-| 1.01 |  13.8 | 13.6 | 8.1 |    8.6 |  0.021 | 0.383 | 0.495 | 5882.0 | 5970.0 |      0.0317 |     0.0195 |
-|  1.1 |  15.1 | 13.1 | 7.5 |    9.3 |   0.02 | 0.352 | 0.457 | 4959.0 | 5701.0 |      0.0376 |     0.0228 |
-|  1.2 |  16.4 | 12.7 | 6.8 |   10.2 |   0.02 | 0.323 | 0.423 | 4167.0 | 5405.0 |      0.0448 |     0.0266 |
-|  1.5 |  20.5 | 12.0 | 5.5 |   12.7 |  0.019 | 0.258 | 0.358 | 2667.0 | 4571.0 |        0.07 |     0.0393 |
-|  2.0 |  27.4 | 12.0 | 4.1 |   17.7 |   0.02 | 0.194 | 0.303 | 1500.0 | 3429.0 |      0.1244 |     0.0664 |
-|  2.5 |  34.2 | 12.7 | 3.3 |   23.8 |  0.022 | 0.155 | 0.276 |  960.0 | 2595.0 |      0.1943 |     0.1022 |
-|  3.0 |  41.1 | 13.7 | 2.7 |   31.2 |  0.024 | 0.129 | 0.261 |  667.0 | 2000.0 |      0.2799 |     0.1469 |
-|  3.5 |  47.9 | 14.9 | 2.3 |   39.8 |  0.026 | 0.111 | 0.252 |  490.0 | 1574.0 |      0.3809 |     0.2005 |
-|  4.0 |  54.8 | 16.3 | 2.1 |   49.8 |  0.027 | 0.097 | 0.245 |  375.0 | 1263.0 |      0.4975 |     0.2628 |
-|  4.5 |  61.6 | 17.7 | 1.8 |   61.1 |  0.029 | 0.086 | 0.241 |  296.0 | 1032.0 |      0.6297 |     0.3336 |
-|  5.0 |  68.5 | 19.2 | 1.6 |   73.8 |   0.03 | 0.077 | 0.238 |  240.0 |  857.0 |      0.7774 |      0.413 |
-|  5.5 |  75.4 | 20.7 | 1.5 |   87.7 |  0.032 |  0.07 | 0.235 |  198.0 |  722.0 |      0.9406 |     0.5009 |
-|  6.0 |  82.2 | 22.3 | 1.4 |  103.0 |  0.037 | 0.065 | 0.233 |  167.0 |  615.0 |      1.1194 |     0.5972 |
-|  7.0 |  95.9 | 25.4 | 1.2 |  137.6 |  0.069 | 0.055 | 0.231 |  122.0 |  462.0 |      1.5237 |     0.8153 |
-|  8.0 | 109.6 | 28.7 | 1.0 |  177.4 |  0.163 | 0.048 | 0.229 |   94.0 |  358.0 |      1.9901 |     1.0671 |
-|  9.0 | 123.3 | 32.0 | 0.9 |  222.6 |  0.361 | 0.043 | 0.228 |   74.0 |  286.0 |      2.5187 |     0.8553 |
-| 10.0 | 137.0 | 35.3 | 0.8 |  273.0 |  0.739 | 0.039 | 0.227 |   60.0 |  233.0 |      3.1095 |     0.5136 |
-| 12.0 | 164.4 | 42.0 | 0.7 |  389.9 |  2.584 | 0.032 | 0.226 |   42.0 |  163.0 |      4.4777 |     0.2109 |
-| 15.0 | 205.5 | 52.1 | 0.5 |  605.1 | 12.076 | 0.026 | 0.225 |   27.0 |  105.0 |      6.9964 |     0.0703 |
-| 20.0 | 274.0 | 69.0 | 0.4 | 1069.9 | 89.067 | 0.019 | 0.224 |   15.0 |   60.0 |      12.438 |     0.0169 |
+| 1.01 |  13.8 | 13.6 | 8.1 |    8.6 |  0.021 | 0.625 | 0.807 | 5882.0 | 5970.0 |      0.0186 |      0.012 |
+|  1.1 |  15.1 | 13.1 | 7.5 |    9.3 |   0.02 | 0.574 | 0.744 | 4959.0 | 5701.0 |       0.022 |      0.014 |
+|  1.2 |  16.4 | 12.7 | 6.8 |   10.2 |   0.02 | 0.526 |  0.69 | 4167.0 | 5405.0 |      0.0262 |     0.0163 |
+|  1.5 |  20.5 | 12.0 | 5.5 |   12.7 |  0.019 | 0.421 | 0.583 | 2667.0 | 4571.0 |      0.0409 |     0.0241 |
+|  2.0 |  27.4 | 12.0 | 4.1 |   17.7 |   0.02 | 0.316 | 0.495 | 1500.0 | 3429.0 |      0.0728 |     0.0407 |
+|  2.5 |  34.2 | 12.7 | 3.3 |   23.8 |  0.022 | 0.253 | 0.451 |  960.0 | 2595.0 |      0.1137 |     0.0627 |
+|  3.0 |  41.1 | 13.7 | 2.7 |   31.2 |  0.024 |  0.21 | 0.426 |  667.0 | 2000.0 |      0.1638 |     0.0901 |
+|  3.5 |  47.9 | 14.9 | 2.3 |   39.8 |  0.026 |  0.18 |  0.41 |  490.0 | 1574.0 |      0.2229 |      0.123 |
+|  4.0 |  54.8 | 16.3 | 2.1 |   49.8 |  0.027 | 0.158 |   0.4 |  375.0 | 1263.0 |      0.2911 |     0.1612 |
+|  4.5 |  61.6 | 17.7 | 1.8 |   61.1 |  0.029 |  0.14 | 0.392 |  296.0 | 1032.0 |      0.3685 |     0.2047 |
+|  5.0 |  68.5 | 19.2 | 1.6 |   73.8 |   0.03 | 0.126 | 0.387 |  240.0 |  857.0 |      0.4549 |     0.2534 |
+|  5.5 |  75.4 | 20.7 | 1.5 |   87.7 |  0.032 | 0.115 | 0.383 |  198.0 |  722.0 |      0.5504 |     0.3073 |
+|  6.0 |  82.2 | 22.3 | 1.4 |  103.0 |  0.037 | 0.105 |  0.38 |  167.0 |  615.0 |      0.6551 |     0.3664 |
+|  7.0 |  95.9 | 25.4 | 1.2 |  137.6 |  0.069 |  0.09 | 0.376 |  122.0 |  462.0 |      0.8916 |     0.5002 |
+|  8.0 | 109.6 | 28.7 | 1.0 |  177.4 |  0.163 | 0.079 | 0.374 |   94.0 |  358.0 |      1.1646 |     0.6546 |
+|  9.0 | 123.3 | 32.0 | 0.9 |  222.6 |  0.361 |  0.07 | 0.372 |   74.0 |  286.0 |      1.4739 |     0.8298 |
+| 10.0 | 137.0 | 35.3 | 0.8 |  273.0 |  0.739 | 0.063 |  0.37 |   60.0 |  233.0 |      1.8196 |     0.5136 |
+| 12.0 | 164.4 | 42.0 | 0.7 |  389.9 |  2.584 | 0.053 | 0.369 |   42.0 |  163.0 |      2.6203 |     0.2109 |
+| 15.0 | 205.5 | 52.1 | 0.5 |  605.1 | 12.076 | 0.042 | 0.367 |   27.0 |  105.0 |      4.0942 |     0.0703 |
+| 20.0 | 274.0 | 69.0 | 0.4 | 1069.9 | 89.067 | 0.032 | 0.366 |   15.0 |   60.0 |      7.2785 |     0.0169 |
 *** Interpretation of the above table
 + The cooling length is remarkably constant for the low-velocity shocks
   + Up to Mach number of 6: about 80 km/s
@@ -195,12 +198,65 @@
 + This is because the gas has a slower exhaust for higher Mach number shocks M \to 1/M
   + And so the cooling layer is thinner for the higher-M shocks  because dx \approx u_2 t_cool
   + I thought there was something else going on too, but that is just because I had not put the distances in physical units properly - all sorted now
++ The post-shock T exceeds 20,000 K for M = 2.3 => u_0 \approx 30 km/s
++ It exceeds 40,000 K for M = 3.5 => u_0 \approx 50 km/s
++ So this will give the following regimes
+  1. u_0 < 30 km/s (T_1 = 10 \to 20,000 K)
+     - [O III] from all the cooling zone
+     - Relative contribution to [O III] = shock/shell \propto M^2 (climbs to about 10%)
+  2. 30 < u_0 < 50 km/s (T_1 = 20 \to 50,000 K)
+     - All of cooling zone still emits [O III], but it starts to be a smaller fraction
+     - Other coolants, such as C III, N III, C IV become more important (UV lines)
+     - Relative contribution to [O III] has a maximum at about 50 km/s of about 15%
+  3. 50 < u_0 < 120 km/s (T_1 = 50 \to 200,000 K)
+     - Cooling predominantly from He II
+       - That is what the Cloudy output files seem to be saying, but that seems prima facie unlikely
+     - 
 ** Shock versus shell emission
++ This is what we implement above in the python program
++ Shock emission
+  \[
+  F_{\text{shock}} = 0.5 \rho_0 u_0^3
+  \]
++ Shell emission
+  \[
+  F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2 \Lambda_0 h 
+  \]
++ With
+  + \(h = 0.387 R / \eta M\)
+  + (\rho_0 = \rho_2 / \gamma M^2)
+  + \(u_0 = M c_s\)
++ Working
+  + F_1 = 0.5 \rho_2 M^3 c_s^3 / \gamma M^2 = 0.3 \rho_2 M c_s^3
+  + F_2 = (\rho_2^2 R / M) 0.387 \Lambda_0 / \eta (\mu m_H)^2
+  + F_1/F_2 = 0.775 M^2 c_s^3 \eta \mu m_h /(n_2 R \Lambda_0)
+  + Check units:
+    + Numerator: (cm/s)^3 g = g cm^3 s^-3
+    + Denominator: cm^-3 cm erg cm^3 s^-1
+      + erg = g cm^2 s^-2
+      + => cm g cm^2 s^-2 s^-1 = g cm^3 s^-3
++ Typical values:
+  + n_2 = 10,000 pcc
+  + R = 1 arcsec = 6e15 cm, but take 1e16 instead
+  + \Lambda_0 = 2.3e-24
+  + c_s = 13.7e5 cm/s
+  + \mu = 0.62
+    + *NO* This \mu is different from the mean mass per particle
+    + It should be the mean mass per electron, which is \mu_e = (1 + 4 y)/(1 + y) = 2\mu if He is singly ionized
+    + For y = 0.087 this gives \mu_e = 1.24
+  + F_1/F_2 = 0.018 M^2 \eta (n_2 / 1e4 pcc)^-1 (R / 1e16 pcc)^-1 (\Lambda_0 / 2.3e-24)^{-1}
++ So the ratio is
+  \[
+  \frac{F_{\text{shock}}}{F_{\text{shell}}}
+  = 0.018 M^2
+  \left( \frac{n_2}{\SI{1e4}{cm^{-3}}} \right)^{-1}
+  \left( \frac{R}{\SI{1e16}{cm}} \right)^{-1}
+  \left( \frac{\Lambda_0}{\SI{2.3e-24}{erg.cm^3.s^{-1}}} \right)^{-1}
+  \]
 
-A fundamental assumption of the present analysis is that
 
 
-*** Parameters of the HH 529 II and III shocks
+** Parameters of the HH 529 II and III shocks
 + There are two possibilities for the shocks
   1. They may be propagating into the nebula
   2. They may be internal working surfaces in the jet beam
