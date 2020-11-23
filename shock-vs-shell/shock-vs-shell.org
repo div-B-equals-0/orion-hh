@@ -412,76 +412,106 @@ so that
 **** Graph of the velocities versus \alpha
 
 #+begin_src python :results file :return figfile
-    import numpy as np
-    from matplotlib import pyplot as plt
-    import seaborn as sns
-    sns.set_color_codes("deep")
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import seaborn as sns
+  sns.set_color_codes("bright")
 
-    figfile = "shock-velocities.pdf"
-    alpha = np.logspace(-1.5, 1.5, 500)
-    betas = [0.0, 0.25, 0.50, 0.75]
+  figfile = "shock-velocities.pdf"
+  alpha = np.logspace(-1.5, 1.5, 500)
+  betas = [0.0, 0.25, 0.50, 0.75]
 
-    VWS = 65.0                      # Velocity of working surface
-    CS = 13.7                       # Adiabatic sound speed
-    GAMMA = 5./3.
+  VWS = 65.0                      # Velocity of working surface
+  CS = 13.7                       # Adiabatic sound speed
+  GAMMA = 5./3.
 
-    fig, [axu, axi, axo] = plt.subplots(
-        3,
-        1,
-        sharex=True,
-        figsize=(4, 5),
-    )
+  fig, [axu, axi, axo] = plt.subplots(
+      3,
+      1,
+      sharex=True,
+      figsize=(4, 5),
+  )
 
-    styles = [
-        dict(lw=0.7, color=(0.2, 0.1, 0.05), alpha=1.0),
-        dict(lw=1.0, color=(0.5, 0.3, 0.1), alpha=1.0),
-        dict(lw=1.4, color=(0.7, 0.45, 0.15), alpha=1.0),
-        dict(lw=2.0, color=(0.8, 0.5, 0.2), alpha=1.0),
-    ]
-    # isothermal Mach number
-    M = np.sqrt(GAMMA)*VWS/CS
-    for beta, style in zip(betas, styles):
-        # u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
-        u = (np.sqrt(alpha*(1 - beta)**2 - (1 - alpha)*(beta**2 - alpha)/M**2) - (alpha - beta)) / ((1 - alpha) * (1 + 1.0/M**2))
-        Vi = VWS*(1 - u)/u
-        Vo = VWS*(u - beta)/u
-        m = u <= 1.0
-        axu.plot(alpha[m], u[m], **style)
-        m = Vi > -CS
-        axi.plot(alpha[m], Vi[m], zorder=-1, label=fr"$\beta = {beta:.2f}$", **style)
-        m = Vo > -CS
-        axo.plot(alpha[m], Vo[m], zorder=-1, **style)
+  styles = [
+      dict(lw=0.7, color=(0.2, 0.1, 0.05), alpha=1.0),
+      dict(lw=1.0, color=(0.5, 0.3, 0.1), alpha=1.0),
+      dict(lw=1.4, color=(0.7, 0.45, 0.15), alpha=1.0),
+      dict(lw=2.0, color=(0.8, 0.5, 0.2), alpha=1.0),
+  ]
+  # isothermal Mach number
+  M = np.sqrt(GAMMA)*VWS/CS
 
-    for ax in axo, axi:
-        ax.axhspan(0.0, CS, color="0.8", alpha=0.8, zorder=0)
-        ax.axhline(CS, lw=0.7, ls="-", color="k", zorder=100)
-    fig.legend(
-        ncol=2,
-        loc="upper right",
-        bbox_to_anchor=(0.98, 0.72),
-        fontsize="small",
-    ).set_title(
-        "Velocity ratio: " + r"$\beta = V_\mathrm{env}\, / \,V_\mathrm{jet}$",
-    )
+  # Example models to plot
+  # Structure [ [ALPHA, BETA, COLOR], ... ]
+  examples = [
+      [7.0, 0.0, "c"],
+      [1.5, 0.0, "b"],
+      [0.5, 0.5, "r"],
+  ]
 
-    axo.set(
-        xscale="log",
-        xlabel=r"Density ratio: $\alpha = \rho_{\mathrm{jet}} \, / \, \rho_{\mathrm{env}}$",
-        ylabel=r"$V_\mathrm{s1}$, km / s",
-        ylim=[0, 80],
-    )
-    axi.set(
-        ylabel=r"$V_\mathrm{s2}$, km / s",
-        ylim=[0, 200],
-    )
-    axu.set(
-        ylabel=r"$u = V_\mathrm{WS} \, / \, V_\mathrm{jet}$",
-        ylim=[0, None],
-    )
+  def ufunc(alpha):
+      "Calculate V_ws / V_jet"
+      return (np.sqrt(alpha*(1 - beta)**2 - (1 - alpha)*(beta**2 - alpha)/M**2)
+              - (alpha - beta)) / ((1 - alpha) * (1 + 1.0/M**2))
 
-    sns.despine()
-    fig.tight_layout()
-    fig.savefig(figfile)
+  def Vifunc(u):
+      "Velocity of (inward-facing) jet shock"
+      return VWS*(1 - u)/u
+
+  def Vofunc(u):
+      "Velocity of (outward-facing) bow shock"
+      return VWS*(u - beta)/u
+
+  for beta, style in zip(betas, styles):
+      # u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
+      u = ufunc(alpha)
+      Vi = Vifunc(u)
+      Vo = Vofunc(u)
+      m = u <= 1.0
+      axu.plot(alpha[m], u[m], **style)
+      m = Vi > -CS
+      axi.plot(alpha[m], Vi[m], zorder=-1, label=fr"$\beta = {beta:.2f}$", **style)
+      m = Vo > -CS
+      axo.plot(alpha[m], Vo[m], zorder=-1, **style)
+
+  for alpha, beta, color in examples:
+      u = ufunc(alpha)
+      Vi = Vifunc(u)
+      Vo = Vofunc(u)
+      axu.plot(alpha, u,  "o", color=color, mec="k")
+      axi.plot(alpha, Vi, "o", color=color, mec="k")
+      axo.plot(alpha, Vo, "o", color=color, mec="k")
+
+  for ax in axo, axi:
+      ax.axhspan(0.0, CS, color="0.8", alpha=0.8, zorder=0)
+      ax.axhline(CS, lw=0.7, ls="-", color="k", zorder=100)
+  fig.legend(
+      ncol=2,
+      loc="upper right",
+      bbox_to_anchor=(0.98, 0.72),
+      fontsize="small",
+  ).set_title(
+      "Velocity ratio: " + r"$\beta = V_\mathrm{env}\, / \,V_\mathrm{jet}$",
+  )
+
+  axo.set(
+      xscale="log",
+      xlabel=r"Density ratio: $\alpha = \rho_{\mathrm{jet}} \, / \, \rho_{\mathrm{env}}$",
+      ylabel=r"$V_\mathrm{s1}$, km / s",
+      ylim=[0, 80],
+  )
+  axi.set(
+      ylabel=r"$V_\mathrm{s2}$, km / s",
+      ylim=[0, 200],
+  )
+  axu.set(
+      ylabel=r"$u = V_\mathrm{WS} \, / \, V_\mathrm{jet}$",
+      ylim=[0, None],
+  )
+
+  sns.despine()
+  fig.tight_layout()
+  fig.savefig(figfile)
 
 
 #+end_src
