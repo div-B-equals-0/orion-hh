@@ -329,10 +329,11 @@ so that
   + u = [-(\alpha - \beta) \pm (1 - \beta) sqrt(\alpha) ] / (1 - \alpha)
   + u = [(1 - \beta) \alpha^{1/2} - (\alpha - \beta)] / (1 - \alpha)
 + [X] *try again with added sound speed*
-  + n_a [(V_ws - V_a)^2 + c_0^2] = n_j [(V_j - V_ws)^2 + c_0^2] = n_ws c_0^2
+  + n_a [(V_ws - V_a)^2 + c_0^2/\gamma] = n_j [(V_j - V_ws)^2 + c_0^2/\gamma] = n_ws c_0^2/\gamma
   + same but use M = V_j/c_0
     + Although actually, what is observed is Mach number of the WS, which is M = u V_j/c_0
-    + So, we divide through by n_a V_j^2, using c_0^2/V_j^2 = u^2/M^2
+    + So, we divide through by n_a V_j^2, using c_0^2/\gamma V_j^2 = u^2/\gamma M^2
+    + /From now on, I write M^2 instead of \gamma M^2, so M is the isothermal Mach number/
   + (u - \beta)^2 + u^2/M^2 = \alpha [(1 - u)^2 + u^2/M^2]
   + u^2 - 2\beta u + \beta^2 + u^2/M^2 = \alpha - 2\alpha u + \alpha u^2 + \alpha u^2/M^2
   + (1 - \alpha) (1 + 1/M^2) u^2 + 2(\alpha - \beta) u + (\beta^2 - \alpha) = 0
@@ -346,6 +347,8 @@ so that
     + \alpha = u^2 (1 + 1/M^2) /  [(1 - u)^2 + u^2/M^2]
       + Put u = 1 => \alpha = (M^2 + 1)
     + *Mow I have the answer* For larger density contrasts than this, the thermal pressure of the jet cannot be balanced by any ram pressure of the environment
+    + So the maximum \alpha for general \beta is given by
+      + \alpha = 1 + (1 - \beta)^2 M^2 
 + Special case of \alpha = 1
   + This is singular, so do an expansion:
     + \alpha = 1 + \varepsilon
@@ -361,40 +364,47 @@ so that
       + \beta < (M - 1) / (M + 1)
       + E.g,, with M = 5, we have \beta < 2/3
 
-|     \alpha |    \beta |    u | (1 - u)/u | (u - \beta)/u |
-|-------+------+------+-----------+-----------|
-|  0.01 |    0 | 0.09 |     10.11 |      1.00 |
-|   0.1 |    0 | 0.24 |      3.17 |      1.00 |
-|   0.3 |    0 | 0.35 |      1.86 |      1.00 |
-|  1.01 |    0 | 0.50 |      1.00 |      1.00 |
-|   3.0 |    0 | 0.63 |      0.59 |      1.00 |
-|  10.0 |    0 | 0.76 |      0.32 |      1.00 |
-| 100.0 |    0 | 0.91 |      0.10 |      1.00 |
-|-------+------+------+-----------+-----------|
-|  0.01 | 0.25 | 0.32 |      2.13 |      0.22 |
-|   0.1 | 0.25 | 0.43 |      1.33 |      0.42 |
-|   0.3 | 0.25 | 0.52 |      0.92 |      0.52 |
-|  1.01 | 0.25 | 0.63 |      0.59 |      0.60 |
-|   3.0 | 0.25 | 0.73 |      0.37 |      0.66 |
-|  10.0 | 0.25 | 0.82 |      0.22 |      0.70 |
-| 100.0 | 0.25 | 0.93 |      0.08 |      0.73 |
-|-------+------+------+-----------+-----------|
-|  0.01 |  0.5 | 0.55 |      0.82 |      0.09 |
-|   0.1 |  0.5 | 0.62 |      0.61 |      0.19 |
-|   0.3 |  0.5 | 0.68 |      0.47 |      0.26 |
-|  1.01 |  0.5 | 0.75 |      0.33 |      0.33 |
-|   3.0 |  0.5 | 0.82 |      0.22 |      0.39 |
-|  10.0 |  0.5 | 0.88 |      0.14 |      0.43 |
-| 100.0 |  0.5 | 0.95 |      0.05 |      0.47 |
-|-------+------+------+-----------+-----------|
-|  0.01 | 0.75 | 0.77 |      0.30 |      0.03 |
-|   0.1 | 0.75 | 0.81 |      0.23 |      0.07 |
-|   0.3 | 0.75 | 0.84 |      0.19 |      0.11 |
-|  1.01 | 0.75 | 0.88 |      0.14 |      0.15 |
-|   3.0 | 0.75 | 0.91 |      0.10 |      0.18 |
-|  10.0 | 0.75 | 0.94 |      0.06 |      0.20 |
-| 100.0 | 0.75 | 0.98 |      0.02 |      0.23 |
-#+TBLFM: $3=((1 - $2) sqrt($1)  - ($1 - $2))/(1 - $1);f2::$4=(1 - $3)/$3;f2::$5=($3 - $2)/$3;f2
+|     \alpha |    \beta | M |             u |       (1 - u)/u |       (u - \beta)/u |
+|-------+------+---+---------------+-----------------+-----------------|
+|  0.01 |    0 | 6 |          0.09 |           10.11 |            1.00 |
+|   0.1 |    0 | 6 |          0.24 |            3.17 |            1.00 |
+|   0.3 |    0 | 6 |          0.35 |            1.86 |            1.00 |
+|  1.01 |    0 | 6 |          0.50 |            1.00 |            1.00 |
+|   1.5 |    0 | 6 |          0.55 |            0.82 |            1.00 |
+|     2 |    0 | 6 |          0.59 |            0.69 |            1.00 |
+|   2.5 |    0 | 6 |          0.62 |            0.61 |            1.00 |
+|   3.0 |    0 | 6 |          0.64 |            0.56 |            1.00 |
+|   7.0 |    0 | 6 |          0.74 |            0.35 |            1.00 |
+|  10.0 |    0 | 6 |          0.79 |            0.27 |            1.00 |
+| 100.0 |    0 | 6 | (0.98, -0.13) |  (2.8e-3, 0.13) |            1.00 |
+|-------+------+---+---------------+-----------------+-----------------|
+|  0.01 | 0.25 | 6 |          0.30 |            2.33 |            0.17 |
+|   0.1 | 0.25 | 6 |          0.42 |            1.38 |            0.40 |
+|  0.25 | 0.25 | 6 |          0.49 |            1.04 |            0.49 |
+|  1.01 | 0.25 | 6 |          0.63 |            0.59 |            0.60 |
+|   3.0 | 0.25 | 6 |          0.74 |            0.35 |            0.66 |
+|  10.0 | 0.25 | 6 |          0.86 |            0.16 |            0.71 |
+| 100.0 | 0.25 | 6 | (0.98, -0.15) | (-3.0e-3, 0.15) |   (0.75, -0.04) |
+|-------+------+---+---------------+-----------------+-----------------|
+|  0.01 |  0.5 | 6 |  (0.48, 0.06) |   (1.05, -0.26) |   (-0.03, 0.13) |
+|   0.1 |  0.5 | 6 |          0.59 |            0.69 |            0.15 |
+|   0.3 |  0.5 | 6 |          0.66 |            0.52 |            0.24 |
+|   0.5 |  0.5 | 6 |          0.70 |            0.43 |            0.29 |
+|  1.01 |  0.5 | 6 |          0.75 |            0.33 |            0.33 |
+|   2.0 |  0.5 | 6 |          0.81 |            0.23 |            0.38 |
+|   3.0 |  0.5 | 6 |          0.84 |            0.19 |            0.40 |
+|  10.0 |  0.5 | 6 |          1.00 |            0.00 |            0.50 |
+| 100.0 |  0.5 | 6 | (0.98, -0.16) | (-6.1e-3, 0.16) |   (0.50, -0.08) |
+|-------+------+---+---------------+-----------------+-----------------|
+|  0.01 | 0.75 | 6 |  (0.73, 0.12) |   (0.33, -0.22) | (-3.7e-4, 0.16) |
+|   0.1 | 0.75 | 6 |  (0.70, 0.08) |   (0.41, -0.16) |   (-0.06, 0.12) |
+|   0.3 | 0.75 | 6 |          0.79 |            0.27 |            0.05 |
+|  0.75 | 0.75 | 6 |          0.85 |            0.18 |            0.12 |
+|  1.01 | 0.75 | 6 |          0.88 |            0.14 |            0.15 |
+|   3.0 | 0.75 | 6 |          0.98 |            0.02 |            0.23 |
+|  10.0 | 0.75 | 6 | (1.00, -0.14) |   (-0.02, 0.14) |   (0.26, -0.10) |
+| 100.0 | 0.75 | 6 | (0.98, -0.16) | (-6.1e-3, 0.16) |   (0.25, -0.12) |
+#+TBLFM: $4=( sqrt($1 (1 - $2)**2 - (1 - $1) ($2**2 - $1) / $3**2)  - ($1 - $2))/(1 - $1) (1 + 1/$3**2);f2::$5=(1 - $4)/$4;f2::$6=($4 - $2)/$4;f2
 
 + So u is the speed of WS in terms of jet speed
 + 4th column gives inner shock jump in terms of WS speed
@@ -402,74 +412,76 @@ so that
 **** Graph of the velocities versus \alpha
 
 #+begin_src python :results file :return figfile
-  import numpy as np
-  from matplotlib import pyplot as plt
-  import seaborn as sns
-  sns.set_color_codes("deep")
+    import numpy as np
+    from matplotlib import pyplot as plt
+    import seaborn as sns
+    sns.set_color_codes("deep")
 
-  figfile = "shock-velocities.pdf"
-  alpha = np.logspace(-1.5, 1.5, 500)
-  betas = [0.0, 0.25, 0.50, 0.75]
+    figfile = "shock-velocities.pdf"
+    alpha = np.logspace(-1.5, 1.5, 500)
+    betas = [0.0, 0.25, 0.50, 0.75]
 
-  VWS = 70.0                      # Velocity of working surface
-  CS = 13.7                       # Adiabatic sound speed
+    VWS = 65.0                      # Velocity of working surface
+    CS = 13.7                       # Adiabatic sound speed
+    GAMMA = 5./3.
 
-  fig, [axu, axi, axo] = plt.subplots(
-      3,
-      1,
-      sharex=True,
-      figsize=(4, 5),
-  )
+    fig, [axu, axi, axo] = plt.subplots(
+        3,
+        1,
+        sharex=True,
+        figsize=(4, 5),
+    )
 
-  styles = [
-      dict(lw=0.7, color=(0.2, 0.1, 0.05), alpha=1.0),
-      dict(lw=1.0, color=(0.5, 0.3, 0.1), alpha=1.0),
-      dict(lw=1.4, color=(0.7, 0.45, 0.15), alpha=1.0),
-      dict(lw=2.0, color=(0.8, 0.5, 0.2), alpha=1.0),
-  ]
-  M = VWS/CS
-  for beta, style in zip(betas, styles):
-      # u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
-      u = (np.sqrt(alpha*(1 - beta)**2 - (1 - alpha)*(beta**2 - alpha)/M**2) - (alpha - beta)) / ((1 - alpha) * (1 + 1.0/M**2))
-      Vi = VWS*(1 - u)/u
-      Vo = VWS*(u - beta)/u
-      m = u <= 1.0
-      axu.plot(alpha[m], u[m], **style)
-      m = Vi > -CS
-      axi.plot(alpha[m], Vi[m], zorder=-1, label=fr"$\beta = {beta:.2f}$", **style)
-      m = Vo > -CS
-      axo.plot(alpha[m], Vo[m], zorder=-1, **style)
+    styles = [
+        dict(lw=0.7, color=(0.2, 0.1, 0.05), alpha=1.0),
+        dict(lw=1.0, color=(0.5, 0.3, 0.1), alpha=1.0),
+        dict(lw=1.4, color=(0.7, 0.45, 0.15), alpha=1.0),
+        dict(lw=2.0, color=(0.8, 0.5, 0.2), alpha=1.0),
+    ]
+    # isothermal Mach number
+    M = np.sqrt(GAMMA)*VWS/CS
+    for beta, style in zip(betas, styles):
+        # u = ((1 - beta)*np.sqrt(alpha) - (alpha - beta)) / (1 - alpha)
+        u = (np.sqrt(alpha*(1 - beta)**2 - (1 - alpha)*(beta**2 - alpha)/M**2) - (alpha - beta)) / ((1 - alpha) * (1 + 1.0/M**2))
+        Vi = VWS*(1 - u)/u
+        Vo = VWS*(u - beta)/u
+        m = u <= 1.0
+        axu.plot(alpha[m], u[m], **style)
+        m = Vi > -CS
+        axi.plot(alpha[m], Vi[m], zorder=-1, label=fr"$\beta = {beta:.2f}$", **style)
+        m = Vo > -CS
+        axo.plot(alpha[m], Vo[m], zorder=-1, **style)
 
-  for ax in axo, axi:
-      ax.axhspan(0.0, CS, color="0.8", alpha=0.8, zorder=0)
-      ax.axhline(CS, lw=0.7, ls="-", color="k", zorder=100)
-  fig.legend(
-      ncol=2,
-      loc="upper right",
-      bbox_to_anchor=(0.98, 0.72),
-      fontsize="small",
-  ).set_title(
-      "Velocity ratio: " + r"$\beta = V_\mathrm{env}\, / \,V_\mathrm{jet}$",
-  )
+    for ax in axo, axi:
+        ax.axhspan(0.0, CS, color="0.8", alpha=0.8, zorder=0)
+        ax.axhline(CS, lw=0.7, ls="-", color="k", zorder=100)
+    fig.legend(
+        ncol=2,
+        loc="upper right",
+        bbox_to_anchor=(0.98, 0.72),
+        fontsize="small",
+    ).set_title(
+        "Velocity ratio: " + r"$\beta = V_\mathrm{env}\, / \,V_\mathrm{jet}$",
+    )
 
-  axo.set(
-      xscale="log",
-      xlabel=r"Density ratio: $\alpha = \rho_{\mathrm{jet}} \, / \, \rho_{\mathrm{env}}$",
-      ylabel=r"$V_\mathrm{s1}$, km / s",
-      ylim=[0, 80],
-  )
-  axi.set(
-      ylabel=r"$V_\mathrm{s2}$, km / s",
-      ylim=[0, 200],
-  )
-  axu.set(
-      ylabel=r"$u = V_\mathrm{WS} \, / \, V_\mathrm{jet}$",
-      ylim=[0, None],
-  )
+    axo.set(
+        xscale="log",
+        xlabel=r"Density ratio: $\alpha = \rho_{\mathrm{jet}} \, / \, \rho_{\mathrm{env}}$",
+        ylabel=r"$V_\mathrm{s1}$, km / s",
+        ylim=[0, 80],
+    )
+    axi.set(
+        ylabel=r"$V_\mathrm{s2}$, km / s",
+        ylim=[0, 200],
+    )
+    axu.set(
+        ylabel=r"$u = V_\mathrm{WS} \, / \, V_\mathrm{jet}$",
+        ylim=[0, None],
+    )
 
-  sns.despine()
-  fig.tight_layout()
-  fig.savefig(figfile)
+    sns.despine()
+    fig.tight_layout()
+    fig.savefig(figfile)
 
 
 #+end_src
