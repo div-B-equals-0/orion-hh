@@ -518,7 +518,124 @@ so that
 
 #+RESULTS:
 [[file:shock-velocities.pdf]]
- 
+*** Global run of velocity, density through the two working surfaces
+
+#+begin_src python :results file :return figfile
+  import numpy as np
+  from matplotlib import pyplot as plt
+  from matplotlib.ticker import MultipleLocator
+  import seaborn as sns
+  sns.set_color_codes("bright")
+
+  figfile = "hh529-ii-iii-ws-profiles.pdf"
+
+
+  # Velocities in km/s
+  Vws_II, Vws_III = 60.0, 70.0
+  Vjet_II, Vjet_III = 93, 127
+  Venv_II, Venv_III = 46.5, 0.0
+  Vs1_II, Vs1_III = Vws_II - Venv_II, Vws_III - Venv_III
+  Vs2_II, Vs2_III = Vjet_II - Vws_II, Vjet_III - Vws_III
+
+  # Velocity at inner edge
+  Vedge = 50.0
+
+  # Adiabatic and isothermal sound speeds
+  asound = 13.7
+  gamma = 5.0/3.0
+  csound = asound/np.sqrt(gamma)
+
+  # radii in mpc (2 mpc ≈ 1 arcsec)
+  Rjet_II, Rjet_III = 2.0, 2.0
+  Rbow_II, Rbow_III = 2.0, 4.0
+
+  # equilibrium shell thicknesses in arcsec
+  H1_II = 0.5 * Rbow_II * csound / Vs1_II
+  H2_II = 0.5 * Rjet_II * csound / Vs2_II
+  H1_III = 0.5 * Rbow_III * csound / Vs1_III
+  H2_III = 0.5 * Rjet_III * csound / Vs2_III
+
+
+  # Positions along axis in arcsec
+
+  # Plot limits 
+  zmin, zmax = -18.0, 2.0
+  # Positions of working surfaces
+  z_II, z_III = -12.0, 0.0
+  # positions of shocks
+  z1_II, z2_II = z_II + H1_II, z_II - H2_II
+  z1_III, z2_III = z_III + H1_III, z_III - H2_III
+
+  # Densities in pcc
+  dws_II, dws_III = 1e4, 3e4
+  djet_II, djet_III = 1500, 1000
+  denv_II, denv_III = 3000, 670
+
+  # Array of positions, velocities, densities
+  z = np.linspace(zmin, zmax, 1000)
+  V = np.empty_like(z)
+  d = np.empty_like(z)
+
+  # Fill in all the regions
+
+  # First jet section
+  m = (z <= z2_II)
+  # Linear velocity profile up to Vjet_II
+  V[m] = Vedge + (Vjet_II - Vedge) * (z[m] - zmin) / (z2_II - zmin)
+  d[m] = djet_II * Vjet_II / V[m]
+
+  # Working surface II
+  m = (z > z2_II) & (z <= z1_II)
+  V[m] = Vws_II
+  d[m] = dws_II
+
+  # Second jet section
+  m = (z >= z1_II) & (z < z2_III)
+  # Linear profile from Venv_II to Vjet_III
+  V[m] = Venv_II + (Vjet_III - Venv_II) * (z[m] - z1_II) / (z2_III - z1_II)
+  d[m] = denv_II * Venv_II / V[m]
+
+  # Working surface III
+  m = (z > z2_III) & (z <= z1_III)
+  V[m] = Vws_III
+  d[m] = dws_III
+
+  # Undisturbed environment
+  m = (z > z1_III)
+  V[m] = 0.0
+  d[m] = denv_III
+
+  sns.set_color_codes()
+  fig, [axV, axd] = plt.subplots(2, 1, figsize=(6, 4), sharex=True)
+
+  axV.plot(z, V, lw=2, color="r")
+  axd.plot(z, d, lw=2, color="c")
+  axd.set(
+      yscale="log",
+      xlabel="Distance along jet axis, mpc",
+      ylabel="Electron density, cm$^{-3}$",
+  )
+  #axd.tick_params(labelbottom=False) 
+  axV.set(ylabel="Velocity, km s$^{-1}$")
+  for ax in axV, axd:
+      ax.axvspan(z2_II, z1_II, color="k", alpha=0.1, ec=None)
+      ax.axvspan(z2_III, z1_III, color="k", alpha=0.1, ec=None)
+      ax.axvline(z_II, color="k", lw=0.5)
+      ax.axvline(z_III, color="k", lw=0.5)
+  axd.text(z_II, 4e4, "HH 529 II", ha="center")
+  axd.text(z_III, 4e4, "HH 529 III", ha="center")
+  axd.text(zmin + 2.0, 1e4, "⟵ to jet source\nat $-120$ mpc", ha="center")
+  axd.xaxis.set_major_locator(MultipleLocator(5.0))
+  axd.minorticks_on()
+
+  sns.despine()
+  fig.tight_layout()
+  fig.savefig(figfile)
+#+end_src
+
+#+RESULTS:
+[[file:hh529-ii-iii-ws-profiles.pdf]]
+
 ** Magnetic field - Alfven speed versus sound speed
 
 *** Talk about how H II regions are thermally dominated
