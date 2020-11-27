@@ -220,7 +220,7 @@
   \]
 + Shell emission
   \[
-  F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2 \Lambda_0 h 
+  F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2 \Lambda_0 h
   \]
 + With
   + \(h = 0.387 R / \eta M\)
@@ -253,9 +253,64 @@
   \left( \frac{R}{\SI{1e16}{cm}} \right)^{-1}
   \left( \frac{\Lambda_0}{\SI{2.3e-24}{erg.cm^3.s^{-1}}} \right)^{-1}
   \]
-
-
-
+** Line profiles following HRH87
++ HRH use \phi as inclination of axis to line of sight
+  + In our paper, we use an angle with the plane of sky: i = 90 - \phi
+  + so cos \phi = sin i
++ They are treating a shocked cloudlet model
+  + This cannot apply in Orion, since a dense cloudlet would be very visible
+  + Nonetheless, their treatment of the bow shock should be fine
++ Also they are considering equilibrium pre-ionization
+  + This is different from our case of total pre-ionization
++ They calculate the extrema of the of the bow velocities
+  + V+ = 0.5 V_s (1 + cos \phi) + \gamma
+  + V- = -0.5 V_s (1 - cos \phi) + \gamma
++ \gamma is the projected LOS velocity of the "obstacle", which in our case is the working surface
++ V_s is the shock velocity on the axis of the bow
+  + This is V_s1 or V_s2
+  + *But* the model does not apply so much to the jet shock since it is planar, not a bow shock
+    + In the WS frame, the streamlines have to bend round through more than 90 degrees
++ So \gamma = -V_ws cos \phi
++ So we have
+  + FWZI = V+ - V- = V_s
+  + Median velocity: V_med = (V+ + V-) / 2 = 0.5 V_s cos \phi + \gamma
+  + Or in our notation: V_med = 0.5 V_s sin i - V_ws sin i = -(V_ws - V_s/2) sin i
+  + Most negative velocity is V- = -0.5 V_s (1 - sin i) - V_ws sin i = -V_s/2  - (V_ws - V_s/2) sin i
+  + Most positive velocity is V+ = 0.5 V_s (1 + sin i) - V_ws sin i = +V_s/2  - (V_ws - V_s/2) sin i
+  + Or to put it more succinctly, the span of velocities is V = V_med \pm V_s/2
+  + If we have a terminal bow, then V_WS = V_s, in which case:
+    + V_med = -0.5 V_ws sin i 
+    + V- = -0.5 V_ws (1 + sin i) 
++ However, it is very hard to measure V_med observationally, since the profile is probably double-peaked, but the lower-velocity peak is buried in the nebular emission.
++ It is probably easier to measure V-
+  + We could take the 10% level on the blue side
+*** How to deduce inclination
++ Assume that we measure V- and V_pos from proper motions
+  + V_pos = V_Ws cos i
+  + V- = -0.5 V_ws (1 + sin i)
++ How to find inclination in terms of ratio of these velocities
+  + X \equiv -V-/V_pos = 0.5 (1 + sin i) / cos i
+  + X = (sec i + tan i) / 2
+  + Put t \equiv tan i
+  + 2 X = sqrt(1 + t^2) + t
+  + (2 X - t)^2 = 1 + t^2 = 4 X^2 - 4 X t + t^2
+  + 4 X t = 4 X^2 - 1
+  + t = X - 1/(4 X)
++ Observations of HH 529 III
+  + V_pos = 36 (a2) or 30 (b1), so 33 +/- 3
+  + V- = -50 (heliocentric), -78 +/- 2 wrt OMC
+  + => X = 78 +/- 2 / 33 +/- 3 = 2.364 +/- 0.223
+  + tan i = (2.364 +/- 0.223) - 0.25/(2.364 +/- 0.223) = 2.258 +/- 0.223
+  + => i = 66 +/- 2
+  + => V_ws = (33 +/- 3) / cos (66 +/- 2) = 81 +/- 10
++ Compare with the bullet approximation
+  + V = -25 (heliocentric), -53 +/- 2 wrt OMC
+  + tan i = (53 +/- 2) / (33 +/- 3) = 1.606 +/- 0.158
+  + i = 58.09 +/- 2.53
+  + V_WS = 62.43 +/- 2.32
+*** Values of \alpha for min and max velocity
++ 
+    
 ** Parameters of the HH 529 II and III shocks
 + There are two possibilities for the shocks
   1. They may be propagating into the nebula
@@ -549,11 +604,13 @@ so that
   Rjet_II, Rjet_III = 2.0, 2.0
   Rbow_II, Rbow_III = 2.0, 4.0
 
+  
   # equilibrium shell thicknesses in arcsec
-  H1_II = 0.5 * Rbow_II * csound / Vs1_II
-  H2_II = 0.5 * Rjet_II * csound / Vs2_II
-  H1_III = 0.5 * Rbow_III * csound / Vs1_III
-  H2_III = 0.5 * Rjet_III * csound / Vs2_III
+  H0 = 0.5 * np.sqrt(np.e) # From Eq 4.2 of Falle & Raga 1993MNRAS.261..573F
+  H1_II = H0 * Rbow_II * csound / Vs1_II
+  H2_II = H0 * Rjet_II * csound / Vs2_II
+  H1_III = H0 * Rbow_III * csound / Vs1_III
+  H2_III = H0 * Rjet_III * csound / Vs2_III
 
 
   # Positions along axis in arcsec
