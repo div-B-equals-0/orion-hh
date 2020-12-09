@@ -78,7 +78,7 @@ $^{3}$Instituto de Radioastronom\'ia y Astrof\'isica, Universidad Nacional Aut\'
   \setcounter{figure}{14}\caption{}\label{fig:proper-motions}
 \end{figure}
 
-
+\addtocounter{equation}{19}
 \addtocounter{section}{11}
 \section{Physical aspects of the high velocity components}
 \label{sec:phys-aspects-high}
@@ -135,14 +135,14 @@ reaching a final density compression factor of
 \end{equation}
 
 The adiabatic sound speed in the equilibrium ionized gas is given by
-\(\sound = (\gamma k T / \mu m_{\mathrm{H}})^{1/2}\),
-where \(k\) is the Boltzmann constant, \(T\) is the temperature,
+\(\sound = (\gamma k T_0 / \mu m_{\mathrm{H}})^{1/2}\),
+where \(k\) is the Boltzmann constant, \(T_0\) is the temperature,
 \(m_{\mathrm{H}}\) is the hydrogen mass
 and \(\mu\) is the mean atomic mass per particle.
 Assuming that all He is singly ionized with
 \(y = \mathrm{He/H} = 0.087\) (Table~\ref{tab:total_abundances_rls}) yields
 \(\mu \approx (1 + 4 y) / (2 + 2 y) \approx 0.62\),
-which combined with \(T = \SI{8480}{K}\) (Table~\ref{tab:pc})
+which combined with \(T_0 = \SI{8480}{K}\) (Table~\ref{tab:pc})
 implies an adiabatic sound speed of \(\approx\SI{13.7}{km.s^{-1}}\). 
 
 The case of a magnetized shock is considerably more complicated \citep{Bazer:1959a},
@@ -339,20 +339,143 @@ Although this reconstruction is plausible, it is important to test it
 against independent evidence.
 One such test is to compare with the observed line profiles of the two working surfaces.
 A general prediction of radiating bow shock models is that the
-full width at zero intensity (FWZI) of many emission lines
-should be equal to the shock speed \citep{Hartigan:1987a}
-for any inclination to the line of sight.
-In Figure~\ref{fig:cuts} we see
+thermal-corrected full width at zero intensity (FWZI) of many emission lines
+should be equal to the shock speed \citep{Hartigan:1987a},
+regardless of the inclination to the line of sight.
+In Figure~\ref{fig:cuts} we see that for the position of HH~529~II (cut~2), the blue-shifted component,
+which we ascribe to the working surface,
+is cleanly separated from the more redshifted nebular emission.
+This is particular clear in the [\ion{Fe}{3}] line (panel e), where the thermal broadening is smallest.
+The FWZI is difficult to measure observationally
+in the presence of instrumental and thermal broadening,
+but measuring the width at 10\% of the peak intensity level is a reasonable proxy.
+This yields \(\text{FWZI} \approx \SI{25}{km.s^{-1}}\), for HH~529~II, which is well within the predicted range.
+In the case of HH~529~III (cut~3 in Figure~\ref{fig:cuts}),
+the blue-shifted component is connected to a bridge of intermediate-velocity emission, which extends redward as far as the nebular component (see also Figure~\ref{fig:4959_vel}).
+It is impossible to accurately measure the FWZI in this case,
+due to the overlap with the stronger nebular emission,
+but one can establish a lower limit of \(\text{FWZI} \ge \SI{50}{km.s^{-1}}\),
+which is consistent with the predicted value of \(\SI{70}{km.s^{-1}}\).
 
 
-\citet{Bally:2006a} estimate the mass loss rate of a large sample of photoionized jets in the Orion Nebula, finding that the majority lie in the range \num{e-7} to \SI{e-6}{M_\odot.yr^{-1}}.  
+% \citet{Bally:2006a} estimate the mass loss rate of a large sample of photoionized jets in the Orion Nebula, finding that the majority lie in the range \num{e-7} to \SI{e-6}{M_\odot.yr^{-1}}.  
 
 
 
 \subsection{Shock emission versus shell emission}
 \label{sec:shock-emiss-vers}
 
-Thickness \citep{Falle:1993a}
+In the analysis of the previous section,
+we considered the shocks to be isothermal.
+However, in order to estimate the shock contribution to the
+line emission from the working surface, it is necessary to consider the high-temperature radiative relaxation layer (cooling zone) that lies immediately behind the shock.  
+We first calculate the relative thickness of this layer,
+compared with the total working surface thickness
+and then consider its contribution
+to a typical collisionally excited optical emission line,
+taking the [\ion{O}{3}] nebular lines as the principle example.
+
+The post-shock gas in the working surface will be accelerated
+away from the jet axis by lateral pressure gradients,
+flowing sideways out of the working surface at the isothermal sound speed
+through a ``Mach ring'' \citep{Falle:1993a},
+with radius approximately equal to that of the jet, \(r\jet\).
+In a steady state, the outward mass flux through the Mach ring
+must be equal to the inward mass flux through the shock,
+while the isothermal Bernoulli equation shows that
+the density at the Mach ring is \(e^{-1/2} \rho\ws\).
+This yields the thickness of the working surface as
+\(H = \frac12 e^{1/2} r\jet / \Mach\subs{}\),
+where the isothermal Mach number of the shock is
+\(\Mach_{\text{s}} = \gamma^{1/2} \sound / V\subs1 \) or \( \gamma^{1/2} \sound / V\subs2 \).
+This result applies to a planar shock,
+whereas in the case of a curved bow shock, the refraction of the post-shock flow away from the jet axis yields a slightly different result: \(H = \frac12 R_{\text{c}} / \Mach_{\text{s}}^2\) \citep{Henney:2019a},
+where \(R_{\text{c}}\) is the radius of curvature of the bow shock.
+In our case, \(R_{\text{c}}\) is observed to be a few times larger than \(r\jet\) (for instance, HH~529~III, see Figure~\ref{fig:hst}),
+so the two approaches give very similar answers for Mach numbers in the range 2 to 5, as we are considering here.
+We assume that \(r\jet = \SI{2}{mpc}\),
+which is half the observed lateral extent of the HH~529~II knots,%
+\footnote{At the distance of the Orion Nebula, \(1'' \approx \SI{2}{mpc}\).}
+from which we find that \(H\) varies from \SI{0.87}{mpc} for a \SI{20}{km.s^{-1}} shock down to \SI{0.25}{mpc} for a \SI{70}{km.s^{-1}} shock.
+These thicknesses are shown to scale in Figure~\ref{fig:ws-profiles}
+for our reconstruction of the two working surfaces.
+
+The thickness of the cooling zone, \(d_{\text{cool}}\) is approximately the immediate post-shock velocity, \(V_1 = \rho_0 V\subs{} / \rho_1\) (see equation~\eqref{eq:rho1-rho0}),
+multiplied by the cooling time:
+\(t_{\text{cool}}  = 3 \rho_1 k (T_1 - T_0) / 2 \mu m_{\mathrm{H}} \mathcal{L}_1\),
+where \(T_1\) is the immediate post-shock temperature
+(see equation~\eqref{eq:T1-T0})
+and \(\mathcal{L}_1 \approx \rho_1^2 (\Lambda(T_1) - \Gamma(T_1)) / (\mu_e \mu_i m_{\mathrm{H}}^2)\) is the immediate post-shock net cooling rate, with photoionization heating coefficient \(\Gamma(T_1)\)
+and cooling coefficient \(\Lambda(T_1)\) (units \si{erg.cm^3.s^{-1}}).
+Assuming power-law cooling and heating laws of the form
+\(\Lambda(T) = \Lambda_0 (T/T_0)^a\) and \(\Gamma(T) = \Gamma_0 (T/T_0)^b\),
+then stable thermal equilibrium at \(T = T_0\) requires
+\(a > b\) and \(\Gamma_0 = \Lambda_0\).
+By performing a Taylor expansion about \(\Mach\subs{} = 1\),
+one finds that the linear terms in \((\Mach\subs{} - 1)\) exactly cancel
+when the result is expressed in terms of the properties of the ``final'' post-shock and post-cooling state:
+\begin{equation}
+  \label{eq:dcool}
+  d_{\text{cool}} = \frac{5}{a-b} \frac{\mu_i}{\mu} \frac{\sound k T_0}{n_2 \Lambda_0}
+  + \mathcal{O}\bigl((\Mach\subs{} - 1)^2\bigr), 
+\end{equation}
+where \(n_2 = \rho_2 / \mu_e m_{\text{H}}\) is the electron density
+(see equation~\eqref{eq:rho2-rho0})
+in the gas that has fully cooled back to the photoionization equilibrium state, assuming \(T_2 = T_0\).
+One might expect that truncating this result to the first term 
+would be valid only for \(\Mach\subs{}\) close to unity,
+but, surprisingly, more detailed calculations show that it is
+a good approximation for Mach numbers as high as 5 (shock velocity of \SI{70}{km.s^{-1}}).
+Substituting suitable values for the constants,
+\(a = 2.3\), \(b = -0.5\), \(\Lambda_0 = \SI{2.5e-24}{erg.cm^3.s^{-1}}\)
+\citep{Osterbrock:2006a},
+\(\mu_i/\mu = 2\), then finally yields
+\begin{equation}
+  \label{eq:dcool-final}
+  d_{\text{cool}} \approx \frac{\SI{0.074}{mpc}}
+  {\bigl(  n_2 / \SI{e4}{cm^{-3}}\bigr)} .
+\end{equation}
+For HH~529, we have determined (Table~\ref{tab:pc})
+\(n_2 = \SI{1.19e4}{cm^{-3}}\) (HH~529~II)
+and \(n_2 = \SI{3.02e4}{cm^{-3}}\) (HH~529~III).
+Comparison with the results of the previous paragraph
+imply that \(d_{\text{cool}} / H \approx 0.1\) in both cases,
+so that cooling zone is thin compared with the total thickness of the working surface.
+
+The total radiative flux from the cooling zone
+should be equal to the kinetic energy flux through the shock:
+\begin{equation}
+  \label{eq:Fshock}
+  F_1 = \frac12 \rho_0 V\subs{}^3 \quad \si{erg.cm^{-2}.s^{-1}},
+\end{equation}
+whereas the radiative flux from the cooled equilibrium gas in the working surface is
+\begin{equation}
+  \label{eq:Fshell}
+  F_2 = n_2^2 \Lambda_0 H \quad \si{erg.cm^{-2}.s^{-1}}.
+\end{equation}
+Assuming the same value of \(\Lambda_0\) as above, the ratio of these is then
+\begin{equation}
+  \label{eq:ratio-shock-shell}
+  \frac{F_1}{F_2} = 0.027 \, M\subs{}^2
+  \left( \frac{n_2}{\SI{1e4}{cm^{-3}}} \right)^{-1}
+  \left( \frac{r\jet}{\SI{1e16}{cm}} \right)^{-1} .
+\end{equation}
+Combining the contributions of both the jet shock and bow shock, we find that \(F_1 / F_2 \approx 0.1\) for HH~529~II, whereas \(F_1 / F_2 \approx 0.3\) for HH~529~III.
+
+The larger relative contribution from the post-shock cooling zone
+to the total emission
+in the case of HH~529~III is a consequence of the larger shock velocities:
+\num{50} to \SI{70}{km.s^{-1}}, corresponding to Mach numbers
+from \num{4} to \num{5} and post-shock temperatures as high as \SI{70000}{K}.
+However, such high-temperature gas emits predominantly at
+far-ultraviolet wavelengths, via lines such as \ion{C}{3} \SI{1909}{\angstrom} and \ion{C}{4} \SI{1549}{\angstrom},
+whereas most of the optical lines studied in the current paper are only minor coolants in such conditions.  
+We have calculated time-dependent simulations for different shock velocities using the Cloudy plasma physics code in order to investigate this. 
+
+
+% 1/2 c^2 + c^2 ln \rho = c^2 ln \rho_0 => ln \rho/\rho_0 = -1/2
+
+\textbf{Final part that briefly explains why \oiii{} starts reducing again for Mach numbers higher than 3.5}. 
 
 \bibliography{will-529-shock-refs}
 

@@ -253,6 +253,80 @@
   \left( \frac{R}{\SI{1e16}{cm}} \right)^{-1}
   \left( \frac{\Lambda_0}{\SI{2.3e-24}{erg.cm^3.s^{-1}}} \right)^{-1}
   \]
+
+*** F_1/F_2 values for II and III
++ We have F_1/F_2 = 0.027 M^2 (n_2 / 1e4 pcc)^-1 (R / 1e16 pcc)^-1
++ But we really need to combine the two shocks in the working surface, say A and B
+  + We want (F1A + F1B) / (F2A + F2B)
+  + (F1A / F2A + (F1B / F2B) (F2B / F2A)) / (1 + F2B / F2A)
+  + F2B / F2A = HB/HA
+  + F1/F2 = (F1/F2)_A + (HB/HA) (F1/F2)_B / (1 + HB/HA)
++ Table of the 4 shocks (s1, s2 are A, B)
+  | Shock  |  V |   M | H/rj |   n2 | F1/F2 |
+  |--------+----+-----+------+------+-------|
+  | II s1  | 19 | 1.4 | 0.59 | 1.19 |  0.07 |
+  | II s2  | 28 | 2.0 | 0.41 | 1.19 |  0.15 |
+  | III s1 | 70 | 5.1 | 0.16 | 3.02 |  0.38 |
+  | III s2 | 57 | 4.2 | 0.20 | 3.02 |  0.26 |
+  #+TBLFM: $3=$2/13.7;f1::$4=0.5 sqrt(exp(1)) / $3;f2::$6=0.027 $3**2 / 0.617 $5; f2
++ So,
+  + II:
+    + HB/HA = 0.41/0.59 = 0.695
+    + F1/F2 = (0.07 + 0.695 0.15) / (1 + 0.695) = 0.103
+  + III:
+    + HB/HA = 1.25
+    + F1/F2 = (0.38 + 1.25 0.26) / (1 + 1.25) = 0.313
+
+
+
+*** F_1/F_2 for the [O III] 5007 line
++ From the [[file:~/Dropbox/shock-cloudy/][file:~/Dropbox/shock-cloudy/]] project, we find the following for the fractional contribution of [O III] 5007 to the total emission in the cooling zone: ~f(5007)~ in table below
++ We also calculate the Mach number, and the F_1/F_2 assuming n_2 = 1e4 pcc and R = 3.24 mpc (1e16 cm)
++ Then we multiply them together and divide by 0.33, which is the 5007 fraction for the nebula gas
+  |   V | f(5007) |    M | F_1/F_2 TOT | F_1/F_2 5007 | T_5007 |
+  |-----+---------+------+-----------+------------+-------|
+  |  17 |   0.362 | 1.24 |     0.042 |      0.046 |  9600 |
+  |  19 |   0.371 | 1.39 |     0.052 |      0.058 | 10300 |
+  |  24 |   0.368 | 1.75 |     0.083 |      0.093 | 11400 |
+  |  28 |   0.352 | 2.04 |     0.112 |      0.119 | 12300 |
+  |  34 |   0.310 | 2.48 |     0.166 |      0.156 | 13500 |
+  |  39 |   0.272 | 2.85 |     0.219 |      0.181 | 14400 |
+  |  48 |   0.211 | 3.50 |     0.331 |      0.212 | 15400 |
+  |  61 |   0.143 | 4.45 |     0.535 |      0.232 | 16500 |
+  |  75 |   0.100 | 5.47 |     0.808 |      0.245 | 16700 |
+  | 106 |   0.056 | 7.74 |     1.618 |      0.275 | 16600 |
+  #+TBLFM: $3=$1 / 13.7;f2::$4=0.027 $3**2;f3::$5=$2 $4 / 0.33;f3
++ So the F_1/F_2 fractions need to be multiplied by
+  + II: 1.36
+  + III: 0.54
++ This gives final values
+  | Shock  |  V |   M | H/r_j |   n_2 | F_1/F_2 5007 | T 5007 |
+  |--------+----+-----+------+------+------------+--------|
+  | II s1  | 19 | 1.4 | 0.59 | 1.19 |      0.079 |  10300 |
+  | II s2  | 28 | 2.0 | 0.41 | 1.19 |      0.162 |  12300 |
+  | III s1 | 70 | 5.1 | 0.16 | 3.02 |      0.130 |  16500 |
+  | III s2 | 57 | 4.2 | 0.20 | 3.02 |      0.124 |  16200 |
++ Conclusion is that F_1/F_2 5007 is about 0.1 for both working surfaces
++ Note that T_5007 is the mean T weighted by 5007 emissivity in the cooling zone
+*** Estimating t^2 for the shock plus shell
++ Set \phi = F_1/F_2 (5007)
++ Then mean temperature is T_0 = (T_neb + \phi T_5007) / (1 + \phi)
++ t^2 is [(T_neb - T_0)^2 + \phi (T_5007 - T_0)^2] / T_0^2 (1 + \phi)
+  | Shock  |     \phi | T 5007 | T_neb |    T_0 |          t^2 |
+  |--------+-------+--------+------+-------+-------------|
+  | II s1  | 0.079 |  10300 | 8500 | 8632. |      0.0030 |
+  | II s2  | 0.162 |  12300 | 8500 | 9030. |      0.0212 |
+  | III s1 | 0.130 |  16500 | 8500 | 9420. |      0.0734 |
+  | III s2 | 0.124 |  16200 | 8500 | 9349. |      0.0666 |
+  #+TBLFM: $5=($4 + $2 $3)/(1 + $2);f0::$6=(($4 - $5)**2 + $2 ($3 - $5)**2) / ($5**2 (1 + $2)) ; f4
+
+** Excitation temperatures of lines
+
++ k T = h c / \lambda
++ 5007 \AA : 29168 K
++ 4363 \AA : 62134 K
++ Data from Atomic Line List
+
 ** Line profiles following HRH87
 + HRH use \phi as inclination of axis to line of sight
   + In our paper, we use an angle with the plane of sky: i = 90 - \phi
@@ -692,7 +766,53 @@ so that
 
 #+RESULTS:
 [[file:hh529-ii-iii-ws-profiles.pdf]]
-
+*** Estimating the cooling length
++ P_1 = 2 n_1 k T_1
+  + Better P = \rho c^2 / \gamma
+  + \rho = n \mu m_H
+  + c^2 = \gamma k T / \mu m_H
+  + => P = n \mu m_H \gamma k T / \mu m_H \gamma = n k T
+    + where n = n_e + n_i
+  + Or P = \rho k T / \mu m_H (this is what we use)
++ T_1 = 1/16 (5 M^2 - 1) (1 + 3/M^2) T_0
++ n_1 V_1 = n_0 V_0 = n_0 M c_s
++ n_1 / n_0 = 4 M^2 / (M^2 + 3)
++ Put M = 1 + x
+  + M^2 = 1 + 2 x
+  + M^-2 = 1 - 2 x
+  + 5 M^2 - 1 = 4 + 10 x
+  + 1 + 3 M^-2 = 4 - 6 x
++ T_1/T_0 = 1/16 (4 + 10 x) (4 - 6 x) = 1/16 (16 + 14 x) = (1 + 7/8 x)
+  + So this implies (T_1/T_0) ~ M^{7/8
+  + T_1 - T_0 = 7/8 x T_0
++ n_1 / n_0 = (4 + 8 x) / (4 + 2 x) = (1 + 2 x) (1 - 1/2 x) = 1 + 3/2 x
+  + Implying n_1/n_0 \sim M^{3/2}
++ net \Lambda = \Lambda_0 (T_1/T_0)^a - (T_1/T_0)^b
+  + (T_1/T_0)^a = 1 + 7a/8 x
+  + (T_1/T_0)^b = 1 + 7b/8 x
+  + \Lambda = \Lambda_0 7(a-b)/8 x
+  + From the bow shock paper, we have a = 2.3, b = -0.5
+    + 7(a-b)/8 = 2.45
++ Remember though that we need to normalize to n_2 (not to n_0)
+  + n_2 = \gamma M^2 n_0
+  + n_0 = n_2 / \gamma M^2
++ d = 3 n_1 V_1 k (T_1 - T_0) / n_1^2 \Lambda
+  + 3 M c_0 k M^{7/8} (T_1 - T_0) / M^3 n_0 \Lambda_0 2.45 (M - 1)
+  + 1.22 (5/3) (c_0 k T_0 / n_2 \Lambda_0) M^{} M^2 (7/8) x / M^3 x
+  + 1.78 (c_0 k T_0 / n_2 \Lambda_0)
+  + Where the number is actually 3 (5/3) / (a - b) = 5/(a - b) = 5/2.8
++ Using the \mu's we find that it is
+  + 5/(a - b) (\mu_i / \mu) (c_0 k T_0 / n_2 \Lambda_0)
+  + where n_2 = \rho_2 / \mu_e m_H is the electron density in the equilibrium shell
+  + Values
+    + n_2 = 1e4
+    + 5/(a - b) = 5/2.8
+    + (\mu_i / \mu) = 2
+    + c_0 = 13.7 km/s
+    + T_0 = 8480 K
+    + \Lambda_0 = 2.5e-24
+  + Result:
+    + 2.291e+14 = 0.074 mpc
 ** Magnetic field - Alfven speed versus sound speed
 
 *** Talk about how H II regions are thermally dominated
