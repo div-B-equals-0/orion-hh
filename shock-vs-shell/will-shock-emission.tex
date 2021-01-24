@@ -387,7 +387,7 @@ the density at the Mach ring is \(e^{-1/2} \rho\ws\).
 This yields the thickness of the working surface as
 \(H = \frac12 e^{1/2} r\jet / \Mach\subs{}\),
 where the isothermal Mach number of the shock is
-\(\Mach_{\text{s}} = \gamma^{1/2} \sound / V\subs1 \) or \( \gamma^{1/2} \sound / V\subs2 \).
+\(\Mach_{\text{s}} = \gamma^{1/2} V\subs1 / \sound\) or \( \gamma^{1/2}  V\subs2 / \sound\).
 This result applies to a planar shock,
 whereas in the case of a curved bow shock, the refraction of the post-shock flow away from the jet axis yields a slightly different result: \(H = \frac12 R_{\text{c}} / \Mach_{\text{s}}^2\) \citep{Henney:2019a},
 where \(R_{\text{c}}\) is the radius of curvature of the bow shock.
@@ -462,20 +462,42 @@ Assuming the same value of \(\Lambda_0\) as above, the ratio of these is then
 \end{equation}
 Combining the contributions of both the jet shock and bow shock, we find that \(F_1 / F_2 \approx 0.1\) for HH~529~II, whereas \(F_1 / F_2 \approx 0.3\) for HH~529~III.
 
-The larger relative contribution from the post-shock cooling zone
+The larger relative contribution of the post-shock cooling zone
 to the total emission
 in the case of HH~529~III is a consequence of the larger shock velocities:
 \num{50} to \SI{70}{km.s^{-1}}, corresponding to Mach numbers
 from \num{4} to \num{5} and post-shock temperatures as high as \SI{70000}{K}.
 However, such high-temperature gas emits predominantly at
-far-ultraviolet wavelengths, via lines such as \ion{C}{3} \SI{1909}{\angstrom} and \ion{C}{4} \SI{1549}{\angstrom},
+far-ultraviolet (FUV) wavelengths, via lines such as \ion{C}{3} \SI{1909}{\angstrom} and \ion{C}{4} \SI{1549}{\angstrom},
 whereas most of the optical lines studied in the current paper are only minor coolants in such conditions.  
-We have calculated time-dependent simulations for different shock velocities using the Cloudy plasma physics code in order to investigate this. 
+We have calculated time-dependent photoionized shock models using the Cloudy plasma physics code \citep{Ferland:2013a, Ferland:2017a} in order to investigate this,
+taking the [\ion{O}{3}] \SI{5007}{\angstrom} line as a typical example.
+We find that for gas in photoionization equilibrium with the radiation field from the Trapezium stars, a fraction \(f_{5007} = 0.33\) of the total radiative cooling is due to this line.
+For the cooling zones behind low-velocity shocks,
+this fraction initially increases slightly with shock velocity,
+reaching a maximum value \(f_{5007} = 0.37\) for \(V\subs{} \approx \SI{20}{km.s^{-1}}\), but subsequently declines,
+falling to \(f_{5007} = 0.11\) for \(V\subs{} \approx \SI{70}{km.s^{-1}}\)
+as the FUV lines take over the majority of the cooling.
+The 5007-emission-weighted average temperature of the cooling zone
+saturates at \(T \approx \SI{16000}{K}\)
+for  \(V\subs{} > \SI{50}{km.s^{-1}}\),
+indicating that the conditions in the post-shock [\ion{O}{3}] emission zone become insensitive to the shock velocity.
 
+In conclusion, we predict that in the high-velocity components
+of HH~529~II and III, roughly 10\% of the emission
+in the strongest collisionally excited optical lines should come from post-shock gas at elevated temperatures of \num{10000} to \SI{16000}{K}
+if the shock velocities are in the range \num{20} to \SI{70}{km.s^{-1}}.
+For recombination lines such as H\(\alpha\),
+the emissivity declines with increasing temperature,
+so that the contribution of the post-shock zone to the total emission is negligible.
+On the other hand, for some weak lines we expect a relatively larger shock-excited contribution. 
+For instance, an auroral line such as [\ion{O}{3}] \SI{4363}{\angstrom} has an excitation temperature that is roughly double that of \SI{5007}{\angstrom}, so will be relatively enhanced in the cooling zone.
+Other lines, such as [\ion{Ar}{4}] \SI{4725}{\angstrom}, come from ion stages with a low abundance in photoionized conditions,
+but that can be enhanced by collisional ionization behind a sufficiently fast shock.
+The detailed effects of post-shock cooling on the optical spectrum
+clearly deserves more careful study.
 
 % 1/2 c^2 + c^2 ln \rho = c^2 ln \rho_0 => ln \rho/\rho_0 = -1/2
-
-\textbf{Final part that briefly explains why \oiii{} starts reducing again for Mach numbers higher than 3.5}. 
 
 \bibliography{will-529-shock-refs}
 

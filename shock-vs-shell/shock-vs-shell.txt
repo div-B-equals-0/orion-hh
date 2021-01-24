@@ -1,0 +1,148 @@
+		     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+		      SHOCK VERSUS SHELL EMISSION
+
+			     William Henney
+		     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+Table of Contents
+─────────────────
+
+1. F_1/F_2 values for II and III
+2. F_1/F_2 for the [O III] 5007 line
+3. Estimating t^2 for the shock plus shell
+
+
+⁃ This is what we implement above in the python program
+⁃ Shock emission \[ F_{\text{shock}} = 0.5 \rho_0 u_0^3 \]
+⁃ Shell emission \[ F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2
+  \Lambda_0 h \]
+⁃ Except that we really want it in terms of isothermal Mach number, so
+  ⁃ \(u_0 = M_i c_i\)
+  ⁃ ρ_0 = ρ_2 / M_i^2
+  ⁃ h = 0.8244 R_j / M_i
+⁃ Working
+  ⁃ F_1 = 0.5 n_2 μ m_H M_i^3 c_i^3 / M_i^2 = 0.5 μ m_H n_2 M_i c_i^3
+  ⁃ F_2 = (n_2^2 R_j / M_i) 0.8244 Λ_0
+  ⁃ F_1/F_2 = 0.6065 M_i^2 c_i^3 μ m_h / (n_2 R_j Λ_0)
+  ⁃ Check units:
+    ⁃ Numerator: (cm/s)^3 g = g cm^3 s^-3
+    ⁃ Denominator: cm^-3 cm erg cm^3 s^-1
+      ⁃ erg = g cm^2 s^-2
+      ⁃ => cm g cm^2 s^-2 s^-1 = g cm^3 s^-3
+⁃ Typical values:
+  ⁃ n_2 = 10,000 pcc
+  ⁃ R = 1 mpc = 3.086e+15 cm
+  ⁃ Λ_0 = 2.3e-24 erg cm^3 s^-1
+  ⁃ c_i = 13.7e5 / sqrt(γ) = 10.6e5 cm/s
+  ⁃ μ = 0.62
+    ⁃ *NO* This μ is different from the mean mass per particle
+    ⁃ It should be the mean mass per electron, which is μ_e = (1 + 4
+      y)/(1 + y) = 2μ if He is singly ionized
+    ⁃ For y = 0.087 this gives μ_e = 1.24
+  ⁃ => F_1/F_2 = 0.6065 10.6e5**3 1.24 1.67262158e-24 / 1e4
+    3.085677582e15 2.3e-24
+  ⁃ => F_1/F_2 = 0.0211100567373
+  ⁃ F_1/F_2 = 0.021 M_i^2 (n_2 / 1e4 pcc)^-1 (R / mpc)^-1 (Λ_0 /
+    2.3e-24)^{-1}
+
+⁃ Re-calculation [2020-12-13 Sun]
+  ⁃ Eduardo normalizes with mpc = 3.086e+15 cm, and with pcc instead of
+    1e4 pcc, in which case I get
+    ⁃ F_1/F_2 = 210 M^2 (1 pcc/n_2) (1 mpc / r_j)
+    ⁃ This is still different from Eduardo's value of 97.5
+    ⁃ There is a factor of 2 difference because Eduardo uses μ = 0.62
+      ⁃ This is wrong because the densities are electron densities, so
+        the μ there needs to be μ_e = 1.24 => Eduardo should have 195.
+    ⁃ Remaining factor of 1.077 difference
+      ⁃ Mainly due to different Λ_0: I used 2.3e-24, Eduardo uses
+        2.5e-24
+
+
+1 F_1/F_2 values for II and III
+═══════════════════════════════
+
+  ⁃ We have F_1/F_2 = 0.027 M^2 (n_2 / 1e4 pcc)^-1 (R / 1e16 pcc)^-1
+  ⁃ But we really need to combine the two shocks in the working surface,
+    say A and B
+    ⁃ We want (F1A + F1B) / (F2A + F2B)
+    ⁃ (F1A / F2A + (F1B / F2B) (F2B / F2A)) / (1 + F2B / F2A)
+    ⁃ F2B / F2A = HB/HA
+    ⁃ F1/F2 = (F1/F2)_A + (HB/HA) (F1/F2)_B / (1 + HB/HA)
+  ⁃ Table of the 4 shocks (s1, s2 are A, B)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     Shock    V    M  H/rj    n2  F1/F2 
+    ────────────────────────────────────
+     II s1   19  1.4  0.59  1.19   0.07 
+     II s2   28  2.0  0.41  1.19   0.15 
+     III s1  70  5.1  0.16  3.02   0.38 
+     III s2  57  4.2  0.20  3.02   0.26 
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⁃ So,
+    ⁃ II:
+      ⁃ HB/HA = 0.41/0.59 = 0.695
+      ⁃ F1/F2 = (0.07 + 0.695 0.15) / (1 + 0.695) = 0.103
+    ⁃ III:
+      ⁃ HB/HA = 1.25
+      ⁃ F1/F2 = (0.38 + 1.25 0.26) / (1 + 1.25) = 0.313
+
+
+2 F_1/F_2 for the [O III] 5007 line
+═══════════════════════════════════
+
+  ⁃ From the [file:~/Dropbox/shock-cloudy/] project, we find the
+    following for the fractional contribution of [O III] 5007 to the
+    total emission in the cooling zone: `f(5007)' in table below
+  ⁃ We also calculate the Mach number, and the F_1/F_2 assuming n_2 =
+    1e4 pcc and R = 3.24 mpc (1e16 cm)
+  ⁃ Then we multiply them together and divide by 0.33, which is the 5007
+    fraction for the nebula gas
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       V  f(5007)     M  F_1/F_2 TOT  F_1/F_2 5007  T_5007      T_1 
+    ────────────────────────────────────────────────────────────────
+      17    0.362  1.24        0.042         0.046    9600   10485. 
+      19    0.371  1.39        0.052         0.058   10300   11745. 
+      24    0.368  1.75        0.083         0.093   11400   15052. 
+      28    0.352  2.04        0.112         0.119   12300   18109. 
+      34    0.310  2.48        0.166         0.156   13500   23515. 
+      39    0.272  2.85        0.219         0.181   14400   28817. 
+      48    0.211  3.50        0.331         0.212   15400   39846. 
+      61    0.143  4.45        0.535         0.232   16500   59957. 
+      75    0.100  5.47        0.808         0.245   16700   86862. 
+     106    0.056  7.74        1.618         0.275   16600  166540. 
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⁃ So the F_1/F_2 fractions need to be multiplied by
+    ⁃ II: 1.36
+    ⁃ III: 0.54
+  ⁃ This gives final values
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     Shock    V    M  H/r_j   n_2  F_1/F_2 5007  T 5007 
+    ────────────────────────────────────────────────────
+     II s1   19  1.4   0.59  1.19         0.079   10300 
+     II s2   28  2.0   0.41  1.19         0.162   12300 
+     III s1  70  5.1   0.16  3.02         0.130   16500 
+     III s2  57  4.2   0.20  3.02         0.124   16200 
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⁃ Conclusion is that F_1/F_2 5007 is about 0.1 for both working
+    surfaces
+  ⁃ Note that T_5007 is the mean T weighted by 5007 emissivity in the
+    cooling zone
+
+
+[file:~/Dropbox/shock-cloudy/] <file:~/Dropbox/shock-cloudy/>
+
+
+3 Estimating t^2 for the shock plus shell
+═════════════════════════════════════════
+
+  ⁃ Set ɸ = F_1/F_2 (5007)
+  ⁃ Then mean temperature is T_0 = (T_neb + ɸ T_5007) / (1 + ɸ)
+  ⁃ t^2 is [(T_neb - T_0)^2 + ɸ (T_5007 - T_0)^2] / T_0^2 (1 + ɸ)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     Shock       ɸ  T 5007  T_neb    T_0     t^2 
+    ─────────────────────────────────────────────
+     II s1   0.079   10300   8500  8632.  0.0030 
+     II s2   0.162   12300   8500  9030.  0.0212 
+     III s1  0.130   16500   8500  9420.  0.0734 
+     III s2  0.124   16200   8500  9349.  0.0666 
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

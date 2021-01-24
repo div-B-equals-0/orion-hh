@@ -1,5 +1,28 @@
 * HH 529-II,III reply to referee
 
+
+** Eduardo queries [2020-12-11 Fri]
+Perdón por la lata, pero tengo otras dudas. Sobre todo en lo referente a H. Es posible que yo esté confundido en algunas cosas, pero me gustaría que me quedara claro todo antes de enviar la respuesta al referee, ya he hecho todos los cambios, solo falta esta incluir los últimos dos párrafos.
+
+He hecho los números y esto es lo que yo obtengo:
+#+attr_html: :width 600
+[[file:eduardo-email-equations-2020-12-11.png]]
+
+Para HH529III, usando n_2=30200, M_s=5.31 y r_jet=2mpc, obtengo F1/F2=0.045
+
+Por otro lado, los valores de H de 0.25 mpc para HH529III ¿lo obtuviste suponiendo un bowshock curvo? Porque si utilizo la ec. 29 de la imagen que te mando con H=0.25, el resultado es F1/F2=0.005
+
+Finalmente, los valores de la anchura de la superficie de trabajo, H, ¿no son, en realidad, límites inferiores de lo que debería usarse para considerar los valores representativos de nuestras observaciones? 
+
+Viendo el caso de HH529III como ejemplo. En nuestro corte 3, la componente de alta velocidad está limitada en 2.46 arcsecs (4.92 mpc), que abarca la zona de enfriamiento de los knots así como las capas comprimidas en equilibrio y por el ángulo de flujo de 58º con el plano del cielo también parte del flujo del jet fotoionizado. El seeing de las observaciones son de aproximadamente 0.7arcsecs por lo que no hay mucho error posible en la cobertura espacial real del corte. Este valor de 4.92 es casi el doble de los 0.25 estimados de H.
+
+Por lo cual, ante la pregunta de  cuanto es la contribución del choque en las observaciones, deberíamos considerar que en nuestras observaciones estamos abarcando zonas del jet fotoionizado que no tiene contribución por choque y posiblemente knots internos con números de Mach mucho menores a 5.31. 
+
+Espero no darte mucha lata,
+
+
+
+
 ** Re-derive the shock jump conditions
 + I am having doubts about whether to use the adiabatic or isothermal sound speed.
 + The shock adiabat is given by
@@ -71,11 +94,18 @@
 
 
 *** Working out the thickness of the equilibrium shocked layer
+:PROPERTIES:
+:ID:       26FA772C-C816-433B-B2FC-B2BED7890433
+:END:
 + Assume a steady state, where gas flows out sideways at a fraction \eta of the isothermal sound speed
   + Mdot in = \pi r^2 n_0 m M_0 c_s
   + Mdot out = 2 \pi r h n_2 m \eta c_s / \gamma^{1/2}
   + h/r = (1/2) n_0 M_0 \gamma^{1/2} / n_2 \eta = 1 / 2 M_0 \gamma^{1/2} \eta
   + This is given above
++ Version from Eq 4.2 of Falle & Raga 1993MNRAS.261..573F
+  + h/r = 0.5 exp(0.5) / M_i
+  + M_i is isothermal Mach number (\gamma^{1/2} M_a)
+  + So this has \eta = exp(-0.5) = 0.6065, when compared with the other
 + Version with no cooling, H
   + If there is no cooling, then we need to use n_1 for the density, but the speed will be higher by a factor of sqrt(T_1/T_0)
   + Mdot out = 2 \pi r h n_1 m \eta c_s sqrt(T_1/T_0)
@@ -214,22 +244,22 @@
      - 
 ** Shock versus shell emission
 + This is what we implement above in the python program
-+ Shock emission
-  \[
-  F_{\text{shock}} = 0.5 \rho_0 u_0^3
-  \]
-+ Shell emission
-  \[
-  F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2 \Lambda_0 h
-  \]
-+ With
-  + \(h = 0.387 R / \eta M\)
-  + (\rho_0 = \rho_2 / \gamma M^2)
-  + \(u_0 = M c_s\)
++ Shock emission F_{shock}= 0.5 \rho_0 u_0^3
+  # \[
+  # F_{\text{shock}} = 0.5 \rho_0 u_0^3
+  # \]
++ Shell emission F_{shell} = (\rho_2 / \mu m_H)^2 \Lambda_0 h 
+  # \[
+  # F_{\text{shell}} = (\rho_2 / \mu m_{\text{H}} )^2 \Lambda_0 h
+  # \]
++ Except that we really want it in terms of isothermal Mach number, so
+  + u_0 = M_i c_i
+  + \rho_0 = \rho_2 / M_i^2
+  + h = 0.8244 R_j / M_i
 + Working
-  + F_1 = 0.5 \rho_2 M^3 c_s^3 / \gamma M^2 = 0.3 \rho_2 M c_s^3
-  + F_2 = (\rho_2^2 R / M) 0.387 \Lambda_0 / \eta (\mu m_H)^2
-  + F_1/F_2 = 0.775 M^2 c_s^3 \eta \mu m_h /(n_2 R \Lambda_0)
+  + F_1 = 0.5 n_2 \mu m_H M_i^3 c_i^3 / M_i^2 = 0.5 \mu m_H n_2 M_i c_i^3
+  + F_2 = (n_2^2 R_j / M_i) 0.8244 \Lambda_0
+  + F_1/F_2 = 0.6065 M_i^2 c_i^3 \mu m_h / (n_2 R_j \Lambda_0)
   + Check units:
     + Numerator: (cm/s)^3 g = g cm^3 s^-3
     + Denominator: cm^-3 cm erg cm^3 s^-1
@@ -237,45 +267,56 @@
       + => cm g cm^2 s^-2 s^-1 = g cm^3 s^-3
 + Typical values:
   + n_2 = 10,000 pcc
-  + R = 1 arcsec = 6e15 cm, but take 1e16 instead
-  + \Lambda_0 = 2.3e-24
-  + c_s = 13.7e5 cm/s
+  + R = 1 mpc = 3.086e+15 cm
+  + \Lambda_0 = 2.3e-24 erg cm^3 s^-1
+  + c_i = 13.7e5 / sqrt(\gamma)  = 10.6e5 cm/s
   + \mu = 0.62
     + *NO* This \mu is different from the mean mass per particle
     + It should be the mean mass per electron, which is \mu_e = (1 + 4 y)/(1 + y) = 2\mu if He is singly ionized
     + For y = 0.087 this gives \mu_e = 1.24
-  + F_1/F_2 = 0.018 M^2 \eta (n_2 / 1e4 pcc)^-1 (R / 1e16 pcc)^-1 (\Lambda_0 / 2.3e-24)^{-1}
-+ So the ratio is
-  \[
-  \frac{F_{\text{shock}}}{F_{\text{shell}}}
-  = 0.018 M^2
-  \left( \frac{n_2}{\SI{1e4}{cm^{-3}}} \right)^{-1}
-  \left( \frac{R}{\SI{1e16}{cm}} \right)^{-1}
-  \left( \frac{\Lambda_0}{\SI{2.3e-24}{erg.cm^3.s^{-1}}} \right)^{-1}
-  \]
+  + => F_1/F_2 = 0.6065 10.6e5**3 1.24 1.67262158e-24 / 1e4 3.085677582e15 2.3e-24
+  + => F_1/F_2 = 0.0211100567373
+  + F_1/F_2 = 0.021 M_i^2 (n_2 / 1e4 pcc)^-1 (R / mpc)^-1 (\Lambda_0 / 2.3e-24)^{-1}
+# + So the ratio is
+#   \[
+#   \frac{F_{\text{shock}}}{F_{\text{shell}}}
+#   = 0.021 M^2
+#   \left( \frac{n_2}{\SI{1e4}{cm^{-3}}} \right)^{-1}
+#   \left( \frac{R}{\SI{1}{mpc}} \right)^{-1}
+#   \left( \frac{\Lambda_0}{\SI{2.3e-24}{erg.cm^3.s^{-1}}} \right)^{-1}
+#   \]
++ Re-calculation [2020-12-13 Sun]
+  + Eduardo normalizes with mpc = 3.086e+15 cm, and with pcc instead of 1e4 pcc, in which case I get
+    + F_1/F_2 = 210 M^2 (1 pcc/n_2) (1 mpc / r_j)
+    + This is still different from Eduardo's value of 97.5
+    + There is a factor of 2 difference because Eduardo uses \mu = 0.62
+      + This is wrong because the densities are electron densities, so the \mu there needs to be \mu_e = 1.24 => Eduardo should have 195.
+    + Remaining factor of 1.077 difference
+      + Mainly due to different \Lambda_0: I used 2.3e-24, Eduardo uses 2.5e-24
++ So, results for particular shocks are done again below
 
 *** F_1/F_2 values for II and III
-+ We have F_1/F_2 = 0.027 M^2 (n_2 / 1e4 pcc)^-1 (R / 1e16 pcc)^-1
++ We have F_1/F_2 = 0.021 M^2 (n_2 / 1e4 pcc)^-1 (R / mpc)^-1
 + But we really need to combine the two shocks in the working surface, say A and B
   + We want (F1A + F1B) / (F2A + F2B)
   + (F1A / F2A + (F1B / F2B) (F2B / F2A)) / (1 + F2B / F2A)
   + F2B / F2A = HB/HA
   + F1/F2 = (F1/F2)_A + (HB/HA) (F1/F2)_B / (1 + HB/HA)
 + Table of the 4 shocks (s1, s2 are A, B)
-  | Shock  |  V |   M | H/rj |   n2 | F1/F2 |
-  |--------+----+-----+------+------+-------|
-  | II s1  | 19 | 1.4 | 0.59 | 1.19 |  0.07 |
-  | II s2  | 28 | 2.0 | 0.41 | 1.19 |  0.15 |
-  | III s1 | 70 | 5.1 | 0.16 | 3.02 |  0.38 |
-  | III s2 | 57 | 4.2 | 0.20 | 3.02 |  0.26 |
-  #+TBLFM: $3=$2/13.7;f1::$4=0.5 sqrt(exp(1)) / $3;f2::$6=0.027 $3**2 / 0.617 $5; f2
+  | Shock  |  V |   M | H/rj |   n2 | rj | F1/F2 |
+  |--------+----+-----+------+------+----+-------|
+  | II s1  | 19 | 1.8 | 0.46 | 1.19 |  2 | 0.029 |
+  | II s2  | 28 | 2.6 | 0.32 | 1.19 |  2 | 0.060 |
+  | III s1 | 70 | 6.6 | 0.12 | 3.02 |  2 | 0.151 |
+  | III s2 | 57 | 5.4 | 0.15 | 3.02 |  2 | 0.101 |
+  #+TBLFM: $3=sqrt(5/3) $2/13.7;f1::$4=0.5 sqrt(exp(1)) / $3;f2::$7=210.0e-4 $3**2 / $6 $5; f3
 + So,
   + II:
     + HB/HA = 0.41/0.59 = 0.695
-    + F1/F2 = (0.07 + 0.695 0.15) / (1 + 0.695) = 0.103
+    + F1/F2 = (0.029 + 0.695 0.060) / (1 + 0.695) = 0.041
   + III:
     + HB/HA = 1.25
-    + F1/F2 = (0.38 + 1.25 0.26) / (1 + 1.25) = 0.313
+    + F1/F2 = (0.151 + 1.25 0.101) / (1 + 1.25) = 0.123
 
 
 
@@ -312,12 +353,12 @@
 + Set \phi = F_1/F_2 (5007)
 + Then mean temperature is T_0 = (T_neb + \phi T_5007) / (1 + \phi)
 + t^2 is [(T_neb - T_0)^2 + \phi (T_5007 - T_0)^2] / T_0^2 (1 + \phi)
-  | Shock  |     \phi | T 5007 | T_neb |    T_0 |          t^2 |
-  |--------+-------+--------+------+-------+-------------|
-  | II s1  | 0.079 |  10300 | 8500 | 8632. |      0.0030 |
-  | II s2  | 0.162 |  12300 | 8500 | 9030. |      0.0212 |
-  | III s1 | 0.130 |  16500 | 8500 | 9420. |      0.0734 |
-  | III s2 | 0.124 |  16200 | 8500 | 9349. |      0.0666 |
+  | Shock  |     \phi | T 5007 | T_neb |    T_0 |     t^2 |
+  |--------+-------+--------+------+-------+--------|
+  | II s1  | 0.079 |  10300 | 8500 | 8632. | 0.0030 |
+  | II s2  | 0.162 |  12300 | 8500 | 9030. | 0.0212 |
+  | III s1 | 0.130 |  16500 | 8500 | 9420. | 0.0734 |
+  | III s2 | 0.124 |  16200 | 8500 | 9349. | 0.0666 |
   #+TBLFM: $5=($4 + $2 $3)/(1 + $2);f0::$6=(($4 - $5)**2 + $2 ($3 - $5)**2) / ($5**2 (1 + $2)) ; f4
 
 ** Excitation temperatures of lines
