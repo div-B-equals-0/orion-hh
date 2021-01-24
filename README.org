@@ -119,6 +119,9 @@ This is from Garcia-Diaz:2007a
 + But why is the [O III] emission not limb-brightened?
 
 
+**** Return to this issue for the HH 204 paper
++ The [O III] is not limb-brightened, possibly because the emissivity in the cooling zone is not significantly higher than in the shell.  Or possibly it is, but over such a small distance that it isn't even resolved with HST
+
 ** Results from Adal's previous UVES observations of HH202-S
 
 *** Dust destruction
@@ -1658,7 +1661,7 @@ This is now in a separate file because it was too big:
 
 #+name: rgb-lupton-hh529
 #+header: :var TAB=rgb-channels-1996 DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996" HDU=0
-#+header: :var STRETCH=0.9 Q=2.5 WINDOW=window-1996
+#+header: :var STRETCH=0.9 Q=2.5 WINDOW=window-1996 HH="529-iii"
 #+begin_src python :results file :return figfile :tangle rgb-lupton-hh529.py
   from pathlib import Path
   import matplotlib.pyplot as plt
@@ -1686,11 +1689,11 @@ This is now in a separate file because it was too big:
   [x0, y0, dx, dy], = WINDOW
 
 
-  figfile = f"rgb-lupton-hh529-{SUFFIX}.jpg"
+  figfile = f"rgb-lupton-hh{HH}-{SUFFIX}.jpg"
   fig, ax = plt.subplots(figsize=(6.2, 5), subplot_kw=dict(projection=w))
   ax.imshow(image)
 
-  regions = rg.read_ds9("hh529-iii-slit.reg")
+  regions = rg.read_ds9(f"hh{HH}-slit.reg")
   for skyregion in regions:
       pixelregion = skyregion.to_pixel(w)
       pixelregion.plot(ax=ax, color="w", lw=0.7, ls="--")
@@ -1734,6 +1737,81 @@ This is now in a separate file because it was too big:
 
 #+RESULTS:
 [[file:rgb-lupton-hh529-1996b.jpg]]
+
+
+
+
+** Repeat for HH 204 - Fig 1 of Paper II
+
+
++ Coordinates of slit
+  + RA(J2000)=05h35𝑚22𝑠.72,
+  + DEC(J2000)=−05 25 20.42
++ Coordinates of zero-point of section 5
+  + RA(J2000)=05 35 22.63, DEC(J2000)=−05 25 21.86
+  + *Correction* 05 35 22.82 −05 25 21.76
+  + *Second correction* from Eduardo [2021-01-12 Tue]
+    + RA:  05 35 22.81, DEC:−05 25 21.86
+    + 8 pixels SE of the slit center
+    + 0.246 arcsec/pixel => 2 arcsec from slit center, so 3 arcsec from slit end.
++ Original observing proposal
+  + 05 35 22.74
+  + -05 25 19.47
+
+
+
+#+name: rgb-channels-hh204
+| final502-radec |  30 |  250 |
+| final658-radec | 100 | 2000 |
+| final656-radec | 200 | 2000 |
+
+#+name: window-hh204
+| 400 | 630 | 800 | 630 |
+
+#+call: rgb-lupton-hh529(TAB=rgb-channels-hh204, WINDOW=window-hh204, HH="204", SUFFIX="1996", Q=1.2, STRETCH=0.9)
+
+#+RESULTS:
+[[file:rgb-lupton-hh204-1996.jpg]]
+
+
+*** Aligning the epochs for HH 204
++ 2005 from Robberto is the reference frame
++ 2015-01 Bally is aligned more or less by ~trap-south-align-robberto.wcs~
+  + Still seems off by a fraction of a pixel, but not important
++ For the 1993 mosaic, we need to make quite a big correction
++ Use the unsaturated star in between HH 203 and 204
+  + 5:35:22.4015 -5:25:09.449
+  + 83.8433551 -5.4192964
+  + Pixels in 1993 mosaics: 388.39887 567.14165
++ This alignment is saved in [[file:mosaic-1996-HH204-align-robberto.wcs]]
+
+
+*** Re-do the rgb image for HH 204
++ Rather than re-use the HH 529 program, I should just write another one
++ I can use the WCS adjustments described above
+  + It looks like the ~.wcs~ file can be interpreted as TOML
+  + Except that TOML has decided that "0." is not a valid float, so we need to fix that
+    #+begin_src python :return data :results verbatim
+      import toml
+      with open("mosaic-1996-HH204-align-robberto.wcs") as stream:
+          data = toml.loads(stream.read().replace("0.\n", "0.0\n"))
+    #+end_src
+
+    #+RESULTS:
+    : {'DATE-OBS': '21/03/95', 'EQUINOX': 2000, 'CTYPE1': 'RA---TAN', 'CRPIX1': 388.39887, 'CRVAL1': 83.8433551, 'CDELT1': 0.0, 'CTYPE2': 'DEC--TAN', 'CRPIX2': 567.14165, 'CRVAL2': -5.4192964, 'CDELT2': 0.0, 'CD1_1': -2.76664e-05, 'CD1_2': 3.804223e-08, 'CD2_1': 4.913188e-09, 'CD2_2': 2.764793e-05}
+
+
+*** GIFs of HH 204 1993, 2005, 2015
+
+#+begin_src sh :dir hh204 :results silent
+ORDER="hh204-rgb-1993.png hh204-rgb-2005.png hh204-rgb-2015.png"
+convert $(for a in "$ORDER"; do printf -- "-delay 100 %s " $a; done; ) HH204-motions.gif
+#+end_src
+
+#+BEGIN_SRC sh :results silent
+open -a Safari hh204/HH204-motions.gif 
+#+END_SRC 
+
 
 
 * Compare with MUSE spectral maps
