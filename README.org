@@ -1791,15 +1791,175 @@ This is now in a separate file because it was too big:
 + I can use the WCS adjustments described above
   + It looks like the ~.wcs~ file can be interpreted as TOML
   + Except that TOML has decided that "0." is not a valid float, so we need to fix that
-    #+begin_src python :return data :results verbatim
+    #+begin_src python :eval no :tangle read_wcs.py
       import toml
-      with open("mosaic-1996-HH204-align-robberto.wcs") as stream:
-          data = toml.loads(stream.read().replace("0.\n", "0.0\n"))
+
+      def read_wcs(wcsfile: str) -> dict: 
+          "Read WCS (key,value) pairs from DS9's *.wcs files"
+          with open(wcsfile) as stream:
+              return toml.loads(_fixups(stream.read()))
+
+
+      def _fixups(s: str) -> str:
+          s = s.replace("0.\n", "0.0\n")
+          return s
+
+
+      if __name__ == "__main__":
+          data = read_wcs("mosaic-1996-HH204-align-robberto.wcs")
+          print(data)
+
+
+    #+end_src
+    Test out the parser:
+    #+begin_src sh :results verbatim
+      python read_wcs.py
     #+end_src
 
     #+RESULTS:
     : {'DATE-OBS': '21/03/95', 'EQUINOX': 2000, 'CTYPE1': 'RA---TAN', 'CRPIX1': 388.39887, 'CRVAL1': 83.8433551, 'CDELT1': 0.0, 'CTYPE2': 'DEC--TAN', 'CRPIX2': 567.14165, 'CRVAL2': -5.4192964, 'CDELT2': 0.0, 'CD1_1': -2.76664e-05, 'CD1_2': 3.804223e-08, 'CD2_1': 4.913188e-09, 'CD2_2': 2.764793e-05}
 
+
++ Here is the new program.  It is almost identical to the previous one, except for applying the WCS correction.
++ We also have changed the slit length to be
+  + 38 pixels times 0.246 arcsec = 9.348 arcsec
++ And cut off the LHS with 244-440 since it is not on the large-scale image
+
+#+name: window-hh204-narrow
+| 570 | 630 | 630 | 630 |
+
+#+name: rgb-lupton-hh204
+#+header: :var TAB=rgb-channels-hh204 DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996-contours" HDU=0
+#+header: :var STRETCH=0.9 Q=1.2 WINDOW=window-hh204-narrow HH="204"
+#+begin_src python :results file :return figfile :tangle rgb-lupton-hh204.py
+  from pathlib import Path
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from astropy.visualization import make_lupton_rgb
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  import regions as rg
+  from read_wcs import read_wcs
+  import seaborn as sns
+
+
+  datadir = Path(DIR)
+  # Unpack the channel info from the table
+  [rf, r1, r2], [gf, g1, g2], [bf, b1, b2] = TAB
+
+  def load_and_scale_image(fn, v1, v2, ihdu=HDU):
+      data = fits.open(datadir / f"{fn}.fits")[ihdu].data
+      return (data - v1) / (v2 - v1)
+
+  hdr = fits.open(datadir / f"{rf}.fits")[HDU].header
+  hdr.update(**read_wcs("mosaic-1996-HH204-align-robberto.wcs"))
+  w = WCS(hdr)
+
+
+  image_r = load_and_scale_image(rf, r1, r2)
+  image_g = load_and_scale_image(gf, g1, g2)
+  image_b = load_and_scale_image(bf, b1, b2)
+  image = make_lupton_rgb(image_r, image_g, image_b, stretch=STRETCH, Q=Q)
+
+  [x0, y0, dx, dy], = WINDOW
+
+
+  figfile = f"rgb-lupton-hh{HH}-{SUFFIX}.jpg"
+  fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(projection=w))
+  sns.set_color_codes("bright")
+  ax.imshow(image)
+
+
+  # Add contours of the high-velocity h alpha
+  kpnodir = Path("../../Work/BobKPNO/2004")
+
+  oiii_hdu = fits.open(kpnodir / "vcube.oiii.fits")[0]
+  oiii_hdr = oiii_hdu.header
+  oiii_hdr.update(**read_wcs(kpnodir / "../DOH-radec-vel-oiii.wcs"))
+
+  nii_hdu = fits.open(kpnodir / "vcube.nii.fits")[0]
+  nii_hdr = nii_hdu.header
+  nii_hdr.update(**read_wcs(kpnodir / "../DOH-radec-vel-oiii.wcs"))
+
+  wkpno = WCS(oiii_hdr).celestial
+
+  # centered on fits channel 13 of oiii
+  vmap_blue = 4*np.mean(oiii_hdu.data[12:13, :, :], axis=0)
+  # centered on fits channel 17 of nii
+  vmap_red = 3*np.mean(nii_hdu.data[16:17, :, :], axis=0)
+
+  ax.contour(vmap_blue,
+             transform=ax.get_transform(wkpno),
+             levels=[40, 160],
+             colors="c",
+             linewidths=[1.0, 2.0],
+             )
+  ax.contour(vmap_red,
+             transform=ax.get_transform(wkpno),
+             levels=[250, 1000],
+             # cmap="BuPu",
+             colors="y",
+             linewidths=[1.0, 2.0],
+             )
+
+
+  regions = rg.read_ds9(f"hh{HH}-slit.reg")
+  for skyregion in regions:
+      pixelregion = skyregion.to_pixel(w)
+      pixelregion.plot(ax=ax, color="w", lw=0.7, ls="--")
+
+
+  ax.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+      xlim=[x0-dx/2, x0+dx/2],
+      ylim=[y0-dy/2, y0+dy/2],
+  )
+  fig.tight_layout(rect=[0.18, 0.05, 1.0, 1.0])
+  fig.savefig(figfile, dpi=300)
+#+end_src
+
+#+RESULTS: rgb-lupton-hh204
+[[file:rgb-lupton-hh204-1996-contours.jpg]]
+
+
+*** Now make the large-scale map that shows the high-velocity flow
+
+Doing it in Affinity Designer
+
+**** Comments on the axes
++ I suspect that HH204 jet is the PA=153 jet that looks like a sheath on the HH203 jet
++ The HH203 jet is at PA=117 although could be slightly higher
+  + This PA is from putting a line through the knot peaks
+  + But really, the only good PA will come from proper motions
+  + And proper motions of jet knots at that
+
+**** Add contours of the jets
++ I use the vcube.oiii.fits and vcube.nii.fits and vcube.ha.fits
+  + Last one is best s/n
++ Contours of Ha
+  + cyan: channel 16, 17, 18 = -38 +/- 6 km/s
+  + blue: channel 9, 10, 11 = -66 +/- 6 km/s
++ Note that velocities are wrt Ha line center, which is about 18 km/s heliocentric
+
+
+***** New strategy
++ Use [O III] at -54 km/s for the PA120 jet
+  + Slightly to the blue of peak for better isolation
++ Use [N II] at -38 for the PA150 jet
+  + Slightly to the red of peak for better isolation
+
+**** Measurements of Radial velocities of different features
+|               | [N II] |  Ha | [O III] | BEST | V_hel | V_ONC |
+|---------------+--------+-----+---------+------+-------+-------|
+| PA150 jet     |    -42 | -40 |     -40 |  -40 |   -22 |   -47 |
+| PA120 jet LO  |    -52 | -50 |     -46 |  -50 |   -32 |   -57 |
+| PA120 jet HI  |    -52 | -48 |     -48 |  -48 |   -30 |   -55 |
+| HH 203 head   |    -50 | -48 |     -46 |  -48 |   -30 |   -55 |
+| Splash        |    -48 | -44 |     -45 |  -44 |   -26 |   -51 |
+| HH 204 head   |    -23 | -18 |     -20 |  -20 |    -2 |   -27 |
+| HH 204 pre    |    -20 |   - |     -18 |  -18 |     0 |   -25 |
+#+TBLFM: $6=18 + $-1::$7=$-1 - 25
 
 *** GIFs of HH 204 1993, 2005, 2015
 

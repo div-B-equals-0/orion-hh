@@ -1,0 +1,8 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+# segment(5:35:22.1667,-5:25:01.358,5:35:20.4837,-5:24:46.538,5:35:19.8149,-5:24:43.639,5:35:19.0813,-5:24:32.362,5:35:18.6714,-5:24:24.952) color=blue width=3 text={nii 10-16} dash=1
+# segment(5:35:22.2782,-5:25:14.515,5:35:20.9404,-5:24:44.551) color=#68f width=2 text={nii 11-19} dash=1
+circle(5:35:19.2895,-5:24:56.692,2.562")
+# segment(5:35:18.1288,-5:24:21.214,5:35:16.6185,-5:24:05.910,5:35:16.2409,-5:24:02.151)
+ellipse(5:35:19.9987,-5:24:33.027,3.222",2.148",0.0024662196) # color=cyan text={nii KNOT 19-23}
