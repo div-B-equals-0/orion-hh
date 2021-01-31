@@ -1,0 +1,11 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+box(5:35:22.7800,-5:25:21.320,0.200",0.200",47.000001) # text={zero plus seeing}
+box(5:35:22.7155,-5:25:20.424,10.000",1.000",47.000001)
+# text(5:35:22.7392,-5:25:24.498) textangle=6.046086e-07 color=white font="courier 20 bold roman" text={2015}
+# projection(5:35:22.0737,-5:23:52.656,5:35:21.5225,-5:23:55.270,0.178")
+# projection(5:35:21.8541,-5:23:56.944,5:35:21.7298,-5:23:50.158,0.190")
+# ruler(5:35:22.9443,-5:25:24.060,5:35:22.7845,-5:25:21.504) ruler=fk5 arcsec
+box(5:35:22.8100,-5:25:21.860,0.200",0.200",47.000001) # text={Zero-point}
+circle(5:35:20.1025,-5:24:32.000,0.200")

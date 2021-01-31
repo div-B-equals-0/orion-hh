@@ -1826,7 +1826,7 @@ This is now in a separate file because it was too big:
 + And cut off the LHS with 244-440 since it is not on the large-scale image
 
 #+name: window-hh204-narrow
-| 570 | 630 | 630 | 630 |
+| 570 | 680 | 693  | 693 |
 
 #+name: rgb-lupton-hh204
 #+header: :var TAB=rgb-channels-hh204 DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996-contours" HDU=0
@@ -1884,9 +1884,20 @@ This is now in a separate file because it was too big:
   wkpno = WCS(oiii_hdr).celestial
 
   # centered on fits channel 13 of oiii
-  vmap_blue = 4*np.mean(oiii_hdu.data[12:13, :, :], axis=0)
+  vmap_blue = np.mean(oiii_hdu.data[12:13, :, :], axis=0)
   # centered on fits channel 17 of nii
-  vmap_red = 3*np.mean(nii_hdu.data[16:17, :, :], axis=0)
+  vmap_red = np.mean(nii_hdu.data[16:17, :, :], axis=0)
+
+  # subtract continuum
+  vmap_blue -= np.mean(oiii_hdu.data[0:5, :, :], axis=0)
+  vmap_red -= np.mean(nii_hdu.data[0:5, :, :], axis=0)
+  mstar = np.mean(oiii_hdu.data[0:5, :, :], axis=0) > 5.0
+  vmap_blue[mstar] = 0.0
+  vmap_red[mstar] = 0.0
+
+  # scaling to match contour levels
+  vmap_blue *= 3
+  vmap_red *= 2
 
   ax.contour(vmap_blue,
              transform=ax.get_transform(wkpno),
@@ -1901,6 +1912,22 @@ This is now in a separate file because it was too big:
              colors="y",
              linewidths=[1.0, 2.0],
              )
+
+  # centered on fits channel 17 of nii
+  vmap_knot = np.mean(nii_hdu.data[20:23, :, :], axis=0)
+  vmap_knot -= np.mean(nii_hdu.data[0:5, :, :], axis=0)
+  m = oiii_hdu.data[32, :, :] < 500.0
+  vmap_knot[m] = 0.0
+  vmap_knot[mstar] = 0.0
+  vmap_knot *= 0.9
+  ax.contour(vmap_knot,
+             transform=ax.get_transform(wkpno),
+             levels=[130, 160],
+             # cmap="BuPu",
+             colors="w",
+             linewidths=[1.0, 2.0],
+             )
+
 
 
   regions = rg.read_ds9(f"hh{HH}-slit.reg")
@@ -1922,6 +1949,73 @@ This is now in a separate file because it was too big:
 #+RESULTS: rgb-lupton-hh204
 [[file:rgb-lupton-hh204-1996-contours.jpg]]
 
+
+*** Make RGB channel maps of nii and ha
+
+
+#+name: rgb-lupton-channel-maps
+#+header: :var STRETCH=0.5 Q=1.2
+#+begin_src python :results file :return figfile :tangle rgb-lupton-channel-maps.py
+  from pathlib import Path
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from astropy.visualization import make_lupton_rgb
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  import regions as rg
+  from read_wcs import read_wcs
+  import seaborn as sns
+
+  kpnodir = Path("../../Work/BobKPNO/2004")
+
+  oiii_hdu = fits.open(kpnodir / "vcube.oiii.fits")[0]
+  oiii_hdr = oiii_hdu.header
+  oiii_hdr.update(**read_wcs(kpnodir / "../DOH-radec-vel-oiii.wcs"))
+
+  nii_hdu = fits.open(kpnodir / "vcube.nii.fits")[0]
+  nii_hdr = nii_hdu.header
+  nii_hdr.update(**read_wcs(kpnodir / "../DOH-radec-vel-oiii.wcs"))
+
+  wkpno = WCS(oiii_hdr).celestial
+
+  image_r = np.mean(oiii_hdu.data[22:25, :, :], axis=0)
+  image_r /= 200.0
+  image_g = np.mean(oiii_hdu.data[17:23, :, :], axis=0)
+  image_g /= 100.0
+  image_b = np.mean(oiii_hdu.data[11:18, :, :], axis=0)
+  image_b /= 80.0
+  image1 = make_lupton_rgb(image_r, image_g, image_b, stretch=STRETCH, Q=Q)
+
+  image_r = np.mean(nii_hdu.data[22:26, :, :], axis=0)
+  image_r /= 1500.0
+  image_g = np.mean(nii_hdu.data[14:23, :, :], axis=0)
+  image_g /= 2000.0
+  image_b = np.mean(nii_hdu.data[10:15, :, :], axis=0)
+  image_b /= 3000.0
+  image2 = make_lupton_rgb(image_r, image_g, image_b, stretch=STRETCH, Q=Q)
+
+  figfile = f"rgb-lupton-channels.jpg"
+
+  fig, [ax1, ax2] = plt.subplots(1, 2,
+                                 figsize=(8, 5),
+                                 subplot_kw=dict(projection=wkpno))
+  sns.set_color_codes("bright")
+  ax1.imshow(image1)
+  ax2.imshow(image2)
+  ax1.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+  )
+  ax2.set(
+      xlabel="RA (J2000)",
+      ylabel=" ",
+  )
+  #fig.tight_layout(rect=[0.18, 0.05, 1.0, 1.0])
+  fig.savefig(figfile, dpi=300)
+#+end_src
+
+#+RESULTS: rgb-lupton-channel-maps
+[[file:rgb-lupton-channels.jpg]]
 
 *** Now make the large-scale map that shows the high-velocity flow
 
@@ -1959,7 +2053,36 @@ Doing it in Affinity Designer
 | Splash        |    -48 | -44 |     -45 |  -44 |   -26 |   -51 |
 | HH 204 head   |    -23 | -18 |     -20 |  -20 |    -2 |   -27 |
 | HH 204 pre    |    -20 |   - |     -18 |  -18 |     0 |   -25 |
+| [N II] knot   |    -20 | -20 |       - |  -20 |    -2 |   -27 |
+|---------------+--------+-----+---------+------+-------+-------|
+| HH 204 N edge |     -2 |  -4 |      -2 |   -2 |    16 |    -9 |
+| HH 204 S edge |     -2 |  -2 |       2 |    0 |    18 |    -7 |
+| HH 203 S head |    -14 | -10 |     -14 |  -14 |     4 |   -21 |
 #+TBLFM: $6=18 + $-1::$7=$-1 - 25
+
+
+**** The low-ionization knot above the Bar
++ This may be related to the HH 204 outflow
++ 
+
+***** Aligning the HST image
++ Take Robberto 2005 ACS as ground truth, as always
++ Align on the proplyd 197-427
+  + Celestial coordinates from 2005: 83.8318880 -5.4073798
+  + Pixel coordinates:
+    + 2005 ACS: 1190.0 1879.0
+    + 2015 WFC3: 2097.5 1656.0 2097.5236 1657.0835
+    + 1996 WFPC2: 799.7 998.9 
+  + Make special WCS files for the 1996 and 2015 images
+    + Rotation seems off in 1996
+      + 0.1 / 3600 = 2.77777777778e-5
+      + Currently CD1_2 / CD1_1 = 3.804223E-08 / -2.76664E-05 = -1.37503361478e-3
+        + -0.078783573163 deg
+      + CD2_1 / CD2_2 = 4.913188E-09 / 2.764793E-05 = 1.77705455707e-4
+        + 0.0101817725013 deg
+      + CD1_1 = -2.76664E-05
+        + arccos(2.76664E-05 /  2.77777777778e-5) = arccos(0.996) = 5.133 deg
+        + That is enormous!  Must mean that 
 
 *** GIFs of HH 204 1993, 2005, 2015
 
