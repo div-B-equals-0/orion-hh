@@ -121,6 +121,130 @@ This is from Garcia-Diaz:2007a
 
 **** Return to this issue for the HH 204 paper
 + The [O III] is not limb-brightened, possibly because the emissivity in the cooling zone is not significantly higher than in the shell.  Or possibly it is, but over such a small distance that it isn't even resolved with HST
++ *Wrong* The [O III] /is/ limb-brightened
+  + It is just very weak, and then superimposed on a stronger background from the equilibrium shell
++ Also, the width of the 
+
+
+**** pyds9 commands to open the files
++ This is based on what I did years ago in
+  + [[file:~/Dropbox/Org/hh-orion.org][file:~/Dropbox/Org/hh-orion.org]]
++ The PC images are described in
+  + [[file:~/Work/BobPC/2005/README]]
++ They are the ~fov2f{502,547,656,658}.fits~ files
+  + Each is 4 HDUs, ones for each WFPC2 chip, starting with PC
+
+#+name: ds9-setup
+#+begin_src python
+  import pyds9
+  acs = pyds9.DS9("ACS") 
+  acs.set("cd /Users/will/Work/BobPC/2005") 
+#+end_src
+
+#+begin_src python :noweb yes
+  <<ds9-setup>>
+  acs.set("rgb")
+  for item in "bin|colorbar|slice|smooth".split("|"):
+      acs.set("rgb lock %s yes" % (item))
+
+  for chan, filter_, bmin, bmax in [
+      ["blue", 658, 30, 450],
+      ["green", 656, 50, 400],
+      ["red", 502, 7, 35], 
+      ]:
+      acs.set("rgb %s" % (chan))
+      acs.set("file fov2f%i.fits" % (filter_))
+      acs.set("scale limits %i %i" % (bmin, bmax))
+#+end_src
+
+Save the WCS files
+#+begin_src python :noweb yes :return rslts
+  <<ds9-setup>>
+  rslts = [["Filter", "Limits"], None]
+  for rgb, f in [["red", "f502"], ["green", "f656"], ["blue", "f658"]]:
+      acs.set(f"rgb {rgb}")
+      acs.set(f"wcs save fov2{f}-align-Robberto.wcs")
+      limits = acs.get("scale limits")
+      rslts.append([f, limits])
+#+end_src
+
+#+RESULTS:
+| Filter | Limits |
+|--------+--------|
+| f502   | 7 35   |
+| f656   | 50 400 |
+| f658   | 30 450 |
+
+
+
+
+**** Plan to get the [O III] rim analysis done
+
+***** DONE Align the images to Robberto 2005
+CLOSED: [2021-02-03 Wed 23:24]
++ We use the star NIC 1211
+  + RA, DEC : 83.8433516 -5.4192935
+  + F502 x, y : 354.7 439.9
+  + F656 x, y : 355.0 440.1
+  + F658 x, y : 355.0 439.5
+
+    
+***** TODO Correct for continuum using F547M
+***** TODO Make ratio images of [O III] / Ha
++ Reproject all to the F502 corrected WCS
+  #+begin_src python :return hdu656.header :results scalar
+    from pathlib import Path
+    import numpy as np
+    from astropy.io import fits
+    from astropy.wcs import WCS
+    from reproject import reproject_interp
+    from read_wcs import read_wcs
+
+    pcdir = Path("../../Work/BobPC/2005")
+    outdir = Path("hh204")
+
+    hdu502 = fits.open(pcdir / "fov2f502.fits")[0]
+    hdu502.header.update(**read_wcs(pcdir / "fov2f502-align-Robberto.wcs"))
+    w502 = WCS(hdu502.header).celestial
+    hdu502.header = w502.to_header().update(simple=True)
+    hdu502.data = hdu502.data[0, :, :]
+
+    hdu656 = fits.open(pcdir / "fov2f656.fits")[0]
+    hdu656.header.update(**read_wcs(pcdir / "fov2f656-align-Robberto.wcs"))
+    w656 = WCS(hdu656.header).celestial
+    hdu656.header = w656.to_header().update(simple=True)
+    hdu656.data = hdu656.data[0, :, :]
+    newdata, _ = reproject_interp(hdu656, hdu502.header)
+    hdu656.data = newdata
+
+    hdu658 = fits.open(pcdir / "fov2f658.fits")[0]
+    hdu658.header.update(**read_wcs(pcdir / "fov2f658-align-Robberto.wcs"))
+    w658 = WCS(hdu658.header).celestial
+    hdu658.header = w658.to_header().update(simple=True)
+    hdu658.data = hdu658.data[0, :, :]
+    newdata, _ = reproject_interp(hdu658, hdu502.header)
+    hdu658.data = newdata
+
+    hdu658.writeto(outdir / "hh204-pc-f658n.fits")
+    hdu656.writeto(outdir / "hh204-pc-f656n.fits")
+    hdu502.writeto(outdir / "hh204-pc-f502n.fits")
+
+
+  #+end_src
+
+  #+RESULTS:
+
+
+***** TODO Do plots of profiles through the shock
+***** TODO Look at the 2015 WFC3 images
++ In particular, icaz02040 looks interesting
+  + This is F373N, so [O II]
++ Also, icaz01060, although mainly continuum, does have something else
+  + It is F336W, so not sure what it has
+  + Seems to be mainly scattered starlight plus the Balmer continuum
+  + It is the other side of the Balmer jump
++ icaz01050 is F224W and that is nearly all scattered, and with ring artefacts around bright stars
++ icaz02030 is F280N (what line is that?) and it is nearly all ringing artefacts.  But the rings don't line up with F224W so we can't use it to remove them.
 
 ** Results from Adal's previous UVES observations of HH202-S
 
@@ -2017,6 +2141,23 @@ This is now in a separate file because it was too big:
 #+RESULTS: rgb-lupton-channel-maps
 [[file:rgb-lupton-channels.jpg]]
 
++ Velocities for the RGB images:
+  | line chan    | k1 | k2 | kmean | adjust | V_hel | V_ONC | dV |
+  |--------------+----+----+-------+--------+-------+-------+----|
+  | [O III] B    | 11 | 18 |    14 |      0 |   -46 |   -71 | 16 |
+  | [O III] G    | 17 | 23 |  19.5 |      0 |  -24. |  -49. | 14 |
+  | [O III] R    | 22 | 25 |    23 |      0 |   -10 |   -35 |  8 |
+  |--------------+----+----+-------+--------+-------+-------+----|
+  | [N II] B     | 10 | 15 |    12 |      4 |   -50 |   -75 | 12 |
+  | [N II] G     | 14 | 23 |    18 |      4 |   -26 |   -51 | 20 |
+  | [N II] R     | 22 | 26 |  23.5 |      4 |   -4. |  -29. | 10 |
+  |--------------+----+----+-------+--------+-------+-------+----|
+  | [N II] neb B | 23 | 28 |    25 |      4 |     2 |   -23 | 12 |
+  | [N II] neb G | 27 | 32 |    29 |      4 |    18 |    -7 | 12 |
+  | [N II] neb R | 32 | 37 |    34 |      4 |    38 |    13 | 12 |
+  #+TBLFM: $4=vmean([$2, $3-1]);f1::$6=18 + $5 + 4 ($4 + 1 - 31)::$7=$6 - 25::$8=4 ($3 - $2 + 1) / 2
+
+
 *** Now make the large-scale map that shows the high-velocity flow
 
 Doing it in Affinity Designer
@@ -2044,21 +2185,22 @@ Doing it in Affinity Designer
   + Slightly to the red of peak for better isolation
 
 **** Measurements of Radial velocities of different features
-|               | [N II] |  Ha | [O III] | BEST | V_hel | V_ONC |
-|---------------+--------+-----+---------+------+-------+-------|
-| PA150 jet     |    -42 | -40 |     -40 |  -40 |   -22 |   -47 |
-| PA120 jet LO  |    -52 | -50 |     -46 |  -50 |   -32 |   -57 |
-| PA120 jet HI  |    -52 | -48 |     -48 |  -48 |   -30 |   -55 |
-| HH 203 head   |    -50 | -48 |     -46 |  -48 |   -30 |   -55 |
-| Splash        |    -48 | -44 |     -45 |  -44 |   -26 |   -51 |
-| HH 204 head   |    -23 | -18 |     -20 |  -20 |    -2 |   -27 |
-| HH 204 pre    |    -20 |   - |     -18 |  -18 |     0 |   -25 |
-| [N II] knot   |    -20 | -20 |       - |  -20 |    -2 |   -27 |
-|---------------+--------+-----+---------+------+-------+-------|
-| HH 204 N edge |     -2 |  -4 |      -2 |   -2 |    16 |    -9 |
-| HH 204 S edge |     -2 |  -2 |       2 |    0 |    18 |    -7 |
-| HH 203 S head |    -14 | -10 |     -14 |  -14 |     4 |   -21 |
-#+TBLFM: $6=18 + $-1::$7=$-1 - 25
++ All columns except V_ONC are heliocentric
+|               | [N II] |  Ha | [O III] | BEST | V_ONC |
+|---------------+--------+-----+---------+------+-------|
+| PA150 jet     |    -42 | -40 |     -40 |  -40 |   -65 |
+| PA120 jet LO  |    -52 | -50 |     -46 |  -50 |   -75 |
+| PA120 jet HI  |    -52 | -48 |     -48 |  -48 |   -73 |
+| HH 203 head   |    -50 | -48 |     -46 |  -48 |   -73 |
+| Splash        |    -48 | -44 |     -45 |  -44 |   -69 |
+| HH 204 head   |    -23 | -18 |     -20 |  -20 |   -45 |
+| HH 204 pre    |    -20 |   - |     -18 |  -18 |   -43 |
+| [N II] knot   |    -20 | -20 |       - |  -20 |   -45 |
+|---------------+--------+-----+---------+------+-------|
+| HH 204 N edge |     -2 |  -4 |      -2 |   -2 |   -27 |
+| HH 204 S edge |     -2 |  -2 |       2 |    0 |   -25 |
+| HH 203 S head |    -14 | -10 |     -14 |  -14 |   -39 |
+#+TBLFM: $6=$-1 - 25
 
 
 **** The low-ionization knot above the Bar
