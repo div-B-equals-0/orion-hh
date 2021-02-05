@@ -187,52 +187,184 @@ CLOSED: [2021-02-03 Wed 23:24]
   + F502 x, y : 354.7 439.9
   + F656 x, y : 355.0 440.1
   + F658 x, y : 355.0 439.5
+  + F547 x, y : 354.8 439.9
 
     
 ***** TODO Correct for continuum using F547M
 ***** TODO Make ratio images of [O III] / Ha
-+ Reproject all to the F502 corrected WCS
-  #+begin_src python :return hdu656.header :results scalar
-    from pathlib import Path
-    import numpy as np
-    from astropy.io import fits
-    from astropy.wcs import WCS
-    from reproject import reproject_interp
-    from read_wcs import read_wcs
+****** First make them 2D images - currently they are 3d
++ FITS structure is
+  : 0  PRIMARY       1 PrimaryHDU     266   (800, 800, 4)   float32
+  : 1  s2o_cvt.tab    1 TableHDU       353   4R x 49C
++ Where the table seems to be a list of BG brightness levels at various positions
 
-    pcdir = Path("../../Work/BobPC/2005")
-    outdir = Path("hh204")
+#+begin_src python :results output
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from astropy.table import Table
+  pcdir = Path("../../Work/BobPC/2005")
+  outdir = Path("hh204")
 
-    hdu502 = fits.open(pcdir / "fov2f502.fits")[0]
-    hdu502.header.update(**read_wcs(pcdir / "fov2f502-align-Robberto.wcs"))
-    w502 = WCS(hdu502.header).celestial
-    hdu502.header = w502.to_header().update(simple=True)
-    hdu502.data = hdu502.data[0, :, :]
+  for filt in "f502", "f656", "f658", "f547":
+      hdulist = fits.open(pcdir / f"fov2{filt}.fits")
+      w2d = WCS(hdulist[0].header).celestial
+      fits.PrimaryHDU(
+          header=w2d.to_header(),
+          data=hdulist[0].data[0, :, :]
+      ).writeto(outdir / f"fov2{filt}-PC.fits", overwrite=True)
+      # print(hdulist.info())
+      # print(Table.read(hdulist[1]))
+#+end_src
 
-    hdu656 = fits.open(pcdir / "fov2f656.fits")[0]
-    hdu656.header.update(**read_wcs(pcdir / "fov2f656-align-Robberto.wcs"))
-    w656 = WCS(hdu656.header).celestial
-    hdu656.header = w656.to_header().update(simple=True)
-    hdu656.data = hdu656.data[0, :, :]
-    newdata, _ = reproject_interp(hdu656, hdu502.header)
-    hdu656.data = newdata
+#+RESULTS:
+  
+****** Reproject all to the F502 corrected WCS
+#+begin_src python :return hdu656.header :results scalar
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from reproject import reproject_interp
+  from read_wcs import read_wcs
 
-    hdu658 = fits.open(pcdir / "fov2f658.fits")[0]
-    hdu658.header.update(**read_wcs(pcdir / "fov2f658-align-Robberto.wcs"))
-    w658 = WCS(hdu658.header).celestial
-    hdu658.header = w658.to_header().update(simple=True)
-    hdu658.data = hdu658.data[0, :, :]
-    newdata, _ = reproject_interp(hdu658, hdu502.header)
-    hdu658.data = newdata
+  datadir = Path("hh204")
 
-    hdu658.writeto(outdir / "hh204-pc-f658n.fits")
-    hdu656.writeto(outdir / "hh204-pc-f656n.fits")
-    hdu502.writeto(outdir / "hh204-pc-f502n.fits")
+  hdu502 = fits.open(datadir / "fov2f502-PC.fits")[0]
+  hdu502.header.update(**read_wcs(datadir / "fov2f502-align-Robberto-PC.wcs"))
+  hdu502.writeto(datadir / "hh204-pc-1994-align-Robberto-f502n.fits", overwrite=True)
+
+  hdu656 = fits.open(datadir / "fov2f656-PC.fits")[0]
+  hdu656.header.update(**read_wcs(datadir / "fov2f656-align-Robberto-PC.wcs"))
+  newdata, _ = reproject_interp(hdu656, hdu502.header)
+  hdu656.data = newdata
+  hdu656.header = hdu502.header
+  hdu656.writeto(datadir / "hh204-pc-1994-align-Robberto-f656n.fits", overwrite=True)
+
+  hdu658 = fits.open(datadir / "fov2f658-PC.fits")[0]
+  hdu658.header.update(**read_wcs(datadir / "fov2f658-align-Robberto-PC.wcs"))
+  newdata, _ = reproject_interp(hdu658, hdu502.header)
+  hdu658.data = newdata
+  hdu658.header = hdu502.header
+  hdu658.writeto(datadir / "hh204-pc-1994-align-Robberto-f658n.fits", overwrite=True)
+
+  hdu547 = fits.open(datadir / "fov2f547-PC.fits")[0]
+  hdu547.header.update(**read_wcs(datadir / "fov2f547-align-Robberto-PC.wcs"))
+  newdata, _ = reproject_interp(hdu547, hdu502.header)
+  hdu547.data = newdata
+  hdu547.header = hdu502.header
+  hdu547.writeto(datadir / "hh204-pc-1994-align-Robberto-f547m.fits", overwrite=True)
 
 
   #+end_src
 
   #+RESULTS:
+  : SIMPLE  =                    T / conforms to FITS standard                      BITPIX  =                  -64 / array data type                                NAXIS   =                    2 / number of array dimensions                     NAXIS1  =                  800                                                  NAXIS2  =                  800                                                  WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                354.7                                                  CRPIX2  =                439.9                                                  PC1_1   =        -1.255243E-05 / Coordinate transformation matrix element       PC1_2   =        -2.803098E-07 / Coordinate transformation matrix element       PC2_1   =        -2.803098E-07 / Coordinate transformation matrix element       PC2_2   =         1.255243E-05 / Coordinate transformation matrix element       CDELT1  =                  1.0 / [deg] Coordinate increment at reference point  CDELT2  =                  1.0 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'                                                            CTYPE2  = 'DEC--TAN'                                                            CRVAL1  =    83.84335160000001                                                  CRVAL2  =           -5.4192935                                                  LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =     -5.4195401368227 / [deg] Native latitude of celestial pole        DATE-OBS= '10/11/94'                                                            MJD-OBS =              49666.0 / [d] MJD of observation                         MJD-OBS =              49666.0 / [d] MJD at start of observation                RADESYS = 'ICRS'               / Equatorial coordinate system                   EQUINOX =                 2000                                                  CD1_1   =        -1.255243E-05                                                  CD1_2   =        -2.803098E-07                                                  CD2_1   =        -2.803098E-07                                                  CD2_2   =         1.255243E-05                                                  END                                                                                                                                                                                                                                                                                                                                                                                                             
+****** Finally make ratios 502/656 and 658/656
+Quote from Bob
+: The normalization is to the exposure times in the program GO 5085, i.e.
+: f656n(200S), f658n(500s), f502n(200s), f547m(50s).
+
+#+begin_src python :dir hh204
+  import numpy as np
+  from astropy.io import fits
+
+  hdu502 = fits.open("hh204-pc-1994-align-Robberto-f502n.fits")[0]
+  hdu656 = fits.open("hh204-pc-1994-align-Robberto-f656n.fits")[0]
+  hdu658 = fits.open("hh204-pc-1994-align-Robberto-f658n.fits")[0]
+  hdu547 = fits.open("hh204-pc-1994-align-Robberto-f547m.fits")[0]
+
+  # convert to counts/s/pixel
+  raw656 = hdu656.data / 200.0
+  raw658 = hdu658.data / 500.0
+  raw502 = hdu502.data / 200.0
+  raw547 = hdu547.data / 50.0
+
+  # Use O'Dell 2009 eq 1
+  S_ha = raw656 * (1.0 - 0.148 * raw658 / raw656 - 0.051 * raw547 / raw656)
+  S_ha /= 1.62 / 6563
+
+  S_nii = raw658 * (1.0 - 0.038 * raw656 / raw658 - 0.062 * raw547 / raw658)
+  S_nii /= 1.60 / 6583
+
+  S_oiii = raw502 * (1.0 - 0.028 * raw547 / raw502)
+  S_oiii /= 0.82 / 5007
+
+
+
+  fits.PrimaryHDU(
+      header=hdu502.header,
+      data=S_oiii / S_ha,
+  ).writeto("hh204-pc-1994-ratio-Oiii-Ha.fits", overwrite=True)
+
+  fits.PrimaryHDU(
+      header=hdu658.header,
+      data=S_nii / S_ha,
+  ).writeto("hh204-pc-1994-ratio-Nii-Ha.fits", overwrite=True)
+
+  fits.PrimaryHDU(
+      header=hdu502.header,
+      data=S_oiii / raw547,
+  ).writeto("hh204-pc-1994-ratio-Oiii-cont.fits", overwrite=True)
+#+end_src
+
+#+RESULTS:
+: None
+
+Check the answers (make new frame by hand)
+
+#+begin_src python
+  import pyds9
+  acs = pyds9.DS9("ACS") 
+  acs.set("cd /Users/will/Dropbox/Orion-HH/hh204") 
+  acs.set("file hh204-pc-1994-ratio-Oiii-Ha.fits")
+#+end_src
+
+#+RESULTS:
+: None
+
+
++ Make a figure of the ratio
++ Exposure times are 
+
+#+begin_src python :return figfile :results file
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from astropy.wcs import WCS
+  from astropy.io import fits
+  import regions as rg
+  import seaborn as sns
+
+  figfile = f"hh204-ratio-oiii-ha-HST-PC-1994.pdf"
+  hdu = fits.open("hh204/hh204-pc-1994-ratio-Oiii-Ha.fits")[0]
+  w = WCS(hdu.header)
+  fig, ax = plt.subplots(figsize=(6.5, 5), subplot_kw=dict(projection=w))
+  sns.set_color_codes("bright")
+
+  m = (hdu.data < 0.0) | (hdu.data > 0.5)
+  hdu.data[m] = 0.195 # median in box to left of HH object
+  im = ax.imshow(hdu.data, vmin=0.0, vmax=0.35, cmap="gray")
+  cb = fig.colorbar(im, ax=ax, label="[O III] 5007 / Hα 6563")
+  regions = rg.read_ds9(f"hh204-slit.reg")
+  for skyregion in regions:
+      pixelregion = skyregion.to_pixel(w)
+      pixelregion.plot(ax=ax, color="w", lw=1.4, ls="--", alpha=0.7)
+
+  ax.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+      xlim=[100, 550],
+      ylim=[80, 530],
+  )
+  fig.tight_layout(rect=[0.18, 0.05, 1.0, 1.0])
+  fig.savefig(figfile)
+
+
+#+end_src
+
+#+RESULTS:
+[[file:hh204-ratio-oiii-ha-HST-PC-1994.pdf]]
 
 
 ***** TODO Do plots of profiles through the shock
@@ -1950,7 +2082,7 @@ This is now in a separate file because it was too big:
 + And cut off the LHS with 244-440 since it is not on the large-scale image
 
 #+name: window-hh204-narrow
-| 570 | 680 | 693  | 693 |
+| 570 | 680 | 693 | 693 |
 
 #+name: rgb-lupton-hh204
 #+header: :var TAB=rgb-channels-hh204 DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996-contours" HDU=0
@@ -2732,7 +2864,7 @@ Measurements of features in [Fe III] lines
 ** New version of Figure 1
 + [[file:proper-motions/hh529-finding-chart.pdf]]
 + Reply to referee
-  : We have made the suggested changes to Fig 1 in order to make the labelling clearer.  In addition, we have changed the font to make it more obvious that I, II, and III are roman numerals. 
+  : We have made the suggested changes Fig 1 in order to make the labelling clearer.  In addition, we have changed the font to make it more obvious that I, II, and III are roman numerals. 
 ** Shock versus shell emission
 :PROPERTIES:
 :EXPORT_OPTIONS: ^:t
