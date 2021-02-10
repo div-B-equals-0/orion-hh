@@ -221,36 +221,37 @@ CLOSED: [2021-02-03 Wed 23:24]
 #+RESULTS:
   
 ****** Reproject all to the F502 corrected WCS
++ [2021-02-08 Mon] Change to use my new wcsfile package, which is developed with nbdev
 #+begin_src python :return hdu656.header :results scalar
   from pathlib import Path
   import numpy as np
   from astropy.io import fits
   from astropy.wcs import WCS
   from reproject import reproject_interp
-  from read_wcs import read_wcs
+  import wcsfile
 
   datadir = Path("hh204")
 
   hdu502 = fits.open(datadir / "fov2f502-PC.fits")[0]
-  hdu502.header.update(**read_wcs(datadir / "fov2f502-align-Robberto-PC.wcs"))
+  hdu502.header.update(**wcsfile.read(datadir / "fov2f502-align-Robberto-PC.wcs"))
   hdu502.writeto(datadir / "hh204-pc-1994-align-Robberto-f502n.fits", overwrite=True)
 
   hdu656 = fits.open(datadir / "fov2f656-PC.fits")[0]
-  hdu656.header.update(**read_wcs(datadir / "fov2f656-align-Robberto-PC.wcs"))
+  hdu656.header.update(**wcsfile.read(datadir / "fov2f656-align-Robberto-PC.wcs"))
   newdata, _ = reproject_interp(hdu656, hdu502.header)
   hdu656.data = newdata
   hdu656.header = hdu502.header
   hdu656.writeto(datadir / "hh204-pc-1994-align-Robberto-f656n.fits", overwrite=True)
 
   hdu658 = fits.open(datadir / "fov2f658-PC.fits")[0]
-  hdu658.header.update(**read_wcs(datadir / "fov2f658-align-Robberto-PC.wcs"))
+  hdu658.header.update(**wcsfile.read(datadir / "fov2f658-align-Robberto-PC.wcs"))
   newdata, _ = reproject_interp(hdu658, hdu502.header)
   hdu658.data = newdata
   hdu658.header = hdu502.header
   hdu658.writeto(datadir / "hh204-pc-1994-align-Robberto-f658n.fits", overwrite=True)
 
   hdu547 = fits.open(datadir / "fov2f547-PC.fits")[0]
-  hdu547.header.update(**read_wcs(datadir / "fov2f547-align-Robberto-PC.wcs"))
+  hdu547.header.update(**wcsfile.read(datadir / "fov2f547-align-Robberto-PC.wcs"))
   newdata, _ = reproject_interp(hdu547, hdu502.header)
   hdu547.data = newdata
   hdu547.header = hdu502.header
@@ -266,9 +267,30 @@ Quote from Bob
 : The normalization is to the exposure times in the program GO 5085, i.e.
 : f656n(200S), f658n(500s), f502n(200s), f547m(50s).
 
++ I want to put these in physical units, so I can compare with the MUSE spectra
++ ODell:2009b defines various coefficients for each filter
+  + Primary coefficient K1
+  + Line contamination coefficient K2
+  + Continuum contamination coefficient K3
+  + Surface brightness S = (R / K1) (1 - K2 R_other / R - K2 R_cont / R)
+    + R, R_other, R_cont are count rates
+  + ODell:2009b Table 3: Recommended values for K1
+    | F469N | 0.51e-10 |
+    | F487N | 0.70e-10 |
+    | F502N | 0.82e-10 |
+    | F656N | 1.62e-10 |
+    | F658N | 1.60e-10 |
+    | F673N | 1.42e-10 |
++ This gives S in units of phot/s/cm^2/sr
+  + So need to multiply by h c / \lambda to get in energy units
+  + 6.62606876e-27 2.99792458e10 / 1e-8 = 1.98644544044e-8
+
+      
 #+begin_src python :dir hh204
   import numpy as np
   from astropy.io import fits
+
+  h_c_over_AA = 1.98644544044e-8
 
   hdu502 = fits.open("hh204-pc-1994-align-Robberto-f502n.fits")[0]
   hdu656 = fits.open("hh204-pc-1994-align-Robberto-f656n.fits")[0]
@@ -283,15 +305,19 @@ Quote from Bob
 
   # Use O'Dell 2009 eq 1
   S_ha = raw656 * (1.0 - 0.148 * raw658 / raw656 - 0.051 * raw547 / raw656)
-  S_ha /= 1.62 / 6563
+  S_ha /= 1.62e-10
+  S_ha *= h_c_over_AA / 6563
 
   S_nii = raw658 * (1.0 - 0.038 * raw656 / raw658 - 0.062 * raw547 / raw658)
-  S_nii /= 1.60 / 6583
+  S_nii /= 1.60e-10
+  S_nii *= h_c_over_AA / 6583
 
   S_oiii = raw502 * (1.0 - 0.028 * raw547 / raw502)
-  S_oiii /= 0.82 / 5007
+  S_oiii /= 0.82e-10
+  S_oiii *= h_c_over_AA / 5007
 
 
+  # Save ratios
 
   fits.PrimaryHDU(
       header=hdu502.header,
@@ -307,7 +333,24 @@ Quote from Bob
       header=hdu502.header,
       data=S_oiii / raw547,
   ).writeto("hh204-pc-1994-ratio-Oiii-cont.fits", overwrite=True)
-#+end_src
+
+  # And save calibrated surface brightness in erg/s/cm2/sr
+  fits.PrimaryHDU(
+      header=hdu656.header,
+      data=S_ha,
+  ).writeto("hh204-pc-1994-Sha.fits", overwrite=True)
+
+  fits.PrimaryHDU(
+      header=hdu658.header,
+      data=S_nii,
+  ).writeto("hh204-pc-1994-Snii.fits", overwrite=True)
+
+  fits.PrimaryHDU(
+      header=hdu502.header,
+      data=S_oiii,
+  ).writeto("hh204-pc-1994-Soiii.fits", overwrite=True)
+
+  #+end_src
 
 #+RESULTS:
 : None
@@ -326,7 +369,6 @@ Check the answers (make new frame by hand)
 
 
 + Make a figure of the ratio
-+ Exposure times are 
 
 #+begin_src python :return figfile :results file
   import numpy as np
@@ -342,9 +384,9 @@ Check the answers (make new frame by hand)
   fig, ax = plt.subplots(figsize=(6.5, 5), subplot_kw=dict(projection=w))
   sns.set_color_codes("bright")
 
-  m = (hdu.data < 0.0) | (hdu.data > 0.5)
-  hdu.data[m] = 0.195 # median in box to left of HH object
-  im = ax.imshow(hdu.data, vmin=0.0, vmax=0.35, cmap="gray")
+  m = (hdu.data < 0.0) | (hdu.data > 1.0)
+  hdu.data[m] = 0.335 # median in box to left of HH object
+  im = ax.imshow(hdu.data, vmin=0.0, vmax=0.60, cmap="gray")
   cb = fig.colorbar(im, ax=ax, label="[O III] 5007 / Hα 6563")
   regions = rg.read_ds9(f"hh204-slit.reg")
   for skyregion in regions:
@@ -365,6 +407,131 @@ Check the answers (make new frame by hand)
 
 #+RESULTS:
 [[file:hh204-ratio-oiii-ha-HST-PC-1994.pdf]]
+
++ Illustrative values of ratio (now corrected to put them properly in energy units)
+  |                            | Original       | Corrected     | 
+  |----------------------------+----------------+---------------|
+  | N wing, outside shock      | 0.195 +/- 0.02 | 0.34 +/- 0.03 |
+  | N wing, shock rim          | 0.21 +/- 0.01  | 0.36 +/- 0.02 |
+  | N wing, inside             | 0.175 +/- 0.02 | 0.30 +/- 0.03 |
+  | Slit, outside shock        | 0.23 +/- 0.02  | 0.40 +/- 0.03 |
+  | Slit, inside shock         | 0.14 +/- 0.02  | 0.24 +/- 0.03 |
+  | Slit, further inside shock | 0.11 +/- 0.02  | 0.19 +/- 0.03 |
+#+TBLFM: $3=(6563/5007)**2 $2;f2
+
++ We are measuring 5007/6563
+  + In the UVES spectra we have 4959/4861
+  + So, 4959/4861 = (4959/5007) (6563/4861) (5007/6563)
+    + Where 4959/5007 = 1/3
+    + And 6563/4861 can come from the MUSE maps: 3.3 upstream of shock
++ We now have agreement between MUSE and HST
+  + MUSE Slit, outside shock: 5007/4861 = 1.30 =>  5007/6563 = 1.3/3.3 = 0.39 - close enough!
++ So this implies that 4959/4861 = 1.30 / 3 = 0.433
+  + This is a bit lower than the 0.6 that I get below from UVES 
+****** Comparison with UVES values
+First we subtract continuum, then we subtract upstream BG
+******* [O III] 4363
+
+| Region  | 4363 cont | 4363 fast | 4363 slow | 4363 inter | fast - cont | slow - cont | inter - cont |
+|---------+-----------+-----------+-----------+------------+-------------+-------------+--------------|
+| BG 1    |        10 |        12 |        32 |         15 |           2 |          22 |            5 |
+| Shock 2 |        13 |        27 |        35 |         22 |          14 |          22 |            9 |
+| Shock 3 |        15 |        28 |        37 |         20 |          13 |          22 |            5 |
+| Shock 4 |        15 |        32 |        37 |         22 |          17 |          22 |            7 |
+#+TBLFM: $6=$3 - $2::$7=$4 - $2::$8=$5 - $2
+******* [O III] 4959
+
+| Region  | 4959 cont | 4959 fast | 4959 slow | 4959 inter | fast - cont | slow - cont | inter - cont |
+|---------+-----------+-----------+-----------+------------+-------------+-------------+--------------|
+| BG 1    |         8 |        40 |      2400 |         90 |          32 |        2392 |           82 |
+| Shock 2 |        10 |       200 |      2400 |        150 |         190 |        2390 |          140 |
+| Shock 3 |        12 |       400 |      2700 |        250 |         388 |        2688 |          238 |
+| Shock 4 |        11 |       500 |      2800 |        300 |         489 |        2789 |          289 |
+#+TBLFM: $6=$3 - $2::$7=$4 - $2::$8=$5 - $2
+******* Hb 4861
+| Region  | 4861 cont | 4861 fast | 4861 slow | 4861 inter | fast - cont | slow - cont | inter - cont |
+|---------+-----------+-----------+-----------+------------+-------------+-------------+--------------|
+| BG 1    |        12 |       100 |      4000 |       2500 |          88 |        3988 |         2488 |
+| Shock 2 |        15 |      2500 |      4700 |       3500 |        2485 |        4685 |         3485 |
+| Shock 3 |        20 |      6500 |      4600 |       4500 |        6480 |        4580 |         4480 |
+| Shock 4 |        15 |      5500 |      4600 |       4200 |        5485 |        4585 |         4185 |
+#+TBLFM: $6=$3 - $2::$7=$4 - $2::$8=$5 - $2
+******* Red component (nebula)
+| Region    | 4363 | 4959 | 4861 | 4363/4959 | 4959/4861 |
+|-----------+------+------+------+-----------+-----------|
+| BG 1      |   22 | 2392 | 3988 |     0.009 |     0.600 |
+| Sh 2 - BG |    0 |    0 |  700 |       0/0 |         0 |
+| Sh 3 - BG |    0 |  500 |  600 |         0 |     0.833 |
+| Sh 4 - BG |    0 |  400 |  600 |         0 |     0.667 |
+#+TBLFM: $5=$2 / $3 ;f3::$6=$3 / $4 ;f3
++ The fact that 4959/4861 is similar in the BG and BG-subtracted regions, suggests that this is just variation in the nebula
++ It is odd that 4959/4861 is so large, given that we calculate it should be 0.433 in the upstream regions, based on the MUSE and HST photometry
+  + Maybe the problem is the extra broadening of H beta
+
+******* Blue component
+| Region    | 4363 | 4959 | 4861 | 4363/4959 | 4959/4861 | 30 x 4363/4861 |
+|-----------+------+------+------+-----------+-----------+----------------|
+| BG 1      |    2 |   32 |   88 |     0.063 |     0.364 |          0.682 |
+| Sh 2 - BG |   12 |  158 | 2400 |     0.076 |     0.066 |          0.150 |
+| Sh 3 - BG |   11 |  356 | 6400 |     0.031 |     0.056 |          0.052 |
+| Sh 4 - BG |   15 |  457 | 5400 |     0.033 |     0.085 |          0.083 |
+#+TBLFM: $5=$2 / $3 ;f3::$6=$3 / $4 ;f3::$7=30 $2 / $4 ;f3
+
++ So factor of 2.5 decrease in 4363/4959, going from close behind shock to further away 
++ And then another factor of 3 going to the nebula component
++ Comparing with Fig 7 of paper gives similar results for 30 x 4363/4861
++ And for 4959/4861 too
+
+
+******* Comparison between red (R) and blue (B) components
++ This time, I do not subtrat the upstream BG from the shock regions, since I am interested in the fraction of all the emission in each line that comes from the blue-shifted component
++ This is for comparison with the HST images, which cannot separate the two.
++ Final 3 columns give the fractions:
+  + f = B / (R + B)
+  + For each line, it is the fraction of the total intensity that comes from the blueshifted component
+  + That is, the fraction emitted by high-velocity gas
+| Region | 4363B | 4363R | 4959B | 4959R | 4861B | 4861R | f4363 | f4959 | f4861 |
+|--------+-------+-------+-------+-------+-------+-------+-------+-------+-------|
+| BG 1   |     2 |    22 |    32 |  2392 |    88 |  3988 | 0.083 | 0.013 | 0.022 |
+| Sh 2   |    12 |    22 |   158 |  2390 |  2400 |  4685 | 0.353 | 0.062 | 0.339 |
+| Sh 3   |    11 |    22 |   356 |  2688 |  6400 |  4580 | 0.333 | 0.117 | 0.583 |
+| Sh 4   |    15 |    22 |   457 |  2789 |  5400 |  4585 | 0.405 | 0.141 | 0.541 |
+#+TBLFM: $8=$2/($2 + $3);f3::$9=$4/($4 + $5);f3::$10=$6/($6 + $7);f3
++ Results:
+  + For [O III] 4363, the blue fraction is roughly constant at 0.35 to 0.4 for all of the bow shock region
+  + For [O III] 4959, the blue fraction rises from 0.06 just behind the shock, up to 0.14 at the end of the slit
+    + For comparison, the HST image of BG-subtracted Soiii goes from 400 in the upstream region, to 460 just behind the shock: increase of 1.15
+    + And using a sample box on the slit spectra, it goes from 181 - 10 = 171 upstream, to 208 - 10 = 198 behind shock: increase of 1.16
+    + **Inconsistency** blue fraction is 0.06 but the previous suggests should be 0.15 /Why?/
+      + It turns out that the shock has emission to the red as well.  If we add this in, the fraction gets to be nearer to 0.15.  Some of this may be scattered, but maybe not
+      + Note that in 4959, the red component is just as strong as the blue component, whereas in 4959 it is hardly detectable.
+        + This makes me think it might be related more to the nebular component than to the shock.
+        + But in that case, why does it increase in strength at the position of the shock?
+        + It is also very weak, but detectable, in [O II] 3726
+  + For H beta 4861, the fraction rises and falls slightly in the range 0.33 to 0.58
+
+
+
+***** Remove upstream nebula from the 2D spectra
+#+begin_src python :results output verbatim
+  import numpy as np
+  from astropy.io import fits
+
+  for night in "dic1", "dic2":
+      fname = f"hh204/blue_2D_{night}.fits"
+      hdu, = fits.open(fname)
+      # avoid the top row
+      BG = np.mean(hdu.data[-6:-4, :], axis=0, keepdims=True)
+      hdu.data -= BG
+      hdu.writeto(fname.replace(".fits", "_bgsub.fits"), overwrite=True)
+
+#+end_src
+
+#+RESULTS:
+
+Description and discussion of these spectra is documented here
++ [[shell:open 'craftdocs://open?blockId=DD749E23-6E65-4255-8F5F-5B3D286B231C&spaceId=ebf58611-71d2-f72d-500b-350bfc7b0451'][Craft document: HH 204 bow shock UVES profiles]]
++ [[https://www.craft.do/s/so6bazU4iaTKOM][Public link to Craft document]]
 
 
 ***** TODO Do plots of profiles through the shock
