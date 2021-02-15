@@ -1,0 +1,11 @@
+# Region file format: DS9 version 4.1
+global color=green dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1
+fk5
+# segment(83.8422646,-5.4170031,83.8353051,-5.4129173,83.8325391,-5.4121180,83.8295055,-5.4090092,83.8278103,-5.4069662) color=blue width=3 text={nii 10-16} dash=1
+# segment(83.8428258,-5.4206985,83.8372518,-5.4123754) color=#68f width=2 text={nii 11-19} dash=1
+circle(83.8399976,-5.4173606,22.109") # tag={Apertures}
+# segment(83.8255365,-5.4058927,83.8192437,-5.4016416,83.8176705,-5.4005974)
+ellipse(83.8334358,-5.4090668,3.222",2.148",0.0024662196) # color=cyan text={nii KNOT 19-23} tag={KNOT}
+circle(83.8337653,-5.4088806,0.050") # color=black text={2015}
+circle(83.8337337,-5.4088516,0.050") # color=black text={2005}
+circle(83.8336791,-5.4088083,0.050") # color=black text={1996}

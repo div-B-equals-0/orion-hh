@@ -386,7 +386,7 @@ Check the answers (make new frame by hand)
 
   m = (hdu.data < 0.0) | (hdu.data > 1.0)
   hdu.data[m] = 0.335 # median in box to left of HH object
-  im = ax.imshow(hdu.data, vmin=0.0, vmax=0.60, cmap="gray")
+  im = ax.imshow(hdu.data, vmin=0.1, vmax=0.55, cmap="gray")
   cb = fig.colorbar(im, ax=ax, label="[O III] 5007 / Hα 6563")
   regions = rg.read_ds9(f"hh204-slit.reg")
   for skyregion in regions:
@@ -405,11 +405,11 @@ Check the answers (make new frame by hand)
 
 #+end_src
 
-#+RESULTS:
+#+RESULTS:                                                 
 [[file:hh204-ratio-oiii-ha-HST-PC-1994.pdf]]
 
 + Illustrative values of ratio (now corrected to put them properly in energy units)
-  |                            | Original       | Corrected     | 
+  |                            | Original       | Corrected     |
   |----------------------------+----------------+---------------|
   | N wing, outside shock      | 0.195 +/- 0.02 | 0.34 +/- 0.03 |
   | N wing, shock rim          | 0.21 +/- 0.01  | 0.36 +/- 0.02 |
@@ -424,6 +424,7 @@ Check the answers (make new frame by hand)
   + So, 4959/4861 = (4959/5007) (6563/4861) (5007/6563)
     + Where 4959/5007 = 1/3
     + And 6563/4861 can come from the MUSE maps: 3.3 upstream of shock
++ *conversion factor* 4959/4861 = 1.1 (5007/6563)
 + We now have agreement between MUSE and HST
   + MUSE Slit, outside shock: 5007/4861 = 1.30 =>  5007/6563 = 1.3/3.3 = 0.39 - close enough!
 + So this implies that 4959/4861 = 1.30 / 3 = 0.433
@@ -484,7 +485,7 @@ First we subtract continuum, then we subtract upstream BG
 
 
 ******* Comparison between red (R) and blue (B) components
-+ This time, I do not subtrat the upstream BG from the shock regions, since I am interested in the fraction of all the emission in each line that comes from the blue-shifted component
++ This time, I do not subtract the upstream BG from the shock regions, since I am interested in the fraction of all the emission in each line that comes from the blue-shifted component
 + This is for comparison with the HST images, which cannot separate the two.
 + Final 3 columns give the fractions:
   + f = B / (R + B)
@@ -511,6 +512,61 @@ First we subtract continuum, then we subtract upstream BG
   + For H beta 4861, the fraction rises and falls slightly in the range 0.33 to 0.58
 
 
+******* Implications for the rim increase in the [O III] / Ha ratio
++ The above considerations imply that the bow shock contribution to 4959,5007 is of order 10%
++ We can measure this along the upper wing where we see the narrow ridge of increased oiii/ha
++ 
+
+
+#+name: hh204-plot-ratio
+#+header: :var ID="hh204-N-wing" IBG=14
+#+begin_src python :results file :return figfile
+  from pathlib import Path
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import seaborn as sns
+
+  datadir = Path("hh204")
+
+  x, Soiii = np.loadtxt(datadir / f"{ID}-Soiii.dat", unpack=True)
+  _, Sha = np.loadtxt(datadir / f"{ID}-Sha.dat", unpack=True)
+
+  bg_oiii = Soiii[:IBG].mean() 
+  bg_ha = Sha[:IBG].mean()
+
+  ishock = np.argmax(np.gradient(Sha))
+
+  R = (Soiii - bg_oiii) / (Sha - bg_ha)
+  R_bg = bg_oiii / bg_ha
+
+  figfile = f"{ID}-oiii-ha-ratio.pdf"
+  fig, ax = plt.subplots()
+  ax.plot(x[IBG:] - x[ishock], R[IBG:])
+  ax.axhline(R_bg, linestyle="--")
+  ax.set(ylim=[0.0, 0.7], xlabel="Displacement, pixels", ylabel="[O III] / Ha")
+  sns.despine()
+  fig.tight_layout()
+  fig.savefig(figfile)
+#+end_src
+
+#+RESULTS: hh204-plot-ratio
+[[file:hh204-N-wing-oiii-ha-ratio.pdf]]
+
+#+call: hh204-plot-ratio(ID="hh204-uves-slit", IBG=75)
+
+#+RESULTS:
+[[file:hh204-uves-slit-oiii-ha-ratio.pdf]]
+
+
+#+call: hh204-plot-ratio(ID="hh204-wide-slit", IBG=40)
+
+#+RESULTS:
+[[file:hh204-wide-slit-oiii-ha-ratio.pdf]]
+
+
+
+
+
 
 ***** Remove upstream nebula from the 2D spectra
 #+begin_src python :results output verbatim
@@ -534,8 +590,12 @@ Description and discussion of these spectra is documented here
 + [[https://www.craft.do/s/so6bazU4iaTKOM][Public link to Craft document]]
 
 
-***** TODO Do plots of profiles through the shock
-***** TODO Look at the 2015 WFC3 images
+***** DONE Do plots of profiles through the shock
+CLOSED: [2021-02-14 Sun 15:12]
+- *Cancelled* for being too much detail
+***** DONE Look at the 2015 WFC3 images
+CLOSED: [2021-02-14 Sun 15:12]
++ *Cancelled* because we don't really need this
 + In particular, icaz02040 looks interesting
   + This is F373N, so [O II]
 + Also, icaz01060, although mainly continuum, does have something else
@@ -544,6 +604,9 @@ Description and discussion of these spectra is documented here
   + It is the other side of the Balmer jump
 + icaz01050 is F224W and that is nearly all scattered, and with ring artefacts around bright stars
 + icaz02030 is F280N (what line is that?) and it is nearly all ringing artefacts.  But the rings don't line up with F224W so we can't use it to remove them.
+**** Document with Will's additions to paper on HH 204
+
+
 
 ** Results from Adal's previous UVES observations of HH202-S
 
