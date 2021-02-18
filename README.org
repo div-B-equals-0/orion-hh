@@ -190,8 +190,11 @@ CLOSED: [2021-02-03 Wed 23:24]
   + F547 x, y : 354.8 439.9
 
     
-***** TODO Correct for continuum using F547M
-***** TODO Make ratio images of [O III] / Ha
+***** DONE Correct for continuum using F547M
+CLOSED: [2021-02-15 Mon 18:39]
+This is now done in [[id:9FD40639-8418-4DCF-9E9F-E896795ECE34][Finally make ratios 502/656 and 658/656]] using the calibration constants from ODell:2009b
+***** DONE Make ratio images of [O III] / Ha
+CLOSED: [2021-02-15 Mon 18:39]
 ****** First make them 2D images - currently they are 3d
 + FITS structure is
   : 0  PRIMARY       1 PrimaryHDU     266   (800, 800, 4)   float32
@@ -263,6 +266,9 @@ CLOSED: [2021-02-03 Wed 23:24]
   #+RESULTS:
   : SIMPLE  =                    T / conforms to FITS standard                      BITPIX  =                  -64 / array data type                                NAXIS   =                    2 / number of array dimensions                     NAXIS1  =                  800                                                  NAXIS2  =                  800                                                  WCSAXES =                    2 / Number of coordinate axes                      CRPIX1  =                354.7                                                  CRPIX2  =                439.9                                                  PC1_1   =        -1.255243E-05 / Coordinate transformation matrix element       PC1_2   =        -2.803098E-07 / Coordinate transformation matrix element       PC2_1   =        -2.803098E-07 / Coordinate transformation matrix element       PC2_2   =         1.255243E-05 / Coordinate transformation matrix element       CDELT1  =                  1.0 / [deg] Coordinate increment at reference point  CDELT2  =                  1.0 / [deg] Coordinate increment at reference point  CUNIT1  = 'deg'                / Units of coordinate increment and value        CUNIT2  = 'deg'                / Units of coordinate increment and value        CTYPE1  = 'RA---TAN'                                                            CTYPE2  = 'DEC--TAN'                                                            CRVAL1  =    83.84335160000001                                                  CRVAL2  =           -5.4192935                                                  LONPOLE =                180.0 / [deg] Native longitude of celestial pole       LATPOLE =     -5.4195401368227 / [deg] Native latitude of celestial pole        DATE-OBS= '10/11/94'                                                            MJD-OBS =              49666.0 / [d] MJD of observation                         MJD-OBS =              49666.0 / [d] MJD at start of observation                RADESYS = 'ICRS'               / Equatorial coordinate system                   EQUINOX =                 2000                                                  CD1_1   =        -1.255243E-05                                                  CD1_2   =        -2.803098E-07                                                  CD2_1   =        -2.803098E-07                                                  CD2_2   =         1.255243E-05                                                  END                                                                                                                                                                                                                                                                                                                                                                                                             
 ****** Finally make ratios 502/656 and 658/656
+:PROPERTIES:
+:ID:       9FD40639-8418-4DCF-9E9F-E896795ECE34
+:END:
 Quote from Bob
 : The normalization is to the exposure times in the program GO 5085, i.e.
 : f656n(200S), f658n(500s), f502n(200s), f547m(50s).
@@ -381,7 +387,7 @@ Check the answers (make new frame by hand)
   figfile = f"hh204-ratio-oiii-ha-HST-PC-1994.pdf"
   hdu = fits.open("hh204/hh204-pc-1994-ratio-Oiii-Ha.fits")[0]
   w = WCS(hdu.header)
-  fig, ax = plt.subplots(figsize=(6.5, 5), subplot_kw=dict(projection=w))
+  fig, ax = plt.subplots(figsize=(5, 3.75), subplot_kw=dict(projection=w))
   sns.set_color_codes("bright")
 
   m = (hdu.data < 0.0) | (hdu.data > 1.0)
@@ -531,19 +537,34 @@ First we subtract continuum, then we subtract upstream BG
   x, Soiii = np.loadtxt(datadir / f"{ID}-Soiii.dat", unpack=True)
   _, Sha = np.loadtxt(datadir / f"{ID}-Sha.dat", unpack=True)
 
+  # Convert to mpc
+  x *= 1.94 * 0.045
   bg_oiii = Soiii[:IBG].mean() 
   bg_ha = Sha[:IBG].mean()
 
   ishock = np.argmax(np.gradient(Sha))
+  x -= x[ishock]
 
-  R = (Soiii - bg_oiii) / (Sha - bg_ha)
-  R_bg = bg_oiii / bg_ha
+  RR = Soiii / Sha                # Raw ratio
+  R_bg = bg_oiii / bg_ha          # Nebular background value
+  R = (Soiii - bg_oiii) / (Sha - bg_ha)  # Nebular-corrected value
 
   figfile = f"{ID}-oiii-ha-ratio.pdf"
-  fig, ax = plt.subplots()
-  ax.plot(x[IBG:] - x[ishock], R[IBG:])
-  ax.axhline(R_bg, linestyle="--")
-  ax.set(ylim=[0.0, 0.7], xlabel="Displacement, pixels", ylabel="[O III] / Ha")
+  fig, [ax2, ax] = plt.subplots(2, 1, sharex=True, figsize=(3, 3.75))
+  ax.fill_between(x[IBG:], R[IBG:], step="mid", color="0.7")
+  ax.axhline(R_bg, linestyle="--", color="k", alpha=0.5)
+  ax.axhline(0.0, linestyle="-", color="k", alpha=1.0, lw=0.5)
+  ax.axvline(0.0, linestyle="-", color="k", alpha=1.0, lw=0.5)
+  ax.plot(x, RR[:], color="k")
+  ax.set(ylim=[-0.05, 0.7], xlabel="Displacement, mpc", ylabel="[O III] / Ha")
+
+  ax2.axvline(0.0, linestyle="-", color="k", alpha=1.0, lw=0.5)
+  ax2.axhline(1.0, linestyle="--", color="k", alpha=0.5)
+  ax2.plot(x, Sha/bg_ha, label=r"H$\alpha$")
+  ax2.plot(x, Soiii/bg_oiii, label=r"[O III]")
+  ax2.set(ylim=[0.0, None], ylabel="Relative brightness")
+  ax2.legend()
+
   sns.despine()
   fig.tight_layout()
   fig.savefig(figfile)
@@ -552,16 +573,16 @@ First we subtract continuum, then we subtract upstream BG
 #+RESULTS: hh204-plot-ratio
 [[file:hh204-N-wing-oiii-ha-ratio.pdf]]
 
-#+call: hh204-plot-ratio(ID="hh204-uves-slit", IBG=75)
+#+call: hh204-plot-ratio(ID="hh204-uves-slit", IBG=80)
 
 #+RESULTS:
 [[file:hh204-uves-slit-oiii-ha-ratio.pdf]]
 
 
-#+call: hh204-plot-ratio(ID="hh204-wide-slit", IBG=40)
+#+call: hh204-plot-ratio(ID="hh204-medium-slit", IBG=80)
 
 #+RESULTS:
-[[file:hh204-wide-slit-oiii-ha-ratio.pdf]]
+[[file:hh204-medium-slit-oiii-ha-ratio.pdf]]
 
 
 

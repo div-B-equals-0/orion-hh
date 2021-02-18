@@ -4,6 +4,8 @@
 \usepackage{graphicx}	% Including figure files
 
 
+\let\tablenum=\undef % This fixes an incompatibility between aastex and siunitx
+\usepackage{siunitx}
 
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
@@ -112,6 +114,8 @@ Orion Nebula – ISM: individual: HH 204}
   \ensuremath{\mathrm{#1\,\scriptstyle\Roman{ionstage}}}}
 \newcommand\oiii{[\ion{O}{3}]}
 \newcommand\wav[1]{\ensuremath{\lambda #1}}
+\newcommand\Te{\ensuremath{T_{\mathrm{e}}}}
+\newcommand\BG{\ensuremath{_{\mathrm{BG}}}}
 % Stars in Orion, e.g., \th1C, \th2A
 \def\th#1#2{\ensuremath{\theta^{#1}\,\text{Ori~#2}}}
 
@@ -123,39 +127,100 @@ Orion Nebula – ISM: individual: HH 204}
 \end{figure*}
 
 
-\begin{figure}
+\begin{figure*}
   \centering
-  \includegraphics[width=\columnwidth]{hh204-ratio-oiii-ha-annotated}
+  \includegraphics[width=\textwidth]{hh204-ratio-oiii-ha-annotated}
   \caption{
-    Map of the line ratio \(\oiii{}\ \wav{5007} / \ha\ \wav{6563}\),
+    (a) Map of the line ratio \(\oiii{}\ \wav{5007} / \ha\ \wav{6563}\),
     calculated from \textit{HST} images with the PC chip of the WFPC2 camera.
-    Particular values of interest are indicated by arrows.
-    The position of the UVES spectrograph slit is outlined by dashed lines.
+    The position of the UVES spectrograph slit is outlined by a dashed box,
+    while a further region of interest in the N wing of the bow shock
+    is indicated by a dotted box.
     The vertically oriented ``scar'' at upper left is an artifact
-    due to the bright star \th2A, located just north of the field of view.}
+    due to the bright star \th2A, located just north of the field of view.
+    (b)~Average cut profiles of the \textit{HST} images for the box in the N wing
+    that is outlined in panel~a.
+    Upper graph shows surface brightness profiles in the two emission lines,
+    normalized to the mean nebular background value outside of the shock.
+    Lower graph shows the line ratio,
+    with the raw ratio indicated by the black solid line
+    and the background-subtracted ratio indicated by the gray histogram.
+    The zero point of the displacement axis is taken to be the location
+    of the maximum gradient in the \ha{} surface brightness.
+    (c)~Same as panel~b, but showing average profiles of the \textit{HST} images
+    along the UVES slit.
+    The region of the slit that
+    shows \(\Te(\oiii) > \SI{12000}{K}\) in the blueshifted component
+    is indicated by the red arrow.
+  }
   \label{fig:ratio-hst-oiii-ha}
-\end{figure}
+\end{figure*}
 
 
 \subsection{Sub-arcsecond imaging of HH 204}
 \label{sec:high-resol-imag}
 
-Figure~\ref{fig:ratio-hst-oiii-ha} shows the ratio of surface brightnesses
-\(\oiii\ \wav{5007} / \ha\ \wav{6563}\) calculated from \textit{HST} WFPC2
+Figure~\ref{fig:ratio-hst-oiii-ha}a shows the ratio of surface brightnesses,
+\(R(\oiii) = S(\oiii\ \wav{5007}) / S(\ha\ \wav{6563})\),
+calculated from \textit{HST} WFPC2
 observations in the F502N, F547M, F656N, and F658N filters
 from program GO5469 \citep{ODell:1996a}.
 Flux calibration and correction for contamination by continuum and non-target lines
 was performed using the coefficients given in \citet{ODell:2009b}.
 It can be seen that the line ratio in the background nebula shows a pronounced gradient
-from \(\wav{5007} / \ha \approx 0.3\) in the north-east
-to \(\wav{5007} / \ha \approx 0.5\) in the south-west.%
+from \(R(\oiii) \approx 0.3\) in the north-east
+to \(R(\oiii) \approx 0.5\) in the south-west.%
 \footnote{
   For comparison with results from our UVES spectra,
   and using the average reddening for the HH~204 region \citep{Weilbacher:2015a},
-  the conversion is \(\wav{4959} / \hb \approx 1.1 \wav{5007} / \ha\).
+  the conversion is \(\wav{4959} / \hb \approx 1.1 R(\oiii)\).
 }
 Inside the bow shock, the ratio is significantly smaller,
-for instance falling from \(\simeq 0.4\) to \(\simeq 0.2\) along the length of the slit. 
+for instance falling from \(\simeq 0.4\) to \(\simeq 0.2\) along the length of the UVES slit.
+
+However, the most interesting feature of the \(R(\oiii)\) image is the slight
+\emph{increase} in the ratio that is seen
+in a thin layer along the leading edge of the bow shock.
+This is most clearly visible in the northern wing of HH~204,
+such as the area highlighted by a dotted outline box in the figure.
+Average profiles across the shock for this region
+are shown in Figure~\ref{fig:ratio-hst-oiii-ha}b.
+The lower panel shows that the raw ratio (solid black line) increases only slightly
+above its value in the background nebula,
+which is because the brightness increase across the bow shock is
+only a small fraction of the background brightness, as can be appreciated in the upper panel.
+In order to isolate the behavior of the shocked component,
+we calculate the background-subtracted line ratio:
+\begin{equation}
+  \label{eq:ratio-bg-sub}
+  R'(\oiii) = \frac{S(\oiii) - S\BG(\oiii)}{S(\ha) - S\BG(\ha)}
+\end{equation}
+under the assumption that \(S\BG\) for each line is constant along the profile.
+The result is shown as a gray histogram in the lower panel of the figure,
+which reveals a sharp peak of width \(\approx \SI{0.3}{mpc}\)
+that reaches a maximum value \(R'(\oiii) \approx 2 R\BG(\oiii)\)
+and is centered on a displacement of \(\approx \SI{-0.1}{mpc}\).
+The origin of the displacement axis is set to the peak
+in the spatial gradient of the \ha{} surface brightness,
+corresponding to the outer edge of the dense shocked shell.
+The negative displacement of the \(R'(\oiii)\) peak means that this occurs
+\emph{outside} the dense shell, closer to the shock front itself. 
+
+Figure~\ref{fig:ratio-hst-oiii-ha}c shows the same quantities
+calculated along a cut that coincides with our UVES slit at the head of HH~204.
+In this case, \(R'(\oiii)\) is always significantly less than \(R\BG(\oiii)\),
+but it does still show a small local peak with a position and width
+that is similar to the more impressive one in the northern wing.
+These peaks in \(R'(\oiii)\) occur over a much smaller scale than
+any of spatial gradients that we find in our UVES slit spectra
+and are only detectable because of the high spatial resolution of the \textit{HST}.%
+\footnote{
+  Pixel size of \SI{0.045}{arcsec},
+  which well samples the PSF width at \ha{} of \SI{0.083}{arcsec}.
+}
+For example,
+
+\textit{Lo que sigue es más bien discusión}
 
 
 
@@ -163,3 +228,8 @@ for instance falling from \(\simeq 0.4\) to \(\simeq 0.2\) along the length of t
 
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
