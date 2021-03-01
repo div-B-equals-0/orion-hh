@@ -626,7 +626,30 @@ CLOSED: [2021-02-14 Sun 15:12]
 + icaz01050 is F224W and that is nearly all scattered, and with ring artefacts around bright stars
 + icaz02030 is F280N (what line is that?) and it is nearly all ringing artefacts.  But the rings don't line up with F224W so we can't use it to remove them.
 **** Document with Will's additions to paper on HH 204
-
+[[file:will-hh204-figs.tex]]
+**** Looking for evidence of the jet in HH 204
++ The PA108 flow looks promising
+  + There is evidence for a long filament in this direction from the following lines
+    + [Fe III] 4658 integrated line
+    + [Fe III] 5270 integrated line (slightly weaker)
+    + Si II 6347 blue flank
+    + Si II 6371 blue flank
+    + Unfortunately, the Si II lines at 5958, 5979 do not show it
+    + He I 6678.15 blue flank (specifically, 6676.65 channel)
+      + Velocity = 3e5 (6676.65 - 6678.15) / 6678.15 = -70 in some frame or other
+  + Also evidence from the KPNo vcube in Ha, [O III], and [N II]
+    + But it is difficult to see because of ovelap with HH 528
+  + There are several small-scale filaments that cross the HH 528 flow with approximately the right orientaion
+    + They are in the general vicinity of 166-442
+    + Need to check their proper motions
+  + Also closer to bow aroud 205-507
+  + *Evidence from H_2 filaments*
+    + Subaru map shows a filament that aligns with this flow, just to NW of the HH 528 head
+    + And we can also see filaments that maybe feed HH 203
+    + And possibly the Big Arc flow too
+    + In fact, the strange partial bubble that I once associated with HH 528 now turns out to be a combination of several unconnected filaments
+    + /Users/will/Dropbox/dib-scatter-hii/data/orion-hawki/Orion-Bar-H2-minus-045-Brg.fits
+    + https://www.irya.unam.mx/gente/w.henney/WebWiki/OrionImages.html
 
 
 ** Results from Adal's previous UVES observations of HH202-S
