@@ -650,6 +650,13 @@ CLOSED: [2021-02-14 Sun 15:12]
     + In fact, the strange partial bubble that I once associated with HH 528 now turns out to be a combination of several unconnected filaments
     + /Users/will/Dropbox/dib-scatter-hii/data/orion-hawki/Orion-Bar-H2-minus-045-Brg.fits
     + https://www.irya.unam.mx/gente/w.henney/WebWiki/OrionImages.html
+  + Possible source:
+    + V2235 Ori, JW401, COUP 534
+      + This is the most luminous star vaguely along the PA 108 line
+      + But it doesn't work for passing through the H_2 filament
+    + COUP 484 is more likely
+      + This does line up and gives PA=105, which is close enough
+  + Although none of these PA seem compatible wit the observed proper motion of HH 204 
 
 
 ** Results from Adal's previous UVES observations of HH202-S
