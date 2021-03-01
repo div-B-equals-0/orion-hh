@@ -106,6 +106,7 @@ Orion Nebula – ISM: individual: HH 204}
 \section{Material de Will}
 \label{sec:will}
 
+\newcommand\chem[1]{\ensuremath{\mathrm{#1}}}
 \newcommand\ha{\ensuremath{\mathrm{H\alpha}}}
 \newcommand\hb{\ensuremath{\mathrm{H\beta}}}
 % aastex \ion command is useless - must replace it
@@ -113,18 +114,13 @@ Orion Nebula – ISM: individual: HH 204}
 \renewcommand{\ion}[2]{\setcounter{ionstage}{#2}% 
   \ensuremath{\mathrm{#1\,\scriptstyle\Roman{ionstage}}}}
 \newcommand\oiii{[\ion{O}{3}]}
+\newcommand\nii{[\ion{N}{2}]}
 \newcommand\wav[1]{\ensuremath{\lambda #1}}
 \newcommand\Te{\ensuremath{T_{\mathrm{e}}}}
 \newcommand\BG{\ensuremath{_{\mathrm{BG}}}}
 % Stars in Orion, e.g., \th1C, \th2A
 \def\th#1#2{\ensuremath{\theta^{#1}\,\text{Ori~#2}}}
 
-\begin{figure*}
-  \centering
-  \includegraphics[width=\textwidth]{hh204-finding-chart}
-  \caption{Finding chart.}
-  \label{fig:hh204-finding-chart}
-\end{figure*}
 
 
 \begin{figure*}
@@ -156,6 +152,7 @@ Orion Nebula – ISM: individual: HH 204}
   \label{fig:ratio-hst-oiii-ha}
 \end{figure*}
 
+\textbf{Pongo primero lo de \textit{HST} porque es más completo.}
 
 \subsection{Sub-arcsecond imaging of HH 204}
 \label{sec:high-resol-imag}
@@ -189,7 +186,7 @@ The lower panel shows that the raw ratio (solid black line) increases only sligh
 above its value in the background nebula,
 which is because the brightness increase across the bow shock is
 only a small fraction of the background brightness, as can be appreciated in the upper panel.
-In order to isolate the behavior of the shocked component,
+In order to isolate the emission of the shocked gas from that of the nebula,
 we calculate the background-subtracted line ratio:
 \begin{equation}
   \label{eq:ratio-bg-sub}
@@ -218,11 +215,167 @@ and are only detectable because of the high spatial resolution of the \textit{HS
   Pixel size of \SI{0.045}{arcsec},
   which well samples the PSF width at \ha{} of \SI{0.083}{arcsec}.
 }
-For example,
+For example, the increase in \(\Te(\oiii)\)
+that we detect in the blue-shifted emission near the shock front
+(Figure~6)
+occurs over a scale of \SI{5}{mpc},
+indicated by the red arrow in the figure,
+which is more than 10 times larger than the width of the \(R'(\oiii)\) peak.
 
-\textit{Lo que sigue es más bien discusión}
+\textbf{Lo que sigue es más bien discusión}
+
+What is the origin of the narrow peak in the \(\oiii/\ha\) ratio
+that is seen just outside the shocked shell?
+When a shock propagates into low-ionization gas (predominantly \chem{O^+}),
+there are three zones where enhanced \oiii{} emission might be expected
+\citep{Cox:1985a, Sutherland:2017a}:
+first, the radiative precursor in the pre-shock gas;
+second, the non-equilibrium collisional ionization zone immediately after the shock;
+third, the radiative relaxation zone where the post-shock gas cools back down
+to the photionization equilibrium temperature of \(\sim \SI{e4}{K}\).
+The first of these can be ruled out in the case of HH~204
+because the pre-shock photoionization of \chem{O^+} would require shock velocities
+greater than \SI{150}{km.s^{-1}}.
+(\textit{Check the exact number.  All the shock papers only give the velocity to pre-ionize hydrogen.})
+The second zone has a high temperature
+(\( > \SI{50 000}{K}\) for shock velocities \(> \SI{55}{km.s^{-1}}\))
+but is severely under-ionized, resulting in line emissivities
+that are far in excess of the equilibrium values.
+However, the region that can emit \oiii{} lines
+is likely to be extremely thin due to the high collisional ionization rate
+(\textit{make an estimate of the thickness}).
+The third zone, in which oxygen is recombining through the \chem{O^{++}} stage
+while cooling through the range \SI{20000}{K} to \SI{10000}{K},
+is therefore the most promising origin.
+
+\textit{Calculate the cooling length and show that in the wings,
+  where the post-shock density is less than \SI{e4}{cm^{-3}}, we should
+  resolve the cooling zone, whereas at the bow shock head
+  where the density is greater than \SI{2e4}{cm^{-3}}, it will be unresolved.
+  This may explain why we only clearly see the peak in \(R'(\oiii)\) in the wing.
+  (But this may also be due to dilution by the Mach disk, see below).
+}
+
+\textit{Then, how to explain the behavior of \(\Te(\oiii)\),
+  which varies on much larger scales than the cooling length.
+  Possibly related to the radius of curvature of the shock.
+  Alternatively, could be that we are seeing a mixture
+  of the two shocked shells:
+  the one from behind the bow shock and the one from behind the Mach disk (jet shock).
+  As we move along the slit away from the shock,
+  the Mach disk shell dominates more and more.
+  If the jet shock is lower velocity than the bow shock,
+  then this might explain the observed gradient in the \oiii{} temperature.
+  This is also consistent with the appearance of the object:
+  there is a big clump of emission that disappears once you move away from the axis into the wings,
+  while the bow shock part remains.
+}
 
 
+\begin{figure*}
+  \centering
+  \includegraphics[width=\textwidth]{hh204-finding-chart}
+  \caption{Location of HH~204 within the Orion Nebula.
+    (a)~Position of the UVES slit for our spectroscopic observations (white dashed box),
+    shown superimposed on an RGB emission-line image of the environs of HH~203 and 204,
+    derived from \textit{HST} WFPC2 observations \citep{ODell:1996a} in filters of
+    \oiii{} (red), \nii{} (green), and \ha{} (blue).
+    Contours show highly blue-shifted emission of \oiii{}
+    (cyan, centered on \SI{-70}{km.s^{-1}})
+    and \nii{}
+    (yellow, centered on \SI{-50}{km.s^{-1}}, and white, centered on \SI{-35}{km.s^{-1}}),
+    derived from multiple longslit spectra
+    \citetext{\citealp{Doi:2004a}
+      as recalibrated in spectral atlas of \citealp{Garcia-Diaz:2008a}}.
+    Mean velocities with respect to the Orion Nebular Cluster
+    of particular features related to the HH objects are indicate by arrows.
+    (b)~Location of HH~204 with respect to the inner Orion Nebula.
+    The intensity of the image comes from the \nii{} \textit{HST} WFPC2 observations,
+    but colorized according to the velocity of the slow-moving nebular gas
+    (within about \SI{30}{km.s^{-1}} of the systemic velocity) as derived from the
+    longslit spectra, see color key on figure.
+    (c)~Highly blue-shifted \oiii{} emission for a field of view similar to that of panel~b.
+    (d)~As panel~c but for highly blue-shifted \nii{} emission.
+    }
+  \label{fig:hh204-finding-chart}
+\end{figure*}
+
+\subsection{Origin of the jet that drives HH 204}
+\label{sec:origin-jet-that}
+
+At least two different high-velocity flows
+converge on the general HH~203/204 region
+from the direction of the inner Orion Nebula (see Figure~\ref{fig:hh204-finding-chart}),
+but it is not clear if either of them are directly responsible for driving the
+HH~204 bow shock.
+One flow is at a position angle (PA) of \(\approx \ang{118}\) and transitions 
+from a high ionization state north-west of the Bright Bar
+(cyan contours in Fig.~\ref{fig:hh204-finding-chart}a),
+to a lower ionization state (yellow contours) to the south-east of the Bright Bar.
+The other is at \(\mathrm{PA} \approx \ang{140}\)
+and is of low ionization for its entire detected length. 
+Both these flows give the appearance of driving HH~203,
+which implies that HH~203 may be a superposition of two unrelated bow shocks.
+Such a superposition is consistent with the detection of two
+different velocity components (\num{-73} and \SI{-39}{km.s^-1})
+at the head of the bow shock, and also with the complex structure
+apparent in high-resolution \textit{HST} images (see Fig.~\ref{fig:hh204-finding-chart}b).
+\citet{ODell:2015a} noted that in addition to the main bow shock (HH~203a),
+there appears to be a second faint bow shock (HH~203b), associated with
+the PA118 flow.
+We also detect a third faint bow shock, which we denote HH~203c,
+situated in front (SW) of HH~204a.
+Note that \citet{ODell:2015a} give position angles of \ang{124} and \ang{127},
+respectively, for HH~203 and HH~204, which probably represent an average of the 
+PA118 and PA140 flows. 
+
+The southern portion of HH~203a,
+which we label as ``[\ion{S}{2}] knot'' in the figure,
+is particularly strong in the [\ion{S}{2}] and [\ion{O}{1}] filters
+and coincides with the peak of the \SI{-39}{km.s^{-1}} feature.
+The spatial alignment and the similarity in velocity and ionization makes it likely that this
+knot is part of the PA140 flow.
+It is conceivable that this flow may extend farther to the SW and
+be driving the HH~204 bow shock,
+although there is no direct evidence for this.
+On the other hand, a third flow at \(\mathrm{PA} \approx \ang{108}\) is seen to feed into HH~204
+from the west.
+This jet, first noted by \cite{Doi:2004a}, is very short and stubby,
+and can be traced back only \SI{10}{arcsec} (\SI{20}{mpc}) from the bow shock.
+There is another faint filament of high-velocity \oiii{} emission that extends between the
+HH~203 and HH~204 regions at \(\mathrm{PA} \approx \ang{108}\)
+(see Fig.~\ref{fig:hh204-finding-chart}a).
+This appears to provide a connecting bridge
+between the PA140 and PA108 flows, although the difference
+in velocity and ionization with respect to the PA108 flow argues against
+a physical association with HH~204. 
+
+In summary, convincing evidence for which large scale flow might be driving the
+HH~204 bow shock is frustratingly absent.
+Although the PA108 flow is clearly associated with HH~204, its short length means
+that the exact orientation is very uncertain.
+The PA140 flow has a much better defined direction,
+but its extension beyond the position of the [\ion{S}{2}] knot
+in order to feed into the HH~204 bow shock is purely speculative.
+The only thing that can be said with any degree of certainty is that the
+high-ionization PA118 flow is \emph{not} driving HH~204, but only HH~203.
+In Figure.~\ref{fig:hh204-finding-chart}b we show the back projection of
+all three of these flows into the core of the nebula,
+assuming an uncertainty of \ang{\pm 10} for the PA108 flow
+and \ang{\pm 5} for the other two.
+The PA118 flow is consistent with an origin in the Orion~S
+star forming region,
+as has been remarked many times previously
+\citep{ODell:1997a, Rosado:2002e, ODell:2003n}.
+However, neither of the other flows are consistent with an origin in that region,
+unless the flow has suffered a relatively large-angle deviation.
+The back-projection of the PA140 flow intersects the Trapezium stars
+in the very center of the nebula, which raises the possibility that the source
+may be a proplyd, which are highly concentrated in that region.
+The back-projection of the PA108 flow falls significantly to the south
+of the main Orion~S region.
+
+% 5:35:14.2753 -5:24:24.958 => 143-425 V1328 Ori
 
 \bibliography{will-hh204-refs}
 
