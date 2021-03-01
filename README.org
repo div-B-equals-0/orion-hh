@@ -2486,6 +2486,80 @@ This is now in a separate file because it was too big:
 #+RESULTS: rgb-lupton-hh204
 [[file:rgb-lupton-hh204-1996-contours.jpg]]
 
+#+name: window-hh204-simple
+| 480 | 610 | 420 | 420 |
+
+#+name: rgb-channels-hh204-simple
+| final502-radec |  30 |  180 |
+| final658-radec | 100 | 2000 |
+| final656-radec | 200 | 2000 |
+
+
+#+name: rgb-lupton-hh204-simple
+#+header: :var TAB=rgb-channels-hh204-simple DIR="/Users/will/Work/BobPC/2002" SUFFIX="1996-simple" HDU=0
+#+header: :var STRETCH=0.9 Q=1.2 WINDOW=window-hh204-simple HH="204"
+#+begin_src python :results file :return figfile :tangle rgb-lupton-hh204.py
+  from pathlib import Path
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from astropy.visualization import make_lupton_rgb
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  import regions as rg
+  from read_wcs import read_wcs
+  import seaborn as sns
+
+
+  datadir = Path(DIR)
+  # Unpack the channel info from the table
+  [rf, r1, r2], [gf, g1, g2], [bf, b1, b2] = TAB
+
+  def load_and_scale_image(fn, v1, v2, ihdu=HDU):
+      data = fits.open(datadir / f"{fn}.fits")[ihdu].data
+      return (data - v1) / (v2 - v1)
+
+  hdr = fits.open(datadir / f"{rf}.fits")[HDU].header
+  hdr.update(**read_wcs("mosaic-1996-HH204-align-robberto.wcs"))
+  w = WCS(hdr)
+
+
+  image_r = load_and_scale_image(rf, r1, r2)
+  image_g = load_and_scale_image(gf, g1, g2)
+  image_b = load_and_scale_image(bf, b1, b2)
+  image = make_lupton_rgb(image_r, image_g, image_b, stretch=STRETCH, Q=Q)
+
+  [x0, y0, dx, dy], = WINDOW
+
+
+  figfile = f"rgb-lupton-hh{HH}-{SUFFIX}.jpg"
+  fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(projection=w))
+  sns.set_color_codes("bright")
+  ax.imshow(image)
+
+
+
+  regions = rg.read_ds9(f"hh{HH}-slit.reg")
+  for skyregion in regions:
+      pixelregion = skyregion.to_pixel(w)
+      pixelregion.plot(ax=ax, color="w", lw=0.7, ls="--")
+
+
+  ax.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+      xlim=[x0-dx/2, x0+dx/2],
+      ylim=[y0-dy/2, y0+dy/2],
+  )
+  fig.tight_layout(rect=[0.18, 0.05, 1.0, 1.0])
+  fig.savefig(figfile, dpi=300)
+#+end_src
+
+#+RESULTS: rgb-lupton-hh204-simple
+[[file:rgb-lupton-hh204-1996-simple.jpg]]
+
+
+
+
 
 *** Make RGB channel maps of nii and ha
 
