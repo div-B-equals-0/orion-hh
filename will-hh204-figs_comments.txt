@@ -1,0 +1,7 @@
+* Anchored Note, page 3
+¿por qué 150 km/s?. En un choque con un átomo de H a 100 km/s hay 52.2 eV. Las colisiones de O+ con electrones tienen poco efecto porque la masa es muy pequeña, pero ¿qué pasa con los nucleos?
+
+
+* Anchored Note, page 3
+Si T([OIII]) ya está en equilibrio, ¿porqué es más caliente que T([NII])?
+

@@ -654,9 +654,13 @@ CLOSED: [2021-02-14 Sun 15:12]
     + V2235 Ori, JW401, COUP 534
       + This is the most luminous star vaguely along the PA 108 line
       + But it doesn't work for passing through the H_2 filament
+      + 05 35 13.2006958872 -05 24 55.493104899
     + COUP 484 is more likely
       + This does line up and gives PA=105, which is close enough
-  + Although none of these PA seem compatible wit the observed proper motion of HH 204 
+      + 05 35 12.4954 -05 24 38.148
+      + 125-438
+  + Although none of these PA seem compatible with the observed proper motion of HH 204
+    + Or are they?
 
 
 ** Results from Adal's previous UVES observations of HH202-S
@@ -2561,6 +2565,9 @@ This is now in a separate file because it was too big:
 
 
 
+
+
+
 *** Make RGB channel maps of nii and ha
 
 
@@ -2644,6 +2651,44 @@ This is now in a separate file because it was too big:
   | [N II] neb R | 32 | 37 |    34 |      4 |    38 |    13 | 12 |
   #+TBLFM: $4=vmean([$2, $3-1]);f1::$6=18 + $5 + 4 ($4 + 1 - 31)::$7=$6 - 25::$8=4 ($3 - $2 + 1) / 2
 
+
+**** Image of the H_2 emission from the possible HH 203 jet
+
+#+begin_src python :return figfile :results file
+  from pathlib import Path
+  import numpy as np
+  import matplotlib.pyplot as plt
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  import regions as rg
+  import seaborn as sns
+
+  datadir = Path("../dib-scatter-hii/data/orion-hawki")
+  h2_hdu = fits.open(datadir / "Orion-Bar-H2-minus-045-Brg.fits")["CHIP1.INT1"]
+  w = WCS(h2_hdu.header)
+  fig, ax = plt.subplots(
+      figsize=(4.5, 5),
+      subplot_kw=dict(projection=w),
+  )
+
+  m = (h2_hdu.data > 2400.0) | (h2_hdu.data < 750)
+  h2_hdu.data[m] = 1314.0 # median value
+  ax.imshow(h2_hdu.data, vmin=1000, vmax=2400, cmap="gray_r")
+  x0, y0 = 1740, 870
+  dx, dy = 550, 800
+
+  figfile = f"h2-jet-hh204.jpg"
+  ax.set(
+      xlabel="RA (J2000)",
+      ylabel="Dec (J2000)",
+      xlim=[x0 - dx/2, x0 + dx/2],
+      ylim=[y0 - dy/2, y0 + dy/2],
+  )
+  fig.savefig(figfile, dpi=300)
+#+end_src
+
+#+RESULTS:
+[[file:h2-jet-hh204.jpg]]
 
 *** Now make the large-scale map that shows the high-velocity flow
 

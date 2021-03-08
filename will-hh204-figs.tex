@@ -122,6 +122,19 @@ Orion Nebula – ISM: individual: HH 204}
 \def\th#1#2{\ensuremath{\theta^{#1}\,\text{Ori~#2}}}
 
 
+ 
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{hh204-finding-chart-simple}
+  \caption{
+    Location of the UVES spectrograph slit at the head of the HH~204 bow shock.
+    The background RGB images shows the immediate environs of HH~203 and 204,
+    derived from \textit{HST} WFPC2 observations \citep{ODell:1996a} in filters of
+    \oiii{} (red), \nii{} (green), and \ha{} (blue).
+    }
+  \label{fig:hh204-finding-chart-simple}
+\end{figure}
+
 
 \begin{figure*}
   \centering
@@ -232,54 +245,91 @@ there are three zones where enhanced \oiii{} emission might be expected
 first, the radiative precursor in the pre-shock gas;
 second, the non-equilibrium collisional ionization zone immediately after the shock;
 third, the radiative relaxation zone where the post-shock gas cools back down
-to the photionization equilibrium temperature of \(\sim \SI{e4}{K}\).
+to the photoionization equilibrium temperature of \(\sim \SI{e4}{K}\).
 The first of these can be ruled out in the case of HH~204
 because the pre-shock photoionization of \chem{O^+} would require shock velocities
-greater than \SI{150}{km.s^{-1}}.
-(\textit{Check the exact number.  All the shock papers only give the velocity to pre-ionize hydrogen.})
+greater than \SI{150}{km.s^{-1}},
+observed proper motion and radial velocities imply a shock velocity less than \SI{100}{km.s^{-1}}.
+% (\textit{Check the exact number.  All the shock papers only give the velocity to pre-ionize hydrogen.})
 The second zone has a high temperature
 (\( > \SI{50 000}{K}\) for shock velocities \(> \SI{55}{km.s^{-1}}\))
 but is severely under-ionized, resulting in line emissivities
-that are far in excess of the equilibrium values.
-However, the region that can emit \oiii{} lines
-is likely to be extremely thin due to the high collisional ionization rate
-(\textit{make an estimate of the thickness}).
+that are far in excess of the equilibrium values in a very thin layer.
+% However, the region that can emit \oiii{} lines
+% is likely to be extremely thin due to the high collisional ionization rate
+% (\textit{make an estimate of the thickness}).
 The third zone, in which oxygen is recombining through the \chem{O^{++}} stage
-while cooling through the range \SI{20000}{K} to \SI{10000}{K},
-is therefore the most promising origin.
+while cooling through the range \SI{30000}{K} to \SI{10000}{K}
+is predicted to be somewhat thicker and with a higher electron density,
+yielding a greater contribution to the total \oiii{} emission.
+Given the electron density that we derive of \SI{13500}{cm^{-3}} (Table~3),
+and assuming a shock velocity \(< \SI{70}{km.s^{-1}}\),
+the cooling length should be approximately \SI{0.05}{mpc},
+or \SI{0.025}{arcsec}, which is a few times smaller than the \textit{HST} resolution.
+However, this analysis applies only to the head of the bow shock.
+In the wings, the shock is not perpendicular to the upstream gas velocity,
+but is oblique at an angle \(\alpha\).
+This yields a post-shock equilibrium density that is smaller by a factor of \(\cos^2\alpha\),
+and a cooling length that is larger by the same factor.
+Hence, the cooling length is expected to be resolved for \(\alpha\) smaller than about \ang{45},
+which is consistent with our observations of the narrow peak in
+the \(\oiii/\ha\) ratio in the north wing.
+The reason that the same behaviour is not seen in the opposite wing is probably
+that the ambient nebular emission is much more highly ionized there,
+which masks the effect.
 
-\textit{Calculate the cooling length and show that in the wings,
-  where the post-shock density is less than \SI{e4}{cm^{-3}}, we should
-  resolve the cooling zone, whereas at the bow shock head
-  where the density is greater than \SI{2e4}{cm^{-3}}, it will be unresolved.
-  This may explain why we only clearly see the peak in \(R'(\oiii)\) in the wing.
-  (But this may also be due to dilution by the Mach disk, see below).
-}
 
-\textit{Then, how to explain the behavior of \(\Te(\oiii)\),
-  which varies on much larger scales than the cooling length.
-  Possibly related to the radius of curvature of the shock.
-  Alternatively, could be that we are seeing a mixture
-  of the two shocked shells:
-  the one from behind the bow shock and the one from behind the Mach disk (jet shock).
-  As we move along the slit away from the shock,
-  the Mach disk shell dominates more and more.
-  If the jet shock is lower velocity than the bow shock,
-  then this might explain the observed gradient in the \oiii{} temperature.
-  This is also consistent with the appearance of the object:
-  there is a big clump of emission that disappears once you move away from the axis into the wings,
-  while the bow shock part remains.
-}
+% \textit{Calculate the cooling length and show that in the wings,
+%   where the post-shock density is less than \SI{e4}{cm^{-3}}, we should
+%   resolve the cooling zone, whereas at the bow shock head
+%   where the density is greater than \SI{2e4}{cm^{-3}}, it will be unresolved.
+%   This may explain why we only clearly see the peak in \(R'(\oiii)\) in the wing.
+%   (But this may also be due to dilution by the Mach disk, see below).
+% }
+
+\newcommand\Mach{\ensuremath{\mathcal{M}}}
+Note that the length scales over which we see changes in \(T(\oiii)\) from the UVES data
+are much larger than this (\(\approx \SI{5}{mpc}\), see Figure~7),
+and so cannot be ascribed to the cooling zone behavior described above.
+Instead, we suggest that we are seeing the superposition of two different emission
+components: one from the bow shock and one from the Mach disk (the shock internal to the jet).
+The jet shock will have a lower Mach number, \(\Mach\), than the bow shock
+so long as the unshocked jet is denser than the ambient medium,
+as appears to be the case in HH~204.
+The thickness of the equilibrium (cooled) shocked shell is proportional to \(\Mach^{-1}\)
+and so should be larger for the shell behind the Mach disk, which thus dominates the
+emission in much of the slit (displacements \num{5} to \SI{12}{mpc} in Figure~7).
+At smaller displacements, the contribution of the bow shock gets progressively larger,
+thus explaining the increase in \(T(\oiii)\).
+The expected length scale for this variation is roughly the radius of curvature of the bow shock,
+which agrees with the observed \SI{5}{mpc}.
+The only reason that this effect is visible at all is that \oiii{} emission from the
+equilibrium shell is so weak.
+For lower ionization lines, the contribution of the bow shock to the total brightness
+is always negligible, even for positions close to the shock.
+
+% \textit{Then, how to explain the behavior of \(\Te(\oiii)\),
+%   which varies on much larger scales than the cooling length.
+%   Possibly related to the radius of curvature of the shock.
+%   Alternatively, could be that we are seeing a mixture
+%   of the two shocked shells:
+%   the one from behind the bow shock and the one from behind the Mach disk (jet shock).
+%   As we move along the slit away from the shock,
+%   the Mach disk shell dominates more and more.
+%   If the jet shock is lower velocity than the bow shock,
+%   then this might explain the observed gradient in the \oiii{} temperature.
+%   This is also consistent with the appearance of the object:
+%   there is a big clump of emission that disappears once you move away from the axis into the wings,
+%   while the bow shock part remains.
+% }
 
 
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth]{hh204-finding-chart}
   \caption{Location of HH~204 within the Orion Nebula.
-    (a)~Position of the UVES slit for our spectroscopic observations (white dashed box),
-    shown superimposed on an RGB emission-line image of the environs of HH~203 and 204,
-    derived from \textit{HST} WFPC2 observations \citep{ODell:1996a} in filters of
-    \oiii{} (red), \nii{} (green), and \ha{} (blue).
+    (a)~Same as Figure~\ref{fig:hh204-finding-chart-simple}
+    but showing an expanded view of the bow shocks and possible driving jets.
     Contours show highly blue-shifted emission of \oiii{}
     (cyan, centered on \SI{-70}{km.s^{-1}})
     and \nii{}
@@ -296,6 +346,12 @@ is therefore the most promising origin.
     longslit spectra, see color key on figure.
     (c)~Highly blue-shifted \oiii{} emission for a field of view similar to that of panel~b.
     (d)~As panel~c but for highly blue-shifted \nii{} emission.
+    Two candidate stellar sources along the back-projection of the PA108 flow
+    are indicated by white circles (see discussion in text).
+    (e)~Near-infrared HAWK-I imaging
+    of the region outlined by a yellow dashed box in panel~d
+    in the \SI{2.12}{\micro m} \chem{H_2} line \citep{Kissler-Patig:2008a},
+    showing an emission filament that may be associated with HH~204.
     }
   \label{fig:hh204-finding-chart}
 \end{figure*}
@@ -317,7 +373,7 @@ and is of low ionization for its entire detected length.
 Both these flows give the appearance of driving HH~203,
 which implies that HH~203 may be a superposition of two unrelated bow shocks.
 Such a superposition is consistent with the detection of two
-different velocity components (\num{-73} and \SI{-39}{km.s^-1})
+different velocity components (\num{-73} and \SI{-39}{km.s^{-1}})
 at the head of the bow shock, and also with the complex structure
 apparent in high-resolution \textit{HST} images (see Fig.~\ref{fig:hh204-finding-chart}b).
 \citet{ODell:2015a} noted that in addition to the main bow shock (HH~203a),
@@ -374,6 +430,27 @@ in the very center of the nebula, which raises the possibility that the source
 may be a proplyd, which are highly concentrated in that region.
 The back-projection of the PA108 flow falls significantly to the south
 of the main Orion~S region.
+
+We have searched archival observations in other wavebands
+for any evidence of jets along the back projection of the PA108 axis.
+The most convincing association is with a molecular hydrogen filament
+seen in the \SI{2.12}{\micro m} line (see Figure~\ref{fig:hh204-finding-chart}e).
+At the position of this filament, HH~204 is at \(\mathrm{PA} = \ang{105}\),
+which is well within the uncertainties,
+and the orientation of the filament is consistent with the same PA.\@
+Unfortunately, no kinematic observations are currently available for this filament,
+so its association with HH~204 can only be tentative.
+The stellar source that best aligns with the \chem{H_2} filament
+is COUP~484, see Figure~\ref{fig:hh204-finding-chart}e.
+However, this is a rather low luminosity star and therefore seems
+an unlikely candidate for driving such an impressive large-scale outflow.
+The star V2235~Ori is also marginally consistent within the uncertainty
+with the PA108 axis and is roughly 100 times brighter than COUP~484
+in the K and L infrared bands \citep{Muench:2002a},
+but its position is completely inconsistent with being the source of the \chem{H_2} filament.
+There is also marginal evidence from MUSE observations \citep{Weilbacher:2015a}
+for a blue-shifted [\ion{Fe}{3}] filament that extends
+from the position of the \chem{H_2} filament towards HH~204, but the data are noisy. 
 
 % 5:35:14.2753 -5:24:24.958 => 143-425 V1328 Ori
 
