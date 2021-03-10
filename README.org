@@ -1092,6 +1092,298 @@ flct: finished
 [[file:hh204_f656n_1996_2015_2stage_proper_motions.jpg]]
 
 
+***** Measure per-feature motions for HH 204
+#+begin_src python :return display
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+  from astropy.table import Table
+  import regions as rg
+
+  regiondir = Path("hh204")
+  datadir = Path("hh204")
+  regions = rg.read_ds9(regiondir / "HH204-samples.reg")
+
+  # Split into BG and source regions
+  source_regions = []
+  bg_regions = []
+  for region in regions:
+      label = region.meta["label"]
+      if "BG" in label:
+          bg_regions.append(region)
+      else:
+          source_regions.append(region)
+
+  hdu2015, = fits.open(datadir / "hh204_wfc3_f656n_2015.fits")
+  w = WCS(hdu2015.header)
+  badmask = ~np.isfinite(hdu2015.data)
+  hdu2015.data[badmask] = 0.0
+
+  data_images = {
+      "VV": fits.open(datadir / "hh204_f656n_1996_2015_2stage_vv_sig10.fits")[0].data,
+      "PA": fits.open(datadir / "hh204_f656n_1996_2015_2stage_pa_sig10.fits")[0].data,
+  }
+
+  # Find mean brightness BG for each group
+  weights = np.zeros_like(hdu2015.data)
+  for r in bg_regions:
+      weights += r.to_pixel(w).to_mask().to_image(hdu2015.data.shape)
+  bg_brightness = np.average(hdu2015.data, weights=weights)
+
+  # Now do measurements on each source region
+  all_results = []
+  for region in source_regions:
+      label = region.meta["label"]
+      group = label.split()[2]
+      bg = bg_brightness
+      results = {"region": label}
+      mask = region.to_pixel(w).to_mask()
+      mw = mask.to_image(hdu2015.data.shape).astype(bool)
+      weights = hdu2015.data[mw] - bg
+      results["Bright"] = np.round(np.mean(weights), 2)
+      results["Bright sig"] = np.round(np.std(weights), 2)
+      results["Bright BG"] = np.round(bg, 2)
+      for data_label, data in data_images.items():
+          m = mask.to_image(data.shape).astype(bool)
+          mean = np.average(data[m], weights=weights)
+          sigma = np.sqrt(np.average((data[m] - mean)**2, weights=weights))
+          results[data_label] = np.round(mean, 2)
+          results[f"{data_label} sig"] = np.round(sigma, 2)
+      all_results.append(results)
+
+  #
+  # List of dicts to astropy.table.Table
+  #
+  # It would be cleaner to just write Table(rows=all_results) but for
+  # some reason that does alphabetical sorting on column names, which we
+  # don't want.  This way preserves the column order.
+  table = Table(
+      names=all_results[0].keys(),
+      rows=[_.values() for _ in all_results],
+  )
+
+  #
+  # astropy.table.Table to a list of lists, which babel will format as
+  # an org table
+  #
+  display = [list(table.colnames), None] + [list(row) for row in table]
+#+end_src
+
+#+RESULTS:
+| region      | Bright | Bright sig | Bright BG |   VV | VV sig |     PA | PA sig |
+|-------------+--------+------------+-----------+------+--------+--------+--------|
+| HH 204 BS a |   6.09 |        1.3 |      4.01 | 4.97 |   0.21 | 127.08 |   4.27 |
+| HH 204 MD a |   8.76 |       1.27 |      4.01 | 4.87 |   0.47 |  129.9 |   8.97 |
+| HH 204 MD b |   9.47 |       0.96 |      4.01 | 4.76 |    0.7 | 131.87 |   6.89 |
+| HH 204 MD c |   9.07 |       0.97 |      4.01 | 5.18 |    1.1 | 144.15 |  39.09 |
+| HH 204 MD d |   7.64 |        1.2 |      4.01 | 5.37 |   0.88 | 140.11 |  30.44 |
+| HH 204 MD e |   8.24 |       1.72 |      4.01 | 4.86 |   1.02 | 152.97 |  52.87 |
+| HH 204 BS b |   4.37 |        0.8 |      4.01 | 5.18 |   0.57 | 134.61 |   5.02 |
+| HH 204 BS c |   2.96 |       0.63 |      4.01 | 3.37 |   0.17 |  96.48 |  11.26 |
+| HH 204 BS d |   3.12 |        0.3 |      4.01 | 2.22 |   0.18 |  97.12 |   6.84 |
+| HH 204 Knot |   2.21 |       0.63 |      4.01 | 3.35 |   0.16 | 183.61 |   2.39 |
+
++ For an average motion, I take the ~BS a~, ~MD a~, ~MD b~ values to get VV = 4.9, PA = 130
+  + 1 pixel in 9.91 yrs is 10.0 km/s within the uncertainties
+  + So, we can move the CRPIX values for the 1996 and 2015 epochs
+  + x : -4.9 sin(130) = -3.75
+  + y : 4.9 cos(130) = -3.15
++ This turns out to be not quite right for the nose
+  + What we end up with is
+    + 1996 :: (5.5, 6) = 8
+    + 2015 :: (4.5, 4.3) = 6.2
+  + These are saved in
+    + [[file:hh204/hh204-1996-nose-frame.wcs]]
+    + [[file:hh204/hh204-2015-nose-frame.wcs]]
+      
+
+
+***** Align in frame of reference of the bow shock nose
++ Use results from previous calculation and save resampled images that are aligned in the nose frame
+ #+begin_src python :results output
+   from pathlib import Path
+   import numpy as np
+   from astropy.io import fits
+   from astropy.wcs import WCS
+   from reproject import reproject_interp
+   import wcsfile
+
+   datadir = Path("hh204")
+
+   # Orig file from Bally 2015 program
+   hdu2, = fits.open(datadir / "hh204_wfc3_f656n_2015.fits")
+   # Align on bowshock nose
+   wcs_aligned = WCS(wcsfile.read(datadir / "hh204-2015-nose-frame.wcs"))
+   hdu2.header.update(wcs_aligned.to_header())
+
+   # Cropped file from Robberto 2005 program
+   hdu1, = fits.open(datadir / "hh204_acs_f658n_2005.fits")
+
+   # Reproject 2->1
+   newdata, _ = reproject_interp(hdu2, hdu1.header)
+   newheader = hdu1.header
+   fits.PrimaryHDU(
+       data=newdata,
+       header=newheader,
+   ).writeto(
+       datadir / "hh204_wfc3_f656n_2015_nose_align.fits",
+       overwrite=True,
+   )
+
+   # Orig file from Bally 1996 program
+   hdu3, = fits.open(datadir / "hh204_wfpc2_f656n_1996.fits")
+   wcs_aligned = WCS(wcsfile.read(datadir / "hh204-1996-nose-frame.wcs"))
+   hdu3.header.update(wcs_aligned.to_header())
+
+   # Reproject 3->1
+   newdata, _ = reproject_interp(hdu3, hdu1.header)
+   newheader = hdu1.header
+   fits.PrimaryHDU(
+       data=newdata,
+       header=newheader,
+   ).writeto(
+       datadir / "hh204_wfpc2_f656n_1996_nose_align.fits",
+       overwrite=True,
+   )
+#+end_src
+
+#+RESULTS:
+
+#+RESULTS:
+
+
+
+#+begin_src python
+  from pathlib import Path
+  import numpy as np
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  datadir = Path("hh204")
+
+
+  hdu1, = fits.open(datadir / "hh204_wfpc2_f656n_1996_nose_align.fits")
+  hdu2, = fits.open(datadir / "hh204_acs_f658n_2005.fits")
+  hdu3, = fits.open(datadir / "hh204_wfc3_f656n_2015_nose_align.fits")
+
+
+  fits.PrimaryHDU(
+      header=hdu3.header,
+      data=hdu3.data/hdu2.data,
+  ).writeto(
+      datadir / f"hh204_f656n_ratio_2015_2005_nose_align.fits",
+      overwrite=True,
+  )
+  fits.PrimaryHDU(
+      header=hdu2.header,
+      data=hdu2.data/hdu1.data,
+  ).writeto(
+      datadir / f"hh204_f656n_ratio_2005_1996_nose_align.fits",
+      overwrite=True,
+  )
+  fits.PrimaryHDU(
+      header=hdu3.header,
+      data=hdu3.data/hdu1.data,
+  ).writeto(
+      datadir / f"hh204_f656n_ratio_2015_1996_nose_align.fits",
+      overwrite=True,
+  )
+#+end_src
+
+#+RESULTS:
+: None
+
+
+
+***** Make high-pass filtered versions
+
+#+begin_src sh :results verbatim :dir hh204
+  for f in wfc3_f656n_2015 acs_f658n_2005 wfpc2_f656n_1996; do
+      python /Users/will/Dropbox/Teresa-Turtle/scripts/smooth-image.py hh204_$f.fits -w 16 
+  done
+#+end_src
+
+#+RESULTS:
+
+#+begin_src sh :results verbatim :dir hh204
+  for f in wfc3_f656n_2015 wfpc2_f656n_1996; do
+      python /Users/will/Dropbox/Teresa-Turtle/scripts/smooth-image.py hh204_${f}_nose_align.fits -w 16 
+  done
+#+end_src
+
+#+RESULTS:
+
+***** TODO Make GIFs
+
+****** Save images of the FITS files
+#+begin_src python :return figfile :results file
+  from pathlib import Path
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import matplotlib.patheffects as path_effects
+  import seaborn as sns
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  figdir = Path(".")
+  datadir = Path("hh204")
+
+  for s in "wfpc2_f656n_1996_nose_align", "acs_f658n_2005", "wfc3_f656n_2015_nose_align":
+      camera, filter_, year = s.split("_")[:3]
+      figfile = figdir / f"hh204_{year}_nose_align.jpg"
+      hdu, = fits.open(datadir / f"hh204_{s}_sharp_16.fits")
+      w = WCS(hdu)
+      im = hdu.data
+      fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(projection=w))
+      ax.imshow(im, vmin=0.5, vmax=2.0, origin="lower", cmap="gray")
+      ax.set(
+          xlim=[370, 1050],
+          ylim=[470, 1150],
+      )
+      lon, lat = ax.coords
+      lon.set_ticklabel_visible(False)
+      lat.set_ticklabel_visible(False)
+      fig.tight_layout()
+      fig.savefig(figfile, dpi=600)
+#+end_src
+
+#+RESULTS:
+[[file:hh204_2015_nose_align.jpg]]
+
+#+begin_src sh
+open hh204_*_nose_align.jpg
+#+end_src
+
+#+RESULTS:
+
+
+
+****** GIFs in bow shock nose frame
+#+begin_src sh :dir hh204_multi_epoch_nose_align_EXPORT
+ORDER="1996 2005 2015"
+convert $(for a in "$ORDER"; do printf -- "-delay 50 %s.jpg " $a; done; ) HH204-bowshock-frame.gif
+#+end_src
+
+#+RESULTS:
+
+#+BEGIN_SRC sh :results silent
+open -a Safari hh204_multi_epoch_nose_align_EXPORT/HH204-bowshock-frame.gif
+#+END_SRC
+
+
+**** Conclusions from proper motions and new directions
++ We see a solid lump of emission that is all moving at the bow shock velocity
+  + This is almost stationary in the movie
+  + It  seems to be the inner part of the working surface
+  + Part of it is the clumpy kit-shaped mass at the head
+  + And there are also faint tendrils feeding into this from behind
+    + Some of these may have low velocities *towards* the working surface, which is evidence for feeding from a dense jet
++ Then there is a sheath of backwards moving material in the bow shock frame
+  + In principle we can use this to try and estimate the shock velocity (and hence whether the upstream gas is moving)
+  + We could try and find the expansion law for the bow shock wings, or at least fit a theoretical model of how the motion in the bow shock frame should be (conserving velocity parallel to the shock)
++ We can try and colorize the image so that the stationary gas is blue amd the moving gas is red, for instance
+
 
 **** Document with Will's additions to paper on HH 204
 [[file:will-hh204-figs.tex]]
