@@ -109,6 +109,241 @@ This is from Garcia-Diaz:2007a
 
 ** Shock emission in HH 204
 
+*** Final stuff on HH 204
+
+**** Abstract should not exceed 250 words
+#+begin_export latex
+We analyze the physical conditions, chemical composition and other  properties of the photoionized Herbig-Haro object HH~204 through Very Large Telescope (VLT) echelle spectroscopy and Hubble Space Telescope (\textit{HST}) imaging. 
+We kinematically isolate the high-velocity emission of HH~204's bow shock and jet bullet from the emission of the background nebula and study the sub-arcsecond distribution of physical conditions and ionic abundances across the HH object.
+We find that low and intermediate-ionization emission arises exclusively from gas at photoionization equilibrium temperatures,
+whereas the weak high-ionization emission from HH~204 shows a significant contribution from higher temperature shock-excited gas.
+The spatial thickness of the high-temperature zone is marginally resolved with \textit{HST} but is unresolved in our spectra.
+We derive separately the ionic abundances of HH~204 and two separate kinematic components of the Orion Nebula: the main ionized layer and the fainter, lower density Diffuse Blue Layer.
+In HH~204, the O$^{+}$ abundance determined from CELs matches the one based on RLs, while the O$^{2+}$ abundance is very low, so that the oxygen abundance discrepancy is zero.
+The ionic abundances of Ni and Fe in HH~204 have similar ionization and depletion patterns, with total abundances that are a factor of 3.5 higher than in the rest of the Orion Nebula due to dust destruction in the bowshock.
+We show that a failure to resolve the kinematic components in our spectra would lead to significant error in the determination of chemical abundances (for instance, 40\% underestimate of O), mainly due to incorrect estimation of the electron density.
+#+end_export
+
+**** Answer Eduardo's earlier queries
+
+Muy buenas preguntas las dos!
+
+***** Anchored Note, page 3
+: ¿por qué 150 km/s?. En un choque con un átomo de H a 100 km/s hay 52.2 eV. Las colisiones de O+ con electrones tienen poco efecto porque la masa es muy pequeña, pero ¿qué pasa con los nucleos?
+
+No es la ionización colisional que nos importa aquí.  Sí tienes razón que un choque de 100 km/s produce O++ por colisiones - por eso hay la posibilidad de [O III] de las zonas dos (ionización) y tres (enfriamiento).  Pero para el _precursor_ la pregunta es sí la radiación EUV emitida por el gas poschoque es capaz de ionizar O++ en el gas antes del choque.  Es eso que requiere velocidades mayores 
+
+***** Anchored Note, page 3
+: Si T([OIII]) ya está en equilibrio, ¿porqué es más caliente que T([NII])?
+
+La verdad, eso no entiendo.   Tienes razón que es un argumento en contra de lo que propongo... Voy a pensar más sobre esto. 
+
+Lástima que la rendija no fue más larga!
+
+Olvidaba mencionar sobre la figura 1 – hice una versión más simple para ir en la introducción si están de acuerdo.  Luego la versión con todos los contornos, etc puede ir en la discusión.  ¿Les parece bien?
+
+: Sí, lo de la T([OIII]) tiene una interpretación compleja. Le he dado unas vueltas. Basado en lo mismo que has encontrado, si en las imágenes 2D del HST vemos que [OIII]/Ha es más alto en una capa periférica delgada de HH204 por la emisión en la zona de enfriamiento esto también debería suceder en zonas equivalentes de la geometría 3D. Entonces deberíamos tener dos capas con [OIII]/Ha altas integradas en la línea de visión de la rendija. Es decir, que la forma paraboloidal de HH204 debería estar recubierta por una manta de gas con  [OIII]/Ha alto, por lo que nuestra rendija integraría dos veces esa manta (por delante y por detrás de HH204). El grosor de la manta sería variable -dependiendo de la densidad del gas- en el bowshock sería casi cero, como lo mostraste en la figura 2c del PDF que nos mandaste, mientras que en el jet, con densidades algo menores, dicha capa es más gruesa (y aporta más emisión). 
+: Esto podría ser complementario a lo que comentas, que en el espectro de UVES de HH204 hay emisión principalmente del bowshock y del Mach disk. En la zona del bowshock, la zona de enfriamiento no aporta casi nada porque es la zona más densa y es ahí (en una distancia de menos de 5 mpc) donde se observa un aumento importante de la T([OIII]) que está fuera de equilibrio. En la zona del mach disk, ya debería estar enfriada y en equilibrio y a la misma temperatura que T([NII]) pero en esa zona, la capa de la zona de enfriamiento debería ser más grande, porque la densidad es algo menor y tal vez esa aportación es lo que sube la temperatura un poco.
+: ¿Qué piensas sobre eso?
+
+
+***** Cygnus loop analogy
+
+Encontré un artículo de Raymond sobre el Bucle de Cisne que sería util para citar.  Aunque hay unas diferencias con nuestro caso (en particular, densidad e ionización) es suficiente similar para usar como analogía.  Esta figura muestra el caso de una velocidad un poco más alta que la nuestra en donde se aprecia la diferencia entre la longitud de enfriamiento y la anchura de la zona de emissión [O III]
+
+https://ui.adsabs.harvard.edu/abs/2020ApJ...894..108R
+
+
+
+
+***** Density jump in the jet
++ From Fig 6 of the paper, we have density increasing from 1e4 to 2e4 as one approaches the shock
++ For a working surface, we predict a jump of M^2 at the shock, and a total change of M^2 exp(0.5/M^2) up to the CD
+  |    M |  M^2 | M^2 exp(0.5/M^2) |
+  |------+------+------------------|
+  |  0.0 | 1.00 |             1.00 |
+  |  0.2 | 1.00 |             1.02 |
+  |  0.4 | 1.00 |             1.08 |
+  |  0.6 | 1.00 |             1.20 |
+  |  0.8 | 1.00 |             1.38 |
+  |  1.0 | 1.00 |             1.65 |
+  |  1.1 | 1.21 |             1.83 |
+  | 1.15 | 1.32 |             1.93 |
+  | 1.18 | 1.39 |             1.99 |
+  |  1.2 | 1.44 |             2.04 |
+  |  1.3 | 1.69 |             2.27 |
+  |  1.4 | 1.96 |             2.53 |
+  #+TBLFM: $2=$1 > 1.0 ? $1**2 : 1.0 ;f2::$3=$1 > 1.0 ? $1**2 exp(0.5/$1**2): exp(0.5*$1**2) ;f2
+
+
+***** DONE Estimate density from H\alpha brightness
+CLOSED: [2021-04-05 Mon 11:25]
+:PROPERTIES:
+:ID:       1C9AE936-653D-43E7-88C1-52D6E21D2BBD
+:END:
++ We have already calibrate these images I think
+  + Yes, they are in [[file:hh204/hh204-pc-1994-Sha.fits]] and similar
++ Brightness measurements:
+  + BG of nose (outside shock): 0.0080 +/- 0.0003
+  + Peak at nose: 0.022 +/- 0.001
+  + BG at N wing (outside shock): 0.0076 +/- 0.0002
+  + Peak at near N wing: 0.0150 +/- 0.0003
+  + Peak at medium N wing: 0.0112 +/- 0.0004
+  + Peak at far N wing: 0.0107 +/- 0.0003
+  + Jet clumps: 0.028
+  + Jet BG (gaps between clumps): 0.0190 +/- 0.0007
+  + Bow shock filament in S wing: 0.0108 +/- 0.0002
+  + Filament BG (still inside bow): 0.0091 +/- 0.0002
++ *Possible calibration error*
+  + Was the O'Dell calibration for WFC pixels?
+  + If so, then brightness needs to be multiplied by (0.0996/0.046)**2 = 4.688
+  + See [[id:9FD40639-8418-4DCF-9E9F-E896795ECE34][Finally make ratios 502/656 and 658/656]]
+  + It looks like this is indeed the case
++ Calculations
+  + S(Ha) = (\alpha E / 4 pi) n^2 z
+  + \alpha = 8.6052e-14 cm^3 s^-1 at 10^4 K
+  + E(H\alpha) = 3.027e-12 erg
+  + Some sizes:
+    + Axial length of "plug": 7.4 arcsec
+    + Cylindrical radius of near N wing: 2.9 arcsec
+    + Thickness of near N wing: 0.3 arcsec
+    + Cylindrical radius of medium N wing: 4.2 arcsec
+    + Thickness of medium N wing: 0.5 arcsec
+    + Cylindrical radius of far N wing: 6.1 arcsec
+    + Thickness of far N wing: 0.7 arcsec
+    + Radius of curvature of nose: 3.2 arcsec
+    + Thickness of nose shell: 0.4 arcsec
+    + Cylindrical radius of S wing filament: 3.4 arcsec
+    + Thickness of S wing filament: 0.4 arcsec
+    + Jet knot diameter: 0.6 arcsec
+  + Conversion to LOS thickness, dz:
+    + dz = 2 sqrt(R h)
+    + Nose: dz = 2 sqrt(3.2 0.4) = 2.3 arcsec
+    + Near N wing: dz = 2 sqrt(2.9 0.3) = 1.9 arcsec
+    + Medium N wing: dz = 2 sqrt(4.2 .5) = 2.9 arcsec
+    + Far N wing: dz = 1
+  |--------------+--------+--------+-----+--------|
+  | Nose         |  0.022 | 0.0080 | 2.3 | 2.07e4 |
+  | Near N wing  | 0.0150 | 0.0076 | 1.9 | 1.66e4 |
+  | Med N wing   | 0.0112 | 0.0076 | 2.9 | 9.35e3 |
+  | Far N wing   | 0.0107 | 0.0076 | 4.1 | 7.30e3 |
+  | S filament   | 0.0108 | 0.0091 | 2.3 | 7.21e3 |
+  | Jet knot     |  0.028 | 0.0190 | 0.6 | 3.25e4 |
+  | Average plug |  0.022 | 0.0080 |   5 | 1.40e4 |
+  #+TBLFM: $5=8.89e4 sqrt(($2 - $3) 1.9 4.688 / $4) ;s3
+
+
+
+**** Explanation for the profiles along the slit
++ Eduardo finds that [O III]/H\beta for the blue component has a U-shaped profile
+  + Starting at the bottom of the slit (+12 mpc), it is 4959/4861 = 0.08
+  + Flat minimum of 0.03 to 0.04 from +2 to +10 mpc
+  + Rises again to 0.06 at +0 mpc
++ The initial fall would seem to indicate at ionization gradient due to EUV opacity
++ But what causes the increase close to the bow shock?
++ And how can we reconcile this with the HST images?
+  + These imply a roughly constant value - see [[id:A4B5B542-E975-46AC-9A30-93DDC6D50403][Implications for the rim increase in the [O III] / Ha ratio]]
+  + *But* they only go to 10 mpc - maybe I should redo it
+  + Part of the answer may be that Eduardo's methodology selects only the blue-shifted emission,
+    + This  will predominantly be the jet material, at least towards the bottom of the slit
+    + At the top, near the bow shock it will include some of the bow shock shell, although some of that will also be at lower velocities
++ Eduardo's fig 8 shows that the O++ abundance also has the same U-shaped profile
+  |   pos |   O+ |  O++ | frac++ |
+  |-------+------+------+--------|
+  | +12.2 | 8.55 |  7.2 |  0.045 |
+  |   +10 | 8.55 |  6.8 |  0.018 |
+  |    +5 | 8.60 | 6.65 |  0.011 |
+  |    +0 | 8.65 |  7.0 |  0.022 |
+  #+TBLFM: $4=10**($3 - $2);f3
++ This seems to track the [O III]/Ha, which is odd given the T increase between +5 and +0
+  + Fig 6 shows it goes from 12000 to 17000 K
+  + This should effect the emissivity ratio quite a lot.  From pyneb I find a ratio of 2.5
+  + This is larger than the increase in 4959/4861, which implies that O++/O keeps going down from +5 mpc to +0 mpc
++ Check this with a table
+  |  pos |  T, K | n, pcc | e4959/4861 | I4959/4861 | 12+log(O++/H+) |
+  |  (1) |   (2) |    (3) |        (4) |        (5) |            (6) |
+  |------+-------+--------+------------+------------+----------------|
+  |  0.0 | 17000 |  20000 |      42254 |      0.060 |           6.15 |
+  |  2.4 | 15000 |  17000 |      31360 |      0.035 |           6.05 |
+  |  4.9 | 12500 |  14000 |      19287 |      0.030 |           6.19 |
+  |  7.3 | 12000 |  14000 |      17124 |      0.035 |           6.31 |
+  |  9.8 | 12000 |  11000 |      17193 |      0.045 |           6.42 |
+  | 12.2 | 12000 |  10000 |      17215 |      0.080 |           6.67 |
+  #+TBLFM: $6=12+log10($5/$4);f2
+  + Columns:
+    - (1), (2), (3) from Figure 6: temperature and density for blue-shifted component as a function of position along slit, in mpc with origin at the shock
+    - (4) Ratio in per-ion emission coefficients of [O III] 4959 to H beta, calculated with PyNeb using columns (2) and (3).
+    - (5) Observed intensity ratio [O III] 4959 to H beta from Figure 7
+    - (6) Calculated ionic abundance 12+log(O++/H+) from columns (4) and (5)
+  + I4959/4861 = e4959/4861 O++/H+
+    - => O++/H+ = I4959/4861 / e4959/4861
+
+**** Trapping of the ionization front in the jet
++ We see an ionization gradient in the blue-shifted component
+
+***** Oxygen ionization ratios
+| MUSE Line      |      BG |       1 |       2 |       3 |       4 |
+|----------------+---------+---------+---------+---------+---------|
+| [O I] 6300     |   10000 |   55000 |   82000 |   40000 |   12000 |
+| [O II] 7319+20 |   40000 |  170000 |  340000 |  310000 |  200000 |
+| [O III] 5007   | 1400000 | 1600000 | 1800000 | 2100000 | 2200000 |
+|----------------+---------+---------+---------+---------+---------|
+| 6300 / 7319+20 |   0.250 |   0.346 |   0.240 |   0.111 |   0.013 |
+| 7319+20 / 5007 |   0.029 |   0.650 |   0.750 |   0.386 |   0.200 |
+#+TBLFM: @5$2=@2/@3;f3::@5$3..@5$6=(@2 - @2$2)/(@3 - @3$2);f3::@6$2=@3/@4;f3::@6$3..@6$6=(@3 - @3$2)/(@4 - @4$2);f3
+
+#+begin_src python :results output verbatim
+    import numpy as np
+    import pyneb as pn
+
+
+    o1 = pn.Atom(atom="O1")
+    o2 = pn.Atom(atom="O2")
+    o3 = pn.Atom(atom="O3")
+
+    tem = 10000.0
+    den = 2 .0e4
+
+    e6300 = o1.getEmissivity(tem, den, wave=6300)
+    e7319 = o2.getEmissivity(tem, den, wave=7319)
+    e7320 = o2.getEmissivity(tem, den, wave=7320)
+    e5007 = o3.getEmissivity(tem, den, wave=5007)
+
+    print(f"e(6300) / e(7319+20) = {e6300 / (e7319 + e7320):.3f}")
+    print(f"e(7319+20) / e(5007) = {(e7319 + e7320) / e5007:.3f}")
+#+end_src
+
+#+RESULTS:
+: e(6300) / e(7319+20) = 4.994
+: e(7319+20) / e(5007) = 0.037
+
+***** Notebook in Google Colab
++ [[file:~/Google Drive/Colab Notebooks/HH204 neutral oxygen fraction.ipynb]]
+**** Extinction correction from C(Hb)
+:PROPERTIES:
+:ID:       B68D43EE-8E6A-47D9-8119-B80677A3A7C9
+:END:
+#+begin_src python :results output verbatim
+  import numpy as np
+  import pyneb
+
+  REDCORR = pyneb.extinction.red_corr.RedCorr(
+      law='CCM89 Bal07', R_V=5.5, cHbeta=1.0
+  )
+
+  flam = np.log10(REDCORR.getCorrHb(6563))
+  print("1 + f_lam =", 1 + flam)
+#+end_src
+
+#+RESULTS:
+: 1 + f_lam = 0.7800507531919084
+
++ For HH 204, C(Hb) = 0.37 +/- 0.04 from MUSE map
+  + [[file:~/Dropbox/dib-scatter-hii/data/orion-muse/C_H_beta-bin001.fits][file:~/Dropbox/dib-scatter-hii/data/orion-muse/C_H_beta-bin001.fits]]
+  + So correction for Ha is 10**(0.37 0.78) = 1.94
+  + So this explains the factor of 1.9 used above in [[id:1C9AE936-653D-43E7-88C1-52D6E21D2BBD][Estimate density from H\alpha brightness]]?
+
+
 *** [O III] versus H\alpha emission
 #+attr_html: :width 300
 [[./figs/HH204-shock-shell_1.png]]
@@ -522,6 +757,9 @@ First we subtract continuum, then we subtract upstream BG
 
 
 ******* Implications for the rim increase in the [O III] / Ha ratio
+:PROPERTIES:
+:ID:       A4B5B542-E975-46AC-9A30-93DDC6D50403
+:END:
 + The above considerations imply that the bow shock contribution to 4959,5007 is of order 10%
 + We can measure this along the upper wing where we see the narrow ridge of increased oiii/ha
 + 
@@ -628,13 +866,13 @@ CLOSED: [2021-02-14 Sun 15:12]
   + It is the other side of the Balmer jump
 + icaz01050 is F224W and that is nearly all scattered, and with ring artefacts around bright stars
 + icaz02030 is F280N (what line is that?) and it is nearly all ringing artefacts.  But the rings don't line up with F224W so we can't use it to remove them.
-**** Do proper motions for HH 204
+*** Do proper motions for HH 204
 + We have the following epochs
   + 1996 WFPC2/PC f656n
   + 2005 ACS/WFC f658n
   + 2015 WFC3/UVIS f656n
   + There are lots of intermediate epochs between 1996 and 2005, but they are all with the WFC chip, and so lower resolution.
-***** Reproject HH 204 images onto the 2005 coordinate grid
+**** Reproject HH 204 images onto the 2005 coordinate grid
 + We already have the correct WCS for the 1996 and 2015 images
   + 1996 in [[file:hh204/]]
     + fov2f656-PC.fits
@@ -649,7 +887,7 @@ CLOSED: [2021-02-14 Sun 15:12]
     + This is a very large file - we should extract a sub-region to be more manageable
       + I already did this in [[id:904807B0-9F3B-4299-840E-096A910331E8][Extract just a window of the ACS 2005 Ha+[N II] image]]
 
-****** Extract ACS image around HH 204
+***** Extract ACS image around HH 204
 + x, y, w, h = 7292.1998,2884.8059,2078.195,1347.475
 #+begin_src python
   from pathlib import Path
@@ -687,7 +925,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 #+RESULTS:
 : None
 
-****** Put them all on the same grid
+***** Put them all on the same grid
 + This had very annoying errors to begin with because I was trying to update the headers, rather than simply replacing them
   + It turns out that is very difficult to get right because of the byzantine preferences of CD and PC, etc. So I just don't bother now
   + This means that we lose info on provenance, but at least the images align properly in DS9
@@ -748,7 +986,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 
 #+RESULTS:
 
-***** Make ratio images
+**** Make ratio images
 #+begin_src python
   from pathlib import Path
   import numpy as np
@@ -789,7 +1027,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 #+RESULTS:
 : None
 
-***** Do flct to get proper motions
+**** Do flct to get proper motions
 #+begin_src python :results output
   import sys
   sys.path.append("../../Source/pyflct")
@@ -866,7 +1104,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 
 
 
-***** Combine the two PM intervals to get variance
+**** Combine the two PM intervals to get variance
 #+begin_src python
   from pathlib import Path
   import numpy as np
@@ -961,7 +1199,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 : None
 
 
-***** Make a figure of HH 204 proper motions
+**** Make a figure of HH 204 proper motions
 #+begin_src python :return figfile :results file
   from pathlib import Path
   import numpy as np
@@ -1052,7 +1290,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 [[file:hh204_f656n_1996_2015_2stage_proper_motions.jpg]]
 
 
-***** Measure per-feature motions for HH 204
+**** Measure per-feature motions for HH 204
 #+begin_src python :return display
   from pathlib import Path
   import numpy as np
@@ -1150,9 +1388,10 @@ CLOSED: [2021-02-14 Sun 15:12]
   + x : -4.9 sin(130) = -3.75
   + y : 4.9 cos(130) = -3.15
 + This turns out to be not quite right for the nose
-  + What we end up with is
-    + 1996 :: (5.5, 6) = 8
-    + 2015 :: (4.5, 4.3) = 6.2
+  + What we end up with is (x, y)
+    + 1996 :: (-5.5, -6) = 8
+    + 2015 :: (-4.5, -4.3) = 6.2
+    + average :: (-5.0, -5.2)
   + These are saved in
     + [[file:hh204/hh204-1996-nose-frame.wcs]]
     + [[file:hh204/hh204-2015-nose-frame.wcs]]
@@ -1160,11 +1399,26 @@ CLOSED: [2021-02-14 Sun 15:12]
   + 1996 - 2005: 80 km/s at PA=137
   + 2005 - 2015: 62 km/s at PA=134
   + Average: 71 +/- 9 km/s at 136 +/- 2 deg
++ So now we can find the inclination to the plane of the sky
+  + The radial velocity of the HH 204 knot is -45 km/s
+  + So total velocity is V = hypot(71, 45) = 84 +/- 9 km/s
+  + Inclination is -32 +/- 6 deg
+  + Previous determination was 27 deg, so this is consistent
++ Note that for HH 203, we get a different PM
+  + roughly 12 km/s at PA=330 in HH 204 frame:
+    + x = -1.2 sin(330) = 0.6
+    + y = 1.2 cos(330) = 1.0
+  + So in cluster frame: (-4.4, -4.2)
+    + 6.1 = 61 km/s
+    + PA = 134 deg
+  + And the radial velocity is higher: -73 km/s
+  + HH 203 total velocity: 95 km/s
+  + HH 203 inclination is -50 +/- 6 deg
 
 
 
 
-***** Align in frame of reference of the bow shock nose
+**** Align in frame of reference of the bow shock nose
 + Use results from previous calculation and save resampled images that are aligned in the nose frame
  #+begin_src python :results output
    from pathlib import Path
@@ -1261,7 +1515,7 @@ CLOSED: [2021-02-14 Sun 15:12]
 
 
 
-***** Make high-pass filtered versions
+**** Make high-pass filtered versions
 
 #+begin_src sh :results verbatim :dir hh204
   for f in wfc3_f656n_2015 acs_f658n_2005 wfpc2_f656n_1996; do
@@ -1279,10 +1533,10 @@ CLOSED: [2021-02-14 Sun 15:12]
 
 #+RESULTS:
 
-***** DONE Make GIFs
+**** DONE Make GIFs
 CLOSED: [2021-03-17 Wed 08:07]
 
-****** Save images of the FITS files
+***** Save images of the FITS files
 #+begin_src python :return figfile :results file
   from pathlib import Path
   import numpy as np
@@ -1325,7 +1579,7 @@ open hh204_*_nose_align.jpg
 
 
 
-****** GIFs in bow shock nose frame
+***** GIFs in bow shock nose frame
 #+begin_src sh :dir hh204_multi_epoch_nose_align_EXPORT
 ORDER="1996 2005 2015"
 convert $(for a in "$ORDER"; do printf -- "-delay 50 %s.jpg " $a; done; ) HH204-bowshock-frame.gif
@@ -1340,7 +1594,7 @@ open -a Safari hh204_multi_epoch_nose_align_EXPORT/HH204-bowshock-frame.gif
 
 
 
-***** Redo proper motions in bow shock frame
+**** Redo proper motions in bow shock frame
 Write a general program to do the FLCT method
 #+begin_src python :eval no :tangle make_pm_map.py
   import sys
@@ -1379,7 +1633,7 @@ Write a general program to do the FLCT method
   data1[~goodpixels] = 0.0
   data2[~goodpixels] = 0.0
   print("Number of goodpixels =", goodpixels.sum())
-  
+
   # Designed for images that have been high-pass filtered and normalized
   data_scale = 2.0
   sigma = SIGMA
@@ -1416,7 +1670,7 @@ Recommended to run these in a shell buffer since they take a few minutes each
 #+end_src
 
 
-****** Redo the combining of the two intervals
+***** Redo the combining of the two intervals
 
 #+name: combine-2-epochs
 #+header: :vars SIG="10"
@@ -1529,7 +1783,7 @@ Recommended to run these in a shell buffer since they take a few minutes each
 #+RESULTS:
 : None
 
-****** Make a figure of the proper motions in the bow shock frame
+***** Make a figure of the proper motions in the bow shock frame
 
 #+begin_src python :return figfile :results file
   from pathlib import Path
@@ -1695,9 +1949,13 @@ Recommended to run these in a shell buffer since they take a few minutes each
 + We can try and colorize the image so that the stationary gas is blue amd the moving gas is red, for instance
 
 
-**** Document with Will's additions to paper on HH 204
+*** Document with Will's additions to paper on HH 204
 [[file:will-hh204-figs.tex]]
-**** Looking for evidence of the jet in HH 204
+*** Looking for evidence of the jet in HH 204
++ Possible sources of the PA140 flow
+  + Proper motions in the same direction in the Huygens region from Table 6 of ODell:2015a
+    + 178-328 has V_t = 161 km/s @ PA132 in [O III] only
+      + HH204 is at PA146 from this source
 + The PA108 flow looks promising
   + There is evidence for a long filament in this direction from the following lines
     + [Fe III] 4658 integrated line
@@ -3261,7 +3519,7 @@ This is now in a separate file because it was too big:
     : 20 130
     : /Users/will/Work/OrionTreasury/acs/hlsp_orion_hst_acs_strip0l_f435w_v1_drz.fits[SCI]
     : 7 35
-
+    
 ** Make lupton versions
 
 #+name: rgb-channels-1996

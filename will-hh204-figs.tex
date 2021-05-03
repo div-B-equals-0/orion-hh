@@ -6,6 +6,16 @@
 
 \let\tablenum=\undef % This fixes an incompatibility between aastex and siunitx
 \usepackage{siunitx}
+\sisetup{
+  % explicit""+" is useful for velocities
+  retain-explicit-plus = true,
+  % prefer 10^6 over 1 x 10^6
+  retain-unity-mantissa = false,
+  % Use x +/- e instead of x(e)  
+  separate-uncertainty = true,
+  % Make sure to pick up bold font when used in section heading for instance
+  detect-weight = true,
+}
 
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
@@ -114,6 +124,7 @@ Orion Nebula – ISM: individual: HH 204}
 \renewcommand{\ion}[2]{\setcounter{ionstage}{#2}% 
   \ensuremath{\mathrm{#1\,\scriptstyle\Roman{ionstage}}}}
 \newcommand\oiii{[\ion{O}{3}]}
+\newcommand\siii{[\ion{S}{3}]}
 \newcommand\nii{[\ion{N}{2}]}
 \newcommand\wav[1]{\ensuremath{\lambda #1}}
 \newcommand\Te{\ensuremath{T_{\mathrm{e}}}}
@@ -406,31 +417,6 @@ between the PA140 and PA108 flows, although the difference
 in velocity and ionization with respect to the PA108 flow argues against
 a physical association with HH~204. 
 
-In summary, convincing evidence for which large scale flow might be driving the
-HH~204 bow shock is frustratingly absent.
-Although the PA108 flow is clearly associated with HH~204, its short length means
-that the exact orientation is very uncertain.
-The PA140 flow has a much better defined direction,
-but its extension beyond the position of the [\ion{S}{2}] knot
-in order to feed into the HH~204 bow shock is purely speculative.
-The only thing that can be said with any degree of certainty is that the
-high-ionization PA118 flow is \emph{not} driving HH~204, but only HH~203.
-In Figure.~\ref{fig:hh204-finding-chart}b we show the back projection of
-all three of these flows into the core of the nebula,
-assuming an uncertainty of \ang{\pm 10} for the PA108 flow
-and \ang{\pm 5} for the other two.
-The PA118 flow is consistent with an origin in the Orion~S
-star forming region,
-as has been remarked many times previously
-\citep{ODell:1997a, Rosado:2002e, ODell:2003n}.
-However, neither of the other flows are consistent with an origin in that region,
-unless the flow has suffered a relatively large-angle deviation.
-The back-projection of the PA140 flow intersects the Trapezium stars
-in the very center of the nebula, which raises the possibility that the source
-may be a proplyd, which are highly concentrated in that region.
-The back-projection of the PA108 flow falls significantly to the south
-of the main Orion~S region.
-
 We have searched archival observations in other wavebands
 for any evidence of jets along the back projection of the PA108 axis.
 The most convincing association is with a molecular hydrogen filament
@@ -452,7 +438,225 @@ There is also marginal evidence from MUSE observations \citep{Weilbacher:2015a}
 for a blue-shifted [\ion{Fe}{3}] filament that extends
 from the position of the \chem{H_2} filament towards HH~204, but the data are noisy. 
 
+A further important line of evidence for the flow direction is provided
+by proper motion measurements.
+We have re-measured the proper motions using \emph{HST} images over an interval of 19 years (1996 to 2015) using the methodology described in section~10 of Paper~I.
+For the ``nose'' of the HH~204 bow shock, we find a plane-of-sky velocity of \SI{71 \pm 9}{km.s^{-1}}
+at \(\mathrm{PA} = \ang{136 \pm 3}\).
+After correcting to a common distance of \SI{417}{pc}
+the previous measurements of \citet{Doi:2002v} are \SI{83 \pm 10}{km.s^{-1}}
+at \(\mathrm{PA} = \ang{137 \pm 7}\),
+which are consistent with our measurements within the uncertainties.
+The proper motion axis is shown by a large red arrow in Figure~\ref{fig:hh204-finding-chart}b
+for comparison with the candidate axes from the high radial velocity jets.
+It is marginally consistent with the PA140 axis, but not all with the
+PA108, PA118, or PA164 axes. 
+
+In summary, convincing evidence for which large scale flow might be driving the
+HH~204 bow shock is frustratingly absent.
+Although the PA108 flow is clearly associated with HH~204, its short length means
+that the exact orientation is very uncertain.
+The PA140 flow has a much better defined direction,
+but its extension beyond the position of the [\ion{S}{2}] knot
+in order to feed into the HH~204 bow shock is purely speculative.
+However, the close agreement between this flow direction
+and the proper motion axis is an additional argument in its favor.
+The only thing that can be said with any degree of certainty is that the
+high-ionization PA118 flow is \emph{not} driving HH~204, but only HH~203.
+
+In Figure.~\ref{fig:hh204-finding-chart}b we show the back projection of
+all three of these flows into the core of the nebula,
+assuming an uncertainty of \ang{\pm 10} for the PA108 flow
+and \ang{\pm 5} for the other two.
+The PA118 flow is consistent with an origin in the Orion~S
+star forming region,
+as has been remarked many times previously
+\citep{ODell:1997a, Rosado:2002e, ODell:2003n}.
+However, neither of the other flows are consistent with an origin in that region,
+unless the flow has suffered a relatively large-angle deviation.
+The back-projection of the PA108 flow falls significantly to the south
+of the main Orion~S region
+in an area with no convincing candidates for the driving source
+(see above discussion of the possible \chem{H_2} jet).
+The back-projection of the PA140 flow intersects the Trapezium stars
+in the very center of the nebula, which raises the possibility that the source
+may be a proplyd, which are highly concentrated in that region.
+
 % 5:35:14.2753 -5:24:24.958 => 143-425 V1328 Ori
+
+\clearpage
+
+\section{Two-zone model for observed temperature structure}
+
+\newcommand\zA{\ensuremath{_\mathrm{A}}}
+\newcommand\zB{\ensuremath{_\mathrm{B}}}
+
+At each position along the spectrograph slit, the line of sight will cross several zones
+with different physical conditions.  These may include:
+\begin{description}
+\item[A1] The compressed shell behind the bow-shock,
+  which is in photoionization equilibrium;
+\item[A2] The main body of the jet bullet, also in photoionization equilibrium;
+\item[B1] The immediate post-shock cooling zone of the bow shock;
+\item[B2] The post-shock cooling zone of the jet shock.
+\end{description}
+In HH~204, the relative velocity between the unshocked jet and the working surface
+is very low (\(\approx \SI{15}{km.s^{-1}}\)), so the jet shock is much weaker than the bow shock,
+implying that the emission from zone B2 can be neglected compared with B1.
+Zones A1 and A2 should have similar conditions, and so can be merged into a single zone with density \(n\zA\) and temperature \(T\zA\).
+Although the zone B1 should have a range of temperatures,
+for simplicity we assume a single characteristic temperature \(T\zB\).
+The density of zone B is found by assuming pressure equilibrium with zone A:
+\(n\zB = n\zA T\zA / T\zB\).
+We define \(f\zB\) for a given ion as the fraction of the total ionic emission measure,
+\(\int n_{\mathrm{e}}\, n_{\mathrm{ion}}\,dz\),
+that comes from zone~B,
+with the remainder, \(f\zA = 1 - f\zB\), coming from zone~A.
+
+The appropriate value of \(T\zB\) is rather uncertain,
+since it depends on the non-equilibrium evolution of ionization and temperature
+in the post-shock radiative relaxation layer.
+Most published shock models \citep{Cox:1985a, Sutherland:2017a}
+are calculated on the assumption that the
+far upstream and downstream ionization states are determined by the radiation from the shock itself.
+Care must therefore be exercised when translating their results to cases such as HH~204,
+where external irradiation from O~stars is a dominant factor.
+The curved bow shock in HH~204 should give a range of shock velocities,
+up to a maximum of \(V \approx \SI{84}{km.s^{-1}}\) (assuming the pre-shock medium is stationary).
+In principle, this corresponds to post-shock temperatures as high as \SI{2e5}{K},
+but the gas at such temperatures will be too highly ionized to significantly emit optical lines.
+The cooling timescale is generally shorter than the recombination timescale,
+so the gas is over-ionized as it cools.
+It is only when the temperature falls below about \SI{50000}{K} that the abundance
+of \chem{O^{++}} becomes significant \citetext{e.g., Fig.~11 of \citealp{Allen:2008a}},
+allowing the emission of the optical [\ion{O}{3}] lines.
+A similar situation is seen in middle-aged supernova remnants,
+such as the Cygnus Loop \citep{Raymond:2020a}. 
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{working-surface-hh204-single}
+  \caption{
+    A simple model for the principal working surface of the HH~204 jet.
+    The shocked gas can be divided conceptually into 4 zones:
+    A1, A2, B1, and B2 (see text for details).
+  }
+  \label{fig:working-surface}
+\end{figure}
+
+
+\begin{figure}
+  \textbf{\Large a}\\
+  \includegraphics[width=\linewidth]{two-temp-Toiii-Tsiii}\\
+  \textbf{\Large b}\\
+  \includegraphics[width=\linewidth]{two-temp-TB-30000}
+  \caption{
+    Simple two-zone model for spatial variations in temperature diagnostics.
+    (a)~Correlation between derived \(\Te\) from \oiii{} and \siii{} lines,
+    assuming that the fraction \(f\zB\) of ionic emission measure that arises
+    in the hot component (with temperature \(T\zB\)) is the same for both ions.
+    Values of \(f\zB = 0.01\) (small dots) and \(f\zB = 0.1\) (large dots)
+    are indicated on each curve.
+    The gray rectangle shows the observed range of values,
+    which cannot be explained under this assumption (see text). 
+    (b)~Derived \(\Te\) for \oiii{}, \siii{}, and \nii{} lines as a function
+    of \(f\zB\), assuming \(T\zB = \SI{30000}{K}\).
+    Colored bands show the observed ranges, which imply that \(f\zB(\oiii)\)
+    must be larger than for the other ions (see text).
+  }
+  \label{fig:two-zone}
+\end{figure}
+
+We look for solutions where both \(T\zA\) and \(T\zB\) are constant
+along the slit,
+so that any spatial variation in the temperature diagnostics
+is driven primarily by variation in \(f\zB\).
+Although the density diagnostics do show a gradient with position,
+both \(T(\oiii)\) and \(T(\siii)\) are relatively insensitive to density,
+so for simplicity we assume \(n\zA\) is constant.
+We use the Python library PyNeb to calculate the per-zone emission coefficients,
+\(j(T\zA, n\zA)\) and \(j(T\zB, n\zB)\), for each emission line.
+For a given diagnostic line pair, 1 and 2, the ratio is calculated as
+\begin{equation}
+  \label{eq:2-zone-ratio}
+  R_{12} = \frac
+  {(1 - f\zB) \, j_1(T\zA, n\zA) + f\zB\, j_1(T\zB, n\zB)}
+  {(1 - f\zB) \, j_2(T\zA, n\zA) + f\zB\, j_2(T\zB, n\zB)}.
+\end{equation}
+This is then fed into PyNeb's \texttt{getTemDen} function
+to find the equivalent single-zone temperature that would
+give the same ratio (assuming a density of \(n\zA\)).
+It is clear from equation~(\ref{eq:2-zone-ratio}) that
+for \(f\zB = 0\) one must recover \(\Te = T\zA\) and that
+for \(f\zB = 1\) one must recover \(\Te = T\zB\).
+But for intermediate values of \(f\zB\),
+the derived temperature will differ between ions because
+of variations in the temperature sensitivity of the diagnostic ratios.
+
+We first investigate the case of a common \(f\zB\) for all ions,
+but we find that this is unable to reproduce the observations.
+This is demonstrated in Figure~\ref{fig:two-zone}a,
+which shows the relation between \(\Te(\oiii)\) and \(\Te(\siii)\)
+for 4 different values of \(T\zB\) between \num{15000} and \SI{50000}{K}.
+We set \(T\zA = \SI{9000}{K}\) and \(n\zA = \SI{20000}{cm^{-3}}\) in all cases
+and \(f\zB\) increases from left to right along each curve.
+The gray rectangle shows the observed range of temperatures
+along the spectrograph slit (Figure~6):
+\(\Te(\oiii)\) shows a systematic decline from \(\approx \SI{17000}{K}\)
+near the bow shock to \(\approx \SI{12000}{K}\) further away,
+while \(\Te(\siii)\) is roughly constant at \num{9000} to \SI{10000}{K},
+with no apparent correlation with \(\Te(\oiii)\).
+The two-zone models with \(T\zB \ge \SI{30000}{K}\)
+all show \(\Te(\oiii) > \Te(\siii)\) as \(f\zB\) increases,
+but this is insufficient to explain the observations.
+For example, in order to achieve \(\Te(\oiii) = \SI{17000}{K}\)
+the models predict \(\Te(\siii) > \SI{11000}{K}\),
+which is significantly higher than observed.
+
+In Figure~\ref{fig:two-zone}b, we relax the assumption
+of a common \(f\zB\) for all ions,
+showing separately the predicted values of
+\(\Te(\nii)\), \(\Te(\siii)\), and \(\Te(\oiii)\)
+as a function of \(f\zB\), assuming \(T\zB = \SI{30000}{K}\).
+The ranges of observed values are shown by colored bands,
+blue for \oiii{} and orange for \nii{} and \siii{}.
+From the figure it is apparent that a decline  
+from \(f\zB(\oiii) \approx 0.1\) at \(x = 0\) to
+\(f\zB(\oiii) \approx 0.02\) for \(x > \SI{5}{mpc}\)
+is required to explain the \(\Te(\oiii)\) profile,
+whereas \(f\zB(\siii)) < 0.01\) and \(f\zB(\nii) < 0.01\)
+is required at all positions.
+
+It is not surprising that \(f\zB\) should vary between ions
+since the photoionization equilibrium ion fraction of \chem{O^{2+}}
+from zone~A is much lower than that of \chem{N^{+}} or \chem{S^{2+}}.
+Assuming \(f\zB \ll 1\), then the ionic abundances given in
+the ``Cut 1, HH 204'' column of Table~4 correspond to zone~A.
+These yield \chem{O^{2+} / \chem{O} = 0.005} and
+\chem{S^{2+} / \chem{S} = 0.61} if the abundances of unobserved ion stages are negligible.
+The lack of [\ion{N}{3}] lines means that \chem{N^{+} / \chem{N}}
+cannot be estimated directly, but is likely of order unity.
+The fact that \chem{O^{2+}} is only present in trace amounts
+in the photoionization equilibrium gas
+means that the relative contribution from the post-shock cooling zone is much larger
+than for \chem{S^{2+}} and \chem{N^{+}}.
+This is confirmed by emission line imaging of HH~204 \citep{Weilbacher:2015a},
+which shows a morphology in \siii{} and \nii{}
+that is clearly dominated by the compact jet bullet,
+whereas the emission in \oiii{} is more diffuse
+within the parabolic envelope of the bow shock.
+
+
+\section*{Acknowledgements}
+WJH is grateful for financial support provided by
+\foreignlanguage{spanish}{
+  Dirección General de Asuntos del Personal Académico,
+  Universidad Nacional Autónoma de México},
+through grant
+\foreignlanguage{spanish}{
+  Programa de Apoyo a Proyectos de Investigación
+  e Inovación Tecnológica}
+IN107019.
+
 
 \bibliography{will-hh204-refs}
 
