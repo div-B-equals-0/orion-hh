@@ -1577,6 +1577,46 @@ open hh204_*_nose_align.jpg
 
 #+RESULTS:
 
+New [2021-06-21 Mon] - do the same for the star-aligned images.  And not spatially filtered 
+
+#+begin_src python :return figfile :results file
+  from pathlib import Path
+  import numpy as np
+  from matplotlib import pyplot as plt
+  import matplotlib.patheffects as path_effects
+  import seaborn as sns
+  from astropy.io import fits
+  from astropy.wcs import WCS
+
+  figdir = Path("press-release-hh204")
+  datadir = Path("hh204")
+  vlim = {
+      "1996": [40, 400],
+      "2005": [6, 100],
+      "2015": [2, 20],
+  }
+  for s in "wfpc2_f656n_1996", "acs_f658n_2005", "wfc3_f656n_2015":
+      camera, filter_, year = s.split("_")[:3]
+      figfile = figdir / f"hh204_{year}.jpg"
+      hdu, = fits.open(datadir / f"hh204_{s}.fits")
+      w = WCS(hdu)
+      im = hdu.data
+      im_med = np.median(hdu.data)
+      fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(projection=w))
+      ax.imshow(im, vmin=vlim[year][0], vmax=vlim[year][1], origin="lower", cmap="gray")
+      ax.set(
+          xlim=[370, 1050],
+          ylim=[470, 1150],
+      )
+      lon, lat = ax.coords
+      lon.set_ticklabel_visible(False)
+      lat.set_ticklabel_visible(False)
+      fig.tight_layout()
+      fig.savefig(figfile, dpi=600)
+#+end_src
+
+#+RESULTS:
+[[file:press-release-hh204/hh204_2015.jpg]]
 
 
 ***** GIFs in bow shock nose frame
@@ -1590,6 +1630,19 @@ convert $(for a in "$ORDER"; do printf -- "-delay 50 %s.jpg " $a; done; ) HH204-
 #+BEGIN_SRC sh :results silent
 open -a Safari hh204_multi_epoch_nose_align_EXPORT/HH204-bowshock-frame.gif
 #+END_SRC
+
+#+begin_src sh :dir press-release-hh204
+ORDER="1996 2005 2015"
+convert $(for a in "$ORDER"; do printf -- "-delay 50 hh204_%s.jpg " $a; done; ) HH204-cluster-frame.gif
+#+end_src
+
+#+RESULTS:
+
+#+BEGIN_SRC sh :results silent
+  open -a Safari press-release-hh204/HH204-cluster-frame.gif
+#+END_SRC
+
+
 
 
 
@@ -2008,6 +2061,24 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
 [[file:figs/uves-data-description.png]]
 
 *** HH 529 dataset
+
+
+* Eduardo talk [2021-06-17 Thu]
+
+** Will presentation of Eduardo
++ Born and brought up here in Morelia, Michoacán
++ Went to UNAM Mexico City to do an undergraduate degree in physics 2012-2017
+  + Undergraduate thesis with Manuel Peimbert in IA-UNAM on /Temperature fluctuations in Planetary Nebulae/
+  + In 2014 he received /Premio Estatal al mérito juvenil del estado de Michoacán/
++ Then did Master's degree in /Universidad de la Laguna/ and /Instituto de Astrofísica de Canarias/ in Tenerife
+  + Research on Abundance Gradient of Helium in Milky Way under direction of César Esteban
++ Finally, he is currently do a PhD at the IAC where he is also a resident astronomer
+  + Advisors are César Esteban and Jorge García Rojas
+  + Thesis is on /Photoionized Herbig-Haro Objects in the Orion Nebula/
+  + which is topic he will talk about today
+
+*** Eduardo's text
+Nací y viví en Morelia hasta mudarme a la CDMX para estudiar la licenciatura en Física en la UNAM del 2012 al 2017. Ahí hice mi tesis de licenciatura sobre fluctuaciones de temperatura en nebulosas planetarias bajo la dirección del Dr. Manuel Peimbert, quien me introdujo en la Astronomía. Por mi desempeño académico me dieron el Premio Estatal al mérito juvenil del estado de Michoacán 2014. Al terminar la licenciatura, obtuve la beca de la Fundación Carolina para Latinoamérica para estudiar el Máster en Astrofísica en la Universidad de La Laguna/IAC. Hice mi trabajo de fin de Máster bajo la dirección de César Esteban sobre el gradiente de Helio en la Vía Láctea. Luego gané una beca de Astrofísico Residente del IAC donde hago mi doctorado. Mi proyecto de doctorado es sobre Objetos Herbig-Haro fotoionizados en la Nebulosa de Orión, bajo la dirección de César Esteban y Jorge García Rojas.
 
 
 * Proper motions
