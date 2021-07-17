@@ -2081,6 +2081,59 @@ Fe, Ni, Cr abundance higher by factor of about 10 in shocked gas
 Nací y viví en Morelia hasta mudarme a la CDMX para estudiar la licenciatura en Física en la UNAM del 2012 al 2017. Ahí hice mi tesis de licenciatura sobre fluctuaciones de temperatura en nebulosas planetarias bajo la dirección del Dr. Manuel Peimbert, quien me introdujo en la Astronomía. Por mi desempeño académico me dieron el Premio Estatal al mérito juvenil del estado de Michoacán 2014. Al terminar la licenciatura, obtuve la beca de la Fundación Carolina para Latinoamérica para estudiar el Máster en Astrofísica en la Universidad de La Laguna/IAC. Hice mi trabajo de fin de Máster bajo la dirección de César Esteban sobre el gradiente de Helio en la Vía Láctea. Luego gané una beca de Astrofísico Residente del IAC donde hago mi doctorado. Mi proyecto de doctorado es sobre Objetos Herbig-Haro fotoionizados en la Nebulosa de Orión, bajo la dirección de César Esteban y Jorge García Rojas.
 
 
+
+* Bob comments [2021-07-13 Tue]
+
+** HH 204 jets
+
+
+
+** Original message
+#+begin_example
+  Dear Dr. Mendez-Delgado,
+
+  I don’t know that we have met either in my one visit to IAC years ago or at any of the Orion Nebula conferences held since then. In any event, I am Bob O’Dell (C. R. O’Dell on papers), presently a part-time Distinguished Research Professor at Vanderbilt University in Nashville, Tennessee USA. You’ve generously cited my relevant papers in your own publications.
+
+  I’ve read with great interest your papers “Photoionized Herbig-Haro objects in the Orion Nebula through deep high-spectral resolution spectroscopy I: HH 529 II and III (published earlier this year in MNRAS) and …. II: HH 204 (submitted to the ApJ but available through arXiv). A tremendous amount of effort must have gone into these two very thorough studies, congratulations. 
+
+  As someone who has worked on the Orion Nebula for 50+ years, I hope that you will welcome a few comments from me. At age 84 I can see that I won’t be able to continue my work on Orion much longer and these comments may encourage you to address some of the open questions.
+
+  PAPER I: 
+
+  First a mea culpa. You point out at the end of Section 9.2 that your results for the tangential motions are in agreement with O’Dell and Henney 2008, but in disagreement with O’Dell et al. (2015). I have looked through my electronic notes used in the 2015 study, and cannot justify what I wrote there. Examining the original data, it is obvious that I made an error somewhere. Unfortunately, I don’t have access to my paper notes of that period (because of the pandemic) and cannot say anything further. Since you have already published your own results and pointed out the agreement with O & H 2008 and disagreement with O et al. 2015, I don’t think that I need to publish an erratum.
+
+  Earlier in Section 9.2 you discuss the line broadening. You include the sigma-nt term. You probably know that I first noted that such a term was necessary in explaining Orion’s FWHM, concluding that this component carries a significant fraction of the total energy of the ionized gas. Although I’ve speculated on its cause, I think that your observation of the background gas emission may allow characterizing it in terms of ionization state and atomic mass in a superior fashion to what my collaborators and I have done before, perhaps leading to its explanation.  I hope that  you will look into this. If you or one of your collaborators cannot, please let me know and I’ll pursue it, using your published data.
+
+  As you probably know, for several decades my collaborators and I have noted that there is usually a red wing on emission-lines with the best S/N ratio.  I see this in your Fig.4, where it is expected (at twice the velocity difference of the  emitting layer and the backscattering dust in the underlying PDR). Using V_PDR=28 and V_[OIII]=16, this leads to the expectation of the backscattered component to be at V=40, about where the red bump appears in the figure. Any backscattering of the shocked material will be much more redshifted and of course, weaker. Furthermore, the shocked gas is weak and probably not close to the PDR, so it is not surprising that its backscattered component is not seen.
+
+  Of course we don’t know the wavelength dependence of the backscattering component or its dependence on the separation of the emitting and backscattering layers, so I cannot comment on the effect of this red component on derived characteristics such as abundances and physical conditions.
+
+  PAPER-II:
+
+  Fig.20. In this case the HH 204 component is strongest and the backscattered component may be present. It would be informative to deconvolve this spectrum into more than the three apparent components. I can see that there is the red wing on the Main Ionization Front component (labeled Orion Nebula). It is worth looking for the backscattered component of the “Blue Layer” (unlikely because of its weakness) and the HH 204 component.
+  The latter should be highly redshifted and well defined. If it is not there, then this confirms that the HH 204 shock feature is not close to the underlying PDR. If you can’t do this, send me a velocity calibrated copy of the .fits image and I’ll do it for you.
+
+  Section 8. I don’t see the PA 140 component on any of my images (the same as you use). Can you describe it more completely? 
+
+  End of paragraph 1. The values of 124 and 127 that I give are what I judged to be the axes of symmetry of HH 203 and HH 204.
+
+  I see your component HH 203c, which appears to be the apex of a bowshock at 5:35:22.36-5:25:07.7 (I advise you give the coordinates). HH 203a (5:35:22.19:-5:25:05.5) and HH 203b (5:35:21.73-5:24:56.6). HH 203c is peculiar in that there are a pair of small shocks at 5:35:22.23-5:25:07.4 aimed about about PA 80 that overlap it.
+
+  Personally, I despair of identifying all the driving jets and components of HH 203-204. The better one looks,
+  the more one sees. For example the broad structure at 5:35:21.76-5:25:17.4 - does it fit in?
+
+  `Section 9.1.  I think that you have underestimated the amount of work done on the DBL, perhaps being led by co-author Will Henney to emphasize this feature in the vicinity of Theta2OriA. Will really deserves the credit for identifying the feature in the SE portion of the nebula as he attempted to interpret it (Deharveng’s study was a one-off presentation of some observations). My colleagues and I have written a series of papers which establish that this feature extends across much of the Huygens Region (O’Dell et al. 2020, ApJ, 891, 46) and have attempted to model its position (Abel et al 2019 ApJ, 881, 130). The most recent of these papers overlapped with the finalizing of your Paper-II and I’m not surprised that you do not mention them. The DBL is brighter and easier to study in the core of the Huygens Region, and in some areas becomes the strongest velocity component. I can’t say that we really understand it and we have another positional study underway.
+
+  By this point we have an idea of the approximate position, certainly its position with respect to the multiple other foreground layers of gas. This leads us to strongly prefer the name “Nearer Ionized Layer” rather than the less descriptive “Blue Diffuse Layer”. 
+
+  Fig. 22, I see the Backscattered components of the Orion Nebula’s emission in the panels or [SIII] and [OIII].
+
+  I hope that you find these comments to be useful. At the minimum it means that there is at least one astronomer out in the world who has studied your excellent papers in detail.
+
+  Best Regards,
+
+  Bob O'Dell
+#+end_example
 * Proper motions
 
 ** HH 529 
