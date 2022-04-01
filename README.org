@@ -1,3 +1,4 @@
+
 #+OPTIONS: ^:{}
 * UVES observations of HH objects in Orion
 
@@ -4646,7 +4647,45 @@ Measurements of features in [Fe III] lines
 ** Figure 1
 [[file:figs/hh514-finding.pdf]]
 
-*** 
+** Radial velocity of jet and star
++ Star radial velocity is 5.74 LSR (Boyden+ 2020), so 23.84 km/s heliocentric
+  + Very close to the average cluster velocity of 25
++ Knot and jet velocity are +150 km/s heliocentric
++ So relative velocity of jet wrt star is 150 - 24 = +126 km/s
 
 ** Proper motions
 
+*** Proper motions of star
+
+**** Kim et al 2019
++ 2019AJ....157..109K
++ 170-337 is source 118
++ [[https://vizier.cds.unistra.fr/viz-bin/VizieR-5?-ref=VIZ6246436a24783a&-out.add=.&-source=J/AJ/157/109/table3&recno=118][Vizier record of source 118]]
++ Proper motion
+  + RA: 2.97 +/- 0.37 mas/yr
+  + Dec: 2.67 +/- 0.68 mas/yr
+  + Total: 3.994 +/- 0.5314
++ If distance is 410 pc, then parallax = 2.439 mas
+  + V = 4.74 mu / P
+  + V = [5.772 +/- 0.7191, 5.189 +/- 1.322] km/s
+  + Total (8 +/- 1) km/s at PA = (48 +/- 8) deg
+
+
+*** Proper motion of jet knot
++ O'Dell & Henney 2008
++ 48 km/s at PA 357, but assuming D = 440 pc
+  + Correcting to 410 pc
+  + RA = (410/440) 48 sin(357) = -2.341 km/s
+  + Dec = (410/440) 48 cos(357) = 44.67 km/s
++ Subtract off motion of star
+  + RA = -2.341 - 5.772 = -8.113
+  + Dec = 44.67 - 5.189 = 39.481
++ V = hypot(-8.113, 39.481) = 40.31 km/s
++ PA = arctan(-8.113 / 39.481) = 348 mod 360
+
+
+** 3D motion of jet
++ V_r = (+126 +/- 10) km/s
++ V_t = (40 +/- 6) km/s
++ V3d = 132.2 +/- 9.7
++ Inclination to LOS is 84.25 +/- 1.94
