@@ -4650,13 +4650,20 @@ Measurements of features in [Fe III] lines
 ** Radial velocity of jet and star
 + Star radial velocity is 5.74 LSR (Boyden+ 2020), so 23.84 km/s heliocentric
   + Very close to the average cluster velocity of 25
+  + Claimed errors are very small: less than 0.1 km/s
 + Knot and jet velocity are +150 km/s heliocentric
 + So relative velocity of jet wrt star is 150 - 24 = +126 km/s
++ Theissen 2022ApJ...926..141T
+  + Observes our star according to Table 1 (HC252)
+  + But not included in any following tables
+  + [2022-04-01 Fri 09:26] I sent an email to the corresponding author
 
 ** Proper motions
 
 *** Proper motions of star
-
++ Source IDs
+  + [HC2000] 252
+  + [OW94] 170-337
 **** Kim et al 2019
 + 2019AJ....157..109K
 + 170-337 is source 118
@@ -4671,6 +4678,11 @@ Measurements of features in [Fe III] lines
   + Total (8 +/- 1) km/s at PA = (48 +/- 8) deg
 
 
+**** Platais et al 2020
++ This out to be the ideal reference
+  + HST ASTROMETRY IN THE ORION NEBULA CLUSTER: CENSUS OF LOW-MASS RUNAWAYS
++ But 170-337 is not included in their catalog!
+
 *** Proper motion of jet knot
 + O'Dell & Henney 2008
 + 48 km/s at PA 357, but assuming D = 440 pc
@@ -4681,11 +4693,45 @@ Measurements of features in [Fe III] lines
   + RA = -2.341 - 5.772 = -8.113
   + Dec = 44.67 - 5.189 = 39.481
 + V = hypot(-8.113, 39.481) = 40.31 km/s
-+ PA = arctan(-8.113 / 39.481) = 348 mod 360
++ PA = arctan(-8.113 / 39.481) = 348 deg
 
 
 ** 3D motion of jet
 + V_r = (+126 +/- 10) km/s
 + V_t = (40 +/- 6) km/s
 + V3d = 132.2 +/- 9.7
-+ Inclination to LOS is 84.25 +/- 1.94
++ Inclination to POS is 72.39 +/- 2.804
+  + So inclination to LOS is 18 +/- 3 deg
+  + As opposed to 17 deg last time
+
+
+** Masses and mass loss rates
++ Disk mass
+  + Dust: 23 +/- 5  Mearth = 6.9e-5 Msun
+  + Gas:
+    + assume gas/dust = 100
+    + 0.007 Msun
+
+
+
+* A new way of identifying HH jets
+
+** Basic method
++ I load up the Muse color images of different ionization zones in Preview, as different tabs of the same window
++ I match the image sizes, for instance with ~cmd 0~
++ I ~ctl tab~ to switch between the tabs
++ Optionally I use ~`~ to activate the magnification window
++ Everything that is an ionization front will show movement
+  + the less dense it is, the further it will move
++ whereas things that stay still may be various things:
+  + extinction features if they happen to be dark
+  + or they could be so dense that we can't see the ionization gradient
+  + or they could be jets, where the ionization is collisional, rather than radiative
++ using this technique, *I have identified the jet driving HH 203/4 I think*
+  + actually, not so fast - not really clear  whether it is or not
+  + it is definitely a jet, but it might be an unrelated flow
+  + it is pretty low ionization
+  + there is also the faint [O I] filament that we mentioned in the Tsamis 2013 paper
+  + and there is the evidence from the high-velocity [O III] and where it disappears
+  + look into this more when I have more time
+  
