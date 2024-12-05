@@ -42,6 +42,9 @@ Espero no darte mucha lata,
   + u_1^2 = V_1^2 (p_1 - p_0) / (V_0 - V_1)
 
 *** Using stuff from Wikipedia
+:PROPERTIES:
+:ID:       390B7BA9-2B56-4BEA-BF7E-954908D9FB40
+:END:
 + The page on [[https://en.wikipedia.org/wiki/Normal_shock_tables][Normal shock tables]] is useful
   + Except M_1, M_2 on that page are M_0, M_1 in our notation
 + They have (in my notation)
@@ -69,9 +72,7 @@ Espero no darte mucha lata,
     + Or just multiply out:
       + (15 + 5M^2 - 3/M^2 - 1)/16
       + No, that does not help
- 
   
-
 
 *** So what does that mean for the rest of it?
 + Just that the isothermal Mach number is sqrt(\gamma) = 1.291 times larger than the adiabatic Mach number.
@@ -353,7 +354,7 @@ Espero no darte mucha lata,
 + Set \phi = F_1/F_2 (5007)
 + Then mean temperature is T_0 = (T_neb + \phi T_5007) / (1 + \phi)
 + t^2 is [(T_neb - T_0)^2 + \phi (T_5007 - T_0)^2] / T_0^2 (1 + \phi)
-  | Shock  |     \phi | T 5007 | T_neb |    T_0 |     t^2 |
+  | Shock  |    \phi | T 5007 | T_neb |    T_0 |     t^2 |
   |--------+-------+--------+------+-------+--------|
   | II s1  | 0.079 |  10300 | 8500 | 8632. | 0.0030 |
   | II s2  | 0.162 |  12300 | 8500 | 9030. | 0.0212 |
@@ -534,7 +535,7 @@ so that
       + \beta < (M - 1) / (M + 1)
       + E.g,, with M = 5, we have \beta < 2/3
 
-|     \alpha |    \beta | M |             u |       (1 - u)/u |       (u - \beta)/u |
+|    \alpha |    \beta | M |             u |       (1 - u)/u |       (u - \beta)/u |
 |-------+------+---+---------------+-----------------+-----------------|
 |  0.01 |    0 | 6 |          0.09 |           10.11 |            1.00 |
 |   0.1 |    0 | 6 |          0.24 |            3.17 |            1.00 |

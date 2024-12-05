@@ -2140,9 +2140,9 @@ Nací y viví en Morelia hasta mudarme a la CDMX para estudiar la licenciatura e
 ** HH 529 
 + Disagreement between OH2008 and OD2015
   |            | Vt 08 | Vr\odot 08 |   |
-  | HH 529-I   |    54 |    -31 |   |
-  | HH 529-II  |    92 |    -31 |   |
-  | HH 529-III |    40 |    -30 |   |
+  | HH 529-I   |    54 |     -31 |   |
+  | HH 529-II  |    92 |     -31 |   |
+  | HH 529-III |    40 |     -30 |   |
  
 + So recalculate the proper motions
 + 
